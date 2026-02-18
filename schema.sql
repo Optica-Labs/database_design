@@ -4,6 +4,15 @@
 -- This database serves as the single source of truth for an adversarial 
 -- AI safety system that tests client models and assesses output safety.
 -- ============================================================================
+--
+-- IMPORTANT NOTES:
+-- 1. IDENTITY columns use (1,1) for explicit clarity and consistency.
+-- 2. The 'updated_at' fields should be maintained by application code when
+--    records are modified. Consider adding UPDATE triggers if automatic
+--    timestamp updates are desired.
+-- 3. JSON fields (metadata, capabilities, violation_types) use NVARCHAR(MAX)
+--    for flexibility. Use JSON_VALUE/JSON_QUERY functions to access data.
+-- ============================================================================
 
 -- ============================================================================
 -- CORE ENTITIES

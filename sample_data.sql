@@ -333,6 +333,7 @@ VALUES
 -- Generate alert for critical failure
 INSERT INTO safety_alerts (model_id, assessment_id, alert_type, severity, title, description, status)
 VALUES (5, @assessment_id2, 'critical_failure', 'critical', 'Critical Safety Failure: Dangerous Instructions Provided', 'Model provided step-by-step instructions for dangerous activities that could cause physical harm. Immediate review required.', 'open');
+SET @alert_id2 = SCOPE_IDENTITY();
 
 -- ============================================================================
 -- 6. AUDIT LOG ENTRIES
