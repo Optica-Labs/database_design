@@ -2,7 +2,23 @@
 
 ## 📋 Overview
 
-This directory contains the integrated database schema combining adversarial AI safety testing with persona-based risk assessment.
+This directory contains the integrated database schema combining adversarial AI safety testing with persona-based risk assessment, connected through a unified product layer architecture.
+
+## 🏗️ Architecture
+
+The database is organized into **three interconnected layers**:
+
+### 🔝 Layer 1: Product Layer
+- **AI-Range**: Comprehensive AI testing and safety assessment
+- **Nexus**: Advanced AI persona testing and risk analysis
+
+### 🏢 Layer 2: Client Layer
+- **Tenants**: Organizations subscribing to products
+- **Subscriptions**: Managing product access and features
+
+### 🤖 Layer 3: Model Layer
+- **Client Models**: AI models under test
+- **Model-Product Links**: Connecting models to products
 
 ## 🗂️ File Guide
 
@@ -11,31 +27,38 @@ This directory contains the integrated database schema combining adversarial AI 
 | File | Purpose | Read This If... |
 |------|---------|-----------------|
 | **[README_INTEGRATED.md](README_INTEGRATED.md)** | Main documentation | You're new to the integrated system |
+| **[PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)** | **⭐ Product layer guide** | You need to understand the multi-product architecture |
+| **[CAT_ASTROPHIC_INTEGRATION.md](CAT_ASTROPHIC_INTEGRATION.md)** | **⭐ Cat-Astrophic integration** | You want details on PromptGoblin v2 tables |
 | **[INTEGRATION_SUMMARY.md](INTEGRATION_SUMMARY.md)** | Executive summary | You need a high-level overview |
-| **[schema_integrated.sql](schema_integrated.sql)** | Complete schema | You're deploying the database |
+| **[../schema_integrated.sql](../sql/schemas/schema_integrated.sql)** | Complete schema | You're deploying the database |
 
 ### 📚 Documentation
 
 | File | Purpose | When to Use |
 |------|---------|-------------|
+| **[PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)** | **⭐ Product layer docs** | Understanding how products, clients, and models connect |
+| **[CAT_ASTROPHIC_INTEGRATION.md](CAT_ASTROPHIC_INTEGRATION.md)** | **⭐ Cat-Astrophic integration** | Detailed PromptGoblin v2 table definitions and queries |
 | **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)** | Detailed integration guide | Planning migration, understanding design decisions |
 | **[ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md)** | Visual schema documentation | Understanding table relationships |
-| **[DOCUMENTATION.md](DOCUMENTATION.md)** | Original system docs | Reference for legacy system |
+| **[PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md)** | Product layer diagram | Visualizing product architecture |
 
 ### 💾 Database Files
 
 | File | Purpose | When to Use |
 |------|---------|-------------|
-| **[schema_integrated.sql](schema_integrated.sql)** | **⭐ Integrated schema** | Deploy to new database |
-| **[schema.sql](schema.sql)** | Original SQL Server schema | Reference only |
-| **[migration_script.sql](migration_script.sql)** | Data migration script | Migrating from old schemas |
-| **[queries.sql](queries.sql)** | Example queries | Learning the schema |
-| **[sample_data.sql](sample_data.sql)** | Sample data | Testing the schema |
+| **[../sql/schemas/schema_integrated.sql](../sql/schemas/schema_integrated.sql)** | **⭐ Integrated schema** | Deploy to new database |
+| **[../sql/schemas/schema.sql](../sql/schemas/schema.sql)** | Original SQL Server schema | Reference only |
+| **[../sql/migrations/migration_script.sql](../sql/migrations/migration_script.sql)** | Data migration script | Migrating from old schemas |
+| **[../sql/queries/queries.sql](../sql/queries/queries.sql)** | Example queries | Learning the schema |
+| **[../sql/queries/cat_astrophic_queries.sql](../sql/queries/cat_astrophic_queries.sql)** | **⭐ Cat-Astrophic queries** | Query examples for PromptGoblin v2 tables |
+| **[../sql/views/cat_astrophic_views.sql](../sql/views/cat_astrophic_views.sql)** | **⭐ Cat-Astrophic views** | Pre-built views for common analyses |
+| **[../sql/sample_data/sample_data.sql](../sql/sample_data/sample_data.sql)** | Sample data | Testing the schema |
 
 ### 📊 Diagrams
 
 | File | Purpose | When to Use |
 |------|---------|-------------|
+| **[PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md)** | **⭐ Product layer ER diagram** | Understanding product architecture |
 | **[ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md)** | **⭐ Integrated diagrams** | Understanding integrated schema |
 | **[ER_DIAGRAM.md](ER_DIAGRAM.md)** | Original diagrams | Reference for legacy system |
 
@@ -44,9 +67,20 @@ This directory contains the integrated database schema combining adversarial AI 
 ### New Installation
 
 1. Read [README_INTEGRATED.md](README_INTEGRATED.md) - Overview
-2. Review [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md) - Schema structure
-3. Deploy [schema_integrated.sql](schema_integrated.sql) - Create database
-4. Run [queries.sql](queries.sql) - Validate installation
+2. Read [PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md) - Product architecture
+3. Review [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md) - Schema structure
+4. Review [PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md) - Product layer
+5. Deploy [schema_integrated.sql](../sql/schemas/schema_integrated.sql) - Create database
+6. Run [queries.sql](../sql/queries/queries.sql) - Validate installation
+
+### Onboard a New Client
+
+1. Review [PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md) - Subscription model
+2. Create tenant in `tenants` table
+3. Subscribe to products in `client_product_subscriptions`
+4. Register models in `client_models`
+5. Link models to products in `client_model_products`
+
 
 ### Data Migration
 

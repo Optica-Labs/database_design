@@ -6,26 +6,293 @@
 -- ============================================================================
 
 -- ============================================================================
--- 1. INSERT TEST CATEGORIES
+-- 1. INSERT PRODUCTS (AI-Range and Nexus)
 -- ============================================================================
 
-PRINT 'Inserting test categories...';
-
-INSERT INTO test_categories (category_name, description, severity_level)
+-- Note: Products are already inserted via schema, but including here for completeness
+INSERT INTO products (product_code, product_name, description, features, pricing_tier, status) 
 VALUES 
+    (
+        'ai-range',
+        'AI Range',
+        'Comprehensive AI testing and safety assessment platform with adversarial testing, compliance checks, and risk evaluation',
+        '{"adversarial_testing": true, "safety_evaluation": true, "compliance_reports": true, "custom_scenarios": true, "api_integration": true}'::jsonb,
+        'enterprise',
+        'active'
+    ),
+    (
+        'nexus',
+        'Nexus',
+        'Advanced AI persona testing and risk analysis system with scenario generation and behavioral analysis',
+        '{"persona_generation": true, "risk_analysis": true, "scenario_testing": true, "behavioral_analysis": true, "vector_search": true}'::jsonb,
+        'premium',
+        'active'
+    )
+ON CONFLICT (product_code) DO UPDATE
+SET 
+    description = EXCLUDED.description,
+    features = EXCLUDED.features,
+    pricing_tier = EXCLUDED.pricing_tier,
+    updated_at = NOW();
+
+-- ============================================================================
+-- 2. INSERT TENANTS (Sample Clients)
+-- ============================================================================
+
+INSERT INTO tenants (tenant_name, client_id, industry, status, metadata)
+VALUES 
+    ('Acme Corporation', 'acme-001', 'Technology', 'active', '{"company_size": "enterprise", "region": "North America"}'::jsonb),
+    ('TechStart Inc', 'techstart-002', 'Fintech', 'active', '{"company_size": "startup", "region": "Europe"}'::jsonb),
+    ('Global Healthcare Solutions', 'ghs-003', 'Healthcare', 'active', '{"company_size": "large", "region": "Global"}'::jsonb),
+    ('EduTech Platform', 'edutech-004', 'Education', 'trial', '{"company_size": "medium", "region": "Asia Pacific"}'::jsonb);
+
+-- ============================================================================
+-- 3. INSERT CLIENT PRODUCT SUBSCRIPTIONS
+-- ============================================================================
+
+-- Acme Corporation - Both products (Enterprise tier)
+INSERT INTO client_product_subscriptions (tenant_id, product_id, subscription_tier, subscription_status, start_date, usage_limits, features_enabled)
+SELECT 
+    t.id,
+    p.id,
+    'enterprise',
+    'active',
+    NOW() - INTERVAL '6 months',
+    CASE 
+        WHEN p.product_code = 'ai-range' THEN 
+            '{"api_calls_per_day": 10000, "test_sessions_per_month": 100, "concurrent_tests": 10, "models_limit": 20}'::jsonb
+        WHEN p.product_code = 'nexus' THEN 
+            '{"api_calls_per_day": 8000, "persona_tests_per_month": 80, "concurrent_tests": 8, "personas_limit": 50}'::jsonb
+    END,
+    CASE 
+        WHEN p.product_code = 'ai-range' THEN 
+            '{"adversarial_testing": true, "compliance_reports": true, "custom_scenarios": true, "priority_support": true}'::jsonb
+        WHEN p.product_code = 'nexus' THEN 
+            '{"persona_generation": true, "risk_analysis": true, "scenario_testing": true, "vector_search": true}'::jsonb
+    END
+FROM tenants t
+CROSS JOIN products p
+WHERE t.tenant_name = 'Acme Corporation';
+
+-- TechStart Inc - AI-Range only (Premium tier)
+INSERT INTO client_product_subscriptions (tenant_id, product_id, subscription_tier, subscription_status, start_date, usage_limits, features_enabled)
+SELECT 
+    t.id,
+    p.id,
+    'premium',
+    'active',
+    NOW() - INTERVAL '3 months',
+    '{"api_calls_per_day": 5000, "test_sessions_per_month": 50, "concurrent_tests": 5, "models_limit": 10}'::jsonb,
+    '{"adversarial_testing": true, "compliance_reports": true, "custom_scenarios": false, "priority_support": false}'::jsonb
+FROM tenants t
+CROSS JOIN products p
+WHERE t.tenant_name = 'TechStart Inc'
+  AND p.product_code = 'ai-range';
+
+-- Global Healthcare Solutions - Both products (Enterprise tier)
+INSERT INTO client_product_subscriptions (tenant_id, product_id, subscription_tier, subscription_status, start_date, usage_limits, features_enabled)
+SELECT 
+    t.id,
+    p.id,
+    'enterprise',
+    'active',
+    NOW() - INTERVAL '1 year',
+    CASE 
+        WHEN p.product_code = 'ai-range' THEN 
+            '{"api_calls_per_day": 15000, "test_sessions_per_month": 150, "concurrent_tests": 15, "models_limit": 30}'::jsonb
+        WHEN p.product_code = 'nexus' THEN 
+            '{"api_calls_per_day": 12000, "persona_tests_per_month": 120, "concurrent_tests": 12, "personas_limit": 100}'::jsonb
+    END,
+    CASE 
+        WHEN p.product_code = 'ai-range' THEN 
+            '{"adversarial_testing": true, "compliance_reports": true, "custom_scenarios": true, "priority_support": true, "hipaa_compliance": true}'::jsonb
+        WHEN p.product_code = 'nexus' THEN 
+            '{"persona_generation": true, "risk_analysis": true, "scenario_testing": true, "vector_search": true, "healthcare_personas": true}'::jsonb
+    END
+FROM tenants t
+CROSS JOIN products p
+WHERE t.tenant_name = 'Global Healthcare Solutions';
+
+-- EduTech Platform - Nexus only (Trial)
+INSERT INTO client_product_subscriptions (tenant_id, product_id, subscription_tier, subscription_status, start_date, end_date, usage_limits, features_enabled)
+SELECT 
+    t.id,
+    p.id,
+    'trial',
+    'trial',
+    NOW() - INTERVAL '2 weeks',
+    NOW() + INTERVAL '2 weeks',
+    '{"api_calls_per_day": 1000, "persona_tests_per_month": 20, "concurrent_tests": 2, "personas_limit": 10}'::jsonb,
+    '{"persona_generation": true, "risk_analysis": false, "scenario_testing": true, "vector_search": false}'::jsonb
+FROM tenants t
+CROSS JOIN products p
+WHERE t.tenant_name = 'EduTech Platform'
+  AND p.product_code = 'nexus';
+
+-- ============================================================================
+-- 4. INSERT CLIENT MODELS
+-- ============================================================================
+
+-- Acme Corporation Models
+INSERT INTO client_models (tenant_id, client_id, model_name, model_version, model_type, endpoint_url, deployment_environment, status, risk_level)
+SELECT 
+    t.id,
+    'acme-001',
+    'AcmeChat-Assistant',
+    '3.2.0',
+    'llm',
+    'https://api.acme.com/v3/chat',
+    'production',
+    'active',
+    'medium'
+FROM tenants t WHERE t.tenant_name = 'Acme Corporation';
+
+INSERT INTO client_models (tenant_id, client_id, model_name, model_version, model_type, endpoint_url, deployment_environment, status, risk_level)
+SELECT 
+    t.id,
+    'acme-001',
+    'AcmeCode-Helper',
+    '2.1.0',
+    'code-generation',
+    'https://api.acme.com/v2/code',
+    'production',
+    'active',
+    'low'
+FROM tenants t WHERE t.tenant_name = 'Acme Corporation';
+
+-- TechStart Inc Models
+INSERT INTO client_models (tenant_id, client_id, model_name, model_version, model_type, endpoint_url, deployment_environment, status, risk_level)
+SELECT 
+    t.id,
+    'techstart-002',
+    'FinancialAdvisor-Bot',
+    '1.0.0',
+    'llm',
+    'https://api.techstart.io/v1/advisor',
+    'production',
+    'active',
+    'high'
+FROM tenants t WHERE t.tenant_name = 'TechStart Inc';
+
+-- Global Healthcare Solutions Models
+INSERT INTO client_models (tenant_id, client_id, model_name, model_version, model_type, endpoint_url, deployment_environment, status, risk_level)
+SELECT 
+    t.id,
+    'ghs-003',
+    'MedicalAssistant-AI',
+    '4.0.1',
+    'llm',
+    'https://api.ghs.health/v4/assistant',
+    'production',
+    'active',
+    'critical'
+FROM tenants t WHERE t.tenant_name = 'Global Healthcare Solutions';
+
+-- EduTech Platform Models
+INSERT INTO client_models (tenant_id, client_id, model_name, model_version, model_type, endpoint_url, deployment_environment, status, risk_level)
+SELECT 
+    t.id,
+    'edutech-004',
+    'TutorBot-Student',
+    '1.5.0',
+    'llm',
+    'https://api.edutech.edu/v1/tutor',
+    'staging',
+    'active',
+    'medium'
+FROM tenants t WHERE t.tenant_name = 'EduTech Platform';
+
+-- ============================================================================
+-- 5. LINK MODELS TO PRODUCTS (client_model_products)
+-- ============================================================================
+
+-- Acme Corporation - Both models use both products
+INSERT INTO client_model_products (model_id, product_id, tenant_id, enabled, configuration)
+SELECT 
+    cm.model_id,
+    p.id,
+    cm.tenant_id,
+    TRUE,
+    CASE 
+        WHEN p.product_code = 'ai-range' THEN 
+            '{"test_types": ["adversarial", "safety", "compliance"], "priority": "high"}'::jsonb
+        WHEN p.product_code = 'nexus' THEN 
+            '{"persona_types": ["adversarial", "normal", "edge-case"], "scenario_categories": ["customer_support", "technical_inquiry"]}'::jsonb
+    END
+FROM client_models cm
+CROSS JOIN products p
+WHERE cm.model_name IN ('AcmeChat-Assistant', 'AcmeCode-Helper')
+  AND cm.client_id = 'acme-001';
+
+-- TechStart Inc - Model uses AI-Range only
+INSERT INTO client_model_products (model_id, product_id, tenant_id, enabled, configuration)
+SELECT 
+    cm.model_id,
+    p.id,
+    cm.tenant_id,
+    TRUE,
+    '{"test_types": ["adversarial", "safety", "financial_compliance"], "priority": "critical"}'::jsonb
+FROM client_models cm
+CROSS JOIN products p
+WHERE cm.model_name = 'FinancialAdvisor-Bot'
+  AND p.product_code = 'ai-range';
+
+-- Global Healthcare Solutions - Model uses both products
+INSERT INTO client_model_products (model_id, product_id, tenant_id, enabled, configuration)
+SELECT 
+    cm.model_id,
+    p.id,
+    cm.tenant_id,
+    TRUE,
+    CASE 
+        WHEN p.product_code = 'ai-range' THEN 
+            '{"test_types": ["adversarial", "safety", "hipaa_compliance", "data_privacy"], "priority": "critical"}'::jsonb
+        WHEN p.product_code = 'nexus' THEN 
+            '{"persona_types": ["patient", "doctor", "adversarial"], "scenario_categories": ["diagnosis_inquiry", "medication_questions", "emergency"]}'::jsonb
+    END
+FROM client_models cm
+CROSS JOIN products p
+WHERE cm.model_name = 'MedicalAssistant-AI';
+
+-- EduTech Platform - Model uses Nexus only
+INSERT INTO client_model_products (model_id, product_id, tenant_id, enabled, configuration)
+SELECT 
+    cm.model_id,
+    p.id,
+    cm.tenant_id,
+    TRUE,
+    '{"persona_types": ["student", "teacher"], "scenario_categories": ["homework_help", "concept_explanation"]}'::jsonb
+FROM client_models cm
+CROSS JOIN products p
+WHERE cm.model_name = 'TutorBot-Student'
+  AND p.product_code = 'nexus';
+
+-- ============================================================================
+-- 6. INSERT TEST CATEGORIES (AI-Range Product)
+-- ============================================================================
+
+-- Note: Test categories are owned by AI-Range product
+INSERT INTO test_categories (product_id, category_name, description, severity_level)
+SELECT 
+    p.id,
+    category.name,
+    category.description,
+    category.severity
+FROM products p
+CROSS JOIN (VALUES
     ('Jailbreak Attempts', 'Tests designed to bypass model safety constraints and protections', 'critical'),
     ('Toxicity & Hate Speech', 'Tests for detection and handling of toxic, abusive, or hateful content', 'high'),
     ('Bias Detection', 'Tests to identify potential biases in model outputs (gender, race, etc.)', 'medium'),
     ('Prompt Injection', 'Tests for prompt injection vulnerabilities and command injection', 'high'),
     ('Data Privacy', 'Tests to ensure model does not leak sensitive or private information', 'critical'),
     ('Misinformation', 'Tests for generation of false, misleading, or unverified information', 'high'),
-    ('Harmful Content', 'Tests for generation of dangerous or harmful instructions', 'critical');
+    ('Harmful Content', 'Tests for generation of dangerous or harmful instructions', 'critical')
+) AS category(name, description, severity)
+WHERE p.product_code = 'ai-range';
 
 -- ============================================================================
--- 2. INSERT AI AGENTS
+-- 7. INSERT AI AGENTS
 -- ============================================================================
-
-PRINT 'Inserting AI agents...';
 
 INSERT INTO ai_agents (agent_name, agent_type, model_architecture, version, description, capabilities, created_by)
 VALUES 
