@@ -13,6 +13,32 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "vector";
 
 -- ============================================================================
+-- PRODUCT LAYER - TOP TIER ARCHITECTURE
+-- ============================================================================
+
+-- Table: products
+-- Defines the products available in the platform (ai-range, nexus)
+CREATE TABLE products (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_code TEXT NOT NULL UNIQUE CHECK (product_code IN ('ai-range', 'nexus')),
+    product_name TEXT NOT NULL,
+    description TEXT,
+    features JSONB DEFAULT '{}'::jsonb,
+    pricing_tier TEXT,
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'beta', 'deprecated', 'inactive')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    metadata JSONB DEFAULT '{}'::jsonb
+);
+
+CREATE INDEX idx_products_code_status ON products(product_code, status);
+
+-- Insert default products
+INSERT INTO products (product_code, product_name, description, status) VALUES
+('ai-range', 'AI Range', 'Comprehensive AI testing and safety assessment platform', 'active'),
+('nexus', 'Nexus', 'Advanced AI persona testing and risk analysis system', 'active');
+
+-- ============================================================================
 -- CORE TENANT & CLIENT MANAGEMENT
 -- ============================================================================
 
@@ -28,6 +54,28 @@ CREATE TABLE tenants (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     metadata JSONB DEFAULT '{}'::jsonb
 );
+
+-- Table: client_product_subscriptions
+-- Manages which clients have access to which products
+CREATE TABLE client_product_subscriptions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    subscription_tier TEXT,
+    subscription_status TEXT NOT NULL DEFAULT 'active' CHECK (subscription_status IN ('active', 'trial', 'suspended', 'expired', 'cancelled')),
+    start_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    end_date TIMESTAMP WITH TIME ZONE,
+    usage_limits JSONB DEFAULT '{}'::jsonb,
+    features_enabled JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    metadata JSONB DEFAULT '{}'::jsonb,
+    UNIQUE(tenant_id, product_id)
+);
+
+CREATE INDEX idx_client_subscriptions_tenant ON client_product_subscriptions(tenant_id);
+CREATE INDEX idx_client_subscriptions_product ON client_product_subscriptions(product_id);
+CREATE INDEX idx_client_subscriptions_status ON client_product_subscriptions(subscription_status);
 
 -- ============================================================================
 -- AI AGENTS & MODELS
@@ -74,20 +122,43 @@ CREATE TABLE client_models (
 CREATE INDEX idx_client_models_tenant ON client_models(tenant_id);
 CREATE INDEX idx_client_models_client_status ON client_models(client_id, status);
 
+-- Table: client_model_products
+-- Junction table linking client models to products they use
+CREATE TABLE client_model_products (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    model_id BIGINT NOT NULL REFERENCES client_models(model_id) ON DELETE CASCADE,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    enabled BOOLEAN DEFAULT TRUE,
+    configuration JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(model_id, product_id)
+);
+
+CREATE INDEX idx_client_model_products_model ON client_model_products(model_id);
+CREATE INDEX idx_client_model_products_product ON client_model_products(product_id);
+CREATE INDEX idx_client_model_products_tenant ON client_model_products(tenant_id);
+
 -- ============================================================================
 -- USE CASES, COHORTS & SUB-COHORTS
 -- ============================================================================
 
 -- Table: use_cases
--- Business use cases for AI systems
+-- Business use cases for AI systems (AI-Range product)
 CREATE TABLE use_cases (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id),
     slug TEXT UNIQUE,
     name TEXT NOT NULL,
     description TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_use_cases_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_use_cases_product ON use_cases(product_id);
 
 -- Table: cohorts
 -- User cohorts within use cases
@@ -180,9 +251,10 @@ CREATE TABLE linguistic_traits_catalog (
 -- ============================================================================
 
 -- Table: personas
--- Unified persona table combining regular and AI-generated personas
+-- Unified persona table combining regular and AI-generated personas (AI-Range product)
 CREATE TABLE personas (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    product_id UUID NOT NULL REFERENCES products(id),
     tenant_id TEXT NOT NULL,
     session_id TEXT,
     use_case_id UUID REFERENCES use_cases(id),
@@ -229,6 +301,7 @@ CREATE TABLE personas (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+CREATE INDEX idx_personas_product ON personas(product_id);
 CREATE INDEX idx_personas_tenant ON personas(tenant_id);
 CREATE INDEX idx_personas_session ON personas(session_id);
 CREATE INDEX idx_personas_type_status ON personas(persona_type, status);
@@ -295,44 +368,63 @@ CREATE TABLE persona_linguistic_traits (
 -- Table: persona_memories
 CREATE TABLE persona_memories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id),
     persona_id TEXT REFERENCES personas(id),
     ts TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     type TEXT,
     content TEXT NOT NULL,
     metadata JSONB,
-    embedding vector
+    embedding vector,
+    CONSTRAINT fk_persona_memories_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
 
 CREATE INDEX idx_persona_memories_persona ON persona_memories(persona_id);
+CREATE INDEX idx_persona_memories_product ON persona_memories(product_id);
 
 -- Table: persona_reflections
 CREATE TABLE persona_reflections (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id),
     persona_id TEXT REFERENCES personas(id),
     ts TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     summary TEXT NOT NULL,
-    embedding vector
+    embedding vector,
+    CONSTRAINT fk_persona_reflections_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_persona_reflections_product ON persona_reflections(product_id);
 
 -- Table: persona_plans
 CREATE TABLE persona_plans (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id),
     persona_id TEXT REFERENCES personas(id),
     ts TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     plan TEXT NOT NULL,
     horizon INTEGER DEFAULT 3,
-    status TEXT DEFAULT 'active'
+    status TEXT DEFAULT 'active',
+    CONSTRAINT fk_persona_plans_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_persona_plans_product ON persona_plans(product_id);
 
 -- Table: persona_actions
 CREATE TABLE persona_actions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id),
     persona_id TEXT REFERENCES personas(id),
     ts TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     input TEXT,
     output TEXT,
-    metadata JSONB
+    metadata JSONB,
+    CONSTRAINT fk_persona_actions_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_persona_actions_product ON persona_actions(product_id);
 
 -- ============================================================================
 -- CONTEXT PROFILES & RISK ASSESSMENT
@@ -488,14 +580,19 @@ CREATE TABLE harms (
 -- ============================================================================
 
 -- Table: test_categories
--- High-level test categorization
+-- High-level test categorization (AI-Range product)
 CREATE TABLE test_categories (
     category_id SERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
     category_name TEXT NOT NULL UNIQUE,
     description TEXT,
     severity_level TEXT NOT NULL CHECK (severity_level IN ('low', 'medium', 'high', 'critical')),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_test_categories_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_test_categories_product ON test_categories(product_id);
 
 -- Table: test_types
 -- Specific types of tests (unified from both schemas)
@@ -515,9 +612,10 @@ CREATE TABLE test_types (
 -- ============================================================================
 
 -- Table: scenarios
--- Test scenarios (unified from ai_scenarios and scenarios tables)
+-- Test scenarios (unified from ai_scenarios and scenarios tables) (AI-Range product)
 CREATE TABLE scenarios (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    product_id UUID NOT NULL REFERENCES products(id),
     tenant_id TEXT NOT NULL,
     session_id TEXT,
     persona_id TEXT REFERENCES personas(id),
@@ -559,6 +657,7 @@ CREATE TABLE scenarios (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+CREATE INDEX idx_scenarios_product ON scenarios(product_id);
 CREATE INDEX idx_scenarios_tenant ON scenarios(tenant_id);
 CREATE INDEX idx_scenarios_session ON scenarios(session_id);
 CREATE INDEX idx_scenarios_persona ON scenarios(persona_id);
@@ -567,6 +666,7 @@ CREATE INDEX idx_scenarios_persona ON scenarios(persona_id);
 -- Detailed intent breakdown for scenarios
 CREATE TABLE scenario_intents (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id),
     scenario_id TEXT REFERENCES scenarios(id),
     
     intent_name TEXT NOT NULL,
@@ -608,63 +708,94 @@ CREATE TABLE scenario_intents (
     tags JSONB,
     
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_scenario_intents_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_scenario_intents_product ON scenario_intents(product_id);
 
 -- Table: scenario_intent_personas
 CREATE TABLE scenario_intent_personas (
+    product_id UUID NOT NULL REFERENCES products(id),
     intent_id UUID REFERENCES scenario_intents(id),
     persona_id TEXT REFERENCES personas(id),
     relevance_score NUMERIC CHECK (relevance_score >= 0 AND relevance_score <= 1),
     notes TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    PRIMARY KEY (intent_id, persona_id)
+    PRIMARY KEY (intent_id, persona_id),
+    CONSTRAINT fk_scenario_intent_personas_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_scenario_intent_personas_product ON scenario_intent_personas(product_id);
 
 -- Table: scenario_personas
 CREATE TABLE scenario_personas (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    product_id UUID NOT NULL REFERENCES products(id),
     scenario_id TEXT REFERENCES scenarios(id),
     persona_id TEXT REFERENCES personas(id),
     relevance_score DOUBLE PRECISION,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_scenario_personas_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_scenario_personas_product ON scenario_personas(product_id);
 
 -- Table: scenario_threats
 CREATE TABLE scenario_threats (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    product_id UUID NOT NULL REFERENCES products(id),
     scenario_id TEXT REFERENCES scenarios(id),
     threat_vector_id TEXT REFERENCES threat_vectors(id),
     relevance_score DOUBLE PRECISION,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_scenario_threats_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_scenario_threats_product ON scenario_threats(product_id);
 
 -- Table: scenario_scores
 CREATE TABLE scenario_scores (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    product_id UUID NOT NULL REFERENCES products(id),
     scenario_id TEXT REFERENCES scenarios(id),
     score_type TEXT NOT NULL,
     score_value DOUBLE PRECISION NOT NULL,
     metadata JSONB DEFAULT '{}'::jsonb,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_scenario_scores_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_scenario_scores_product ON scenario_scores(product_id);
 
 -- Table: scenario_test_types
 CREATE TABLE scenario_test_types (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    product_id UUID NOT NULL REFERENCES products(id),
     scenario_id TEXT REFERENCES scenarios(id),
     test_type_id TEXT REFERENCES test_types(id),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_scenario_test_types_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_scenario_test_types_product ON scenario_test_types(product_id);
 
 -- ============================================================================
 -- TEST SESSIONS & EXECUTION
 -- ============================================================================
 
 -- Table: test_sessions
+-- AI-Range testing sessions
 CREATE TABLE test_sessions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     session_id TEXT NOT NULL UNIQUE,
+    product_id UUID NOT NULL REFERENCES products(id),
     customer_id TEXT NOT NULL,
     tenant_id UUID REFERENCES tenants(id),
     
@@ -677,16 +808,21 @@ CREATE TABLE test_sessions (
     metadata JSONB DEFAULT '{}'::jsonb,
     
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
+    CONSTRAINT fk_test_sessions_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
 
+CREATE INDEX idx_test_sessions_product ON test_sessions(product_id);
 CREATE INDEX idx_test_sessions_tenant ON test_sessions(tenant_id);
 CREATE INDEX idx_test_sessions_customer ON test_sessions(customer_id);
 
 -- Table: adversarial_test_cases
--- Individual test cases for adversarial testing
+-- Individual test cases for adversarial testing (AI-Range product)
 CREATE TABLE adversarial_test_cases (
     test_case_id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
     category_id INTEGER REFERENCES test_categories(category_id),
     
     test_name TEXT NOT NULL,
@@ -705,13 +841,15 @@ CREATE TABLE adversarial_test_cases (
     metadata JSONB
 );
 
+CREATE INDEX idx_test_cases_product ON adversarial_test_cases(product_id);
 CREATE INDEX idx_test_cases_category ON adversarial_test_cases(category_id);
 CREATE INDEX idx_test_cases_active ON adversarial_test_cases(is_active);
 
 -- Table: test_executions
--- Records each execution of a test
+-- Records each execution of a test (AI-Range product)
 CREATE TABLE test_executions (
     execution_id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
     test_case_id BIGINT REFERENCES adversarial_test_cases(test_case_id),
     executing_agent_id BIGINT REFERENCES ai_agents(agent_id),
@@ -723,9 +861,13 @@ CREATE TABLE test_executions (
     status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'running', 'completed', 'failed', 'timeout')),
     
     error_message TEXT,
-    execution_context JSONB
+    execution_context JSONB,
+    
+    CONSTRAINT fk_test_executions_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
 
+CREATE INDEX idx_executions_product ON test_executions(product_id);
 CREATE INDEX idx_executions_model ON test_executions(model_id);
 CREATE INDEX idx_executions_test ON test_executions(test_case_id);
 CREATE INDEX idx_executions_status ON test_executions(status);
@@ -799,6 +941,7 @@ CREATE INDEX idx_outputs_execution ON model_outputs(execution_id);
 -- Table: prompt_generator_responses
 CREATE TABLE prompt_generator_responses (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id),
     session_id TEXT NOT NULL,
     persona_id TEXT REFERENCES personas(id),
     persona_name TEXT NOT NULL,
@@ -807,12 +950,17 @@ CREATE TABLE prompt_generator_responses (
     prompts JSONB,
     raw_output JSONB,
     
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_prompt_generator_responses_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_prompt_generator_responses_product ON prompt_generator_responses(product_id);
 
 -- Table: prompt_response_metadata
 CREATE TABLE prompt_response_metadata (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id),
     prompt_response_id UUID REFERENCES prompt_generator_responses(id),
     session_id UUID REFERENCES test_sessions(id),
     persona_id TEXT REFERENCES personas(id),
@@ -831,17 +979,227 @@ CREATE TABLE prompt_response_metadata (
     token_output INTEGER,
     
     metadata JSONB DEFAULT '{}'::jsonb,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_prompt_response_metadata_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_prompt_response_metadata_product ON prompt_response_metadata(product_id);
+
+-- ============================================================================
+-- CAT-ASTROPHIC PROMPT DATABASE (PromptGoblin v2) INTEGRATION
+-- ============================================================================
+-- Tables for comprehensive prompt generation, execution tracking, and telemetry
+
+-- Table: generation_runs
+-- Stores batch/run-level metadata for prompt generation sessions
+CREATE TABLE generation_runs (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
+    generation_run_id UUID NOT NULL UNIQUE,
+    modality VARCHAR(50) DEFAULT 'text' CHECK (modality IN ('text', 'image', 'audio')),
+    tags JSONB DEFAULT '[]'::jsonb,
+    plan_metadata JSONB,
+    coverage_map JSONB,
+    adaptive_weights JSONB,
+    status VARCHAR(50) DEFAULT 'in_progress' CHECK (status IN ('in_progress', 'completed', 'failed')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
+    CONSTRAINT fk_generation_runs_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_generation_runs_product ON generation_runs(product_id);
+CREATE INDEX idx_generation_runs_id ON generation_runs(generation_run_id);
+CREATE INDEX idx_generation_runs_status ON generation_runs(status);
+CREATE INDEX idx_generation_runs_created ON generation_runs(created_at);
+
+-- Table: conversations
+-- Stores conversation-level metadata (one per prompt in PromptGoblin format)
+CREATE TABLE conversations (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
+    generation_run_id BIGINT NOT NULL REFERENCES generation_runs(id),
+    conversation_id VARCHAR(100) NOT NULL UNIQUE,
+    industry JSONB DEFAULT '[]'::jsonb,
+    model_version VARCHAR(50) DEFAULT 'unknown',
+    ai_range_enabled BOOLEAN DEFAULT FALSE,
+    ai_range_model_name VARCHAR(255),
+    ai_range_temperature FLOAT DEFAULT 0.7,
+    ai_range_category VARCHAR(100),
+    ai_range_target VARCHAR(100),
+    human_in_loop BOOLEAN DEFAULT FALSE,
+    human_in_loop_stage JSONB DEFAULT '[]'::jsonb,
+    human_in_loop_details TEXT DEFAULT '',
+    quality_methodology VARCHAR(255) DEFAULT '',
+    diversity_score FLOAT,
+    coverage_contribution JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
+    CONSTRAINT fk_conversations_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_conversations_product ON conversations(product_id);
+CREATE INDEX idx_conversations_id ON conversations(conversation_id);
+CREATE INDEX idx_conversations_generation_run ON conversations(generation_run_id);
+CREATE INDEX idx_conversations_created ON conversations(created_at);
+
+-- Table: turns
+-- Stores individual prompt-response exchanges (the core generation data)
+CREATE TABLE turns (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
+    conversation_id BIGINT NOT NULL REFERENCES conversations(id),
+    turn_id VARCHAR(100) NOT NULL UNIQUE,
+    stage INTEGER,
+    role VARCHAR(50) DEFAULT 'assistant' CHECK (role IN ('assistant', 'user', 'system')),
+    prompt TEXT NOT NULL,
+    response TEXT NOT NULL,
+    response_preview TEXT,
+    prompt_tokens INTEGER DEFAULT 0,
+    response_tokens INTEGER DEFAULT 0,
+    total_tokens INTEGER DEFAULT 0,
+    latency_ms FLOAT DEFAULT 0.0,
+    status VARCHAR(50) DEFAULT 'completed' CHECK (status IN ('completed', 'failed', 'pending')),
+    finish_reason VARCHAR(50),
+    model VARCHAR(255) NOT NULL,
+    model_version VARCHAR(50) DEFAULT 'unknown',
+    base_model_id VARCHAR(255),
+    base_model_name VARCHAR(255),
+    base_model_version VARCHAR(50),
+    base_model_temperature FLOAT,
+    auto_quality_score FLOAT DEFAULT 0.0,
+    human_reviewed BOOLEAN DEFAULT FALSE,
+    r_n FLOAT DEFAULT 0.0,
+    v_n FLOAT DEFAULT 0.0,
+    a_n FLOAT DEFAULT 0.0,
+    rho FLOAT DEFAULT 0.0,
+    pipeline_metadata JSONB,
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
+    CONSTRAINT fk_turns_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_turns_product ON turns(product_id);
+CREATE INDEX idx_turns_id ON turns(turn_id);
+CREATE INDEX idx_turns_conversation ON turns(conversation_id);
+CREATE INDEX idx_turns_stage ON turns(stage);
+CREATE INDEX idx_turns_timestamp ON turns(timestamp);
+CREATE INDEX idx_turns_conversation_timestamp ON turns(conversation_id, timestamp);
+
+-- Table: quality_metrics
+-- Stores quality assessment metrics for conversations
+CREATE TABLE quality_metrics (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
+    conversation_id BIGINT NOT NULL REFERENCES conversations(id),
+    methodology VARCHAR(255) DEFAULT '',
+    metrics JSONB DEFAULT '{}'::jsonb,
+    fit_score FLOAT,
+    diversity_score FLOAT,
+    policy_risk_score FLOAT,
+    length_score FLOAT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
+    CONSTRAINT fk_quality_metrics_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_quality_metrics_product ON quality_metrics(product_id);
+CREATE INDEX idx_quality_metrics_conversation ON quality_metrics(conversation_id);
+
+-- Table: telemetry
+-- Stores aggregated metrics per generation run
+CREATE TABLE telemetry (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
+    generation_run_id BIGINT NOT NULL UNIQUE REFERENCES generation_runs(id),
+    ingression_time TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    egression_time TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    total_entries INTEGER DEFAULT 0,
+    total_prompt_tokens INTEGER DEFAULT 0,
+    total_response_tokens INTEGER DEFAULT 0,
+    total_tokens INTEGER DEFAULT 0,
+    average_latency_ms FLOAT DEFAULT 0.0,
+    success_rate FLOAT,
+    repair_rate FLOAT,
+    reject_rate FLOAT,
+    avg_iterations FLOAT,
+    strategy_coverage JSONB,
+    topic_coverage JSONB,
+    models_used JSONB DEFAULT '{}'::jsonb,
+    feature_flags JSONB DEFAULT '[]'::jsonb,
+    audit_trail_ids JSONB DEFAULT '[]'::jsonb,
+    retention_policy VARCHAR(255) DEFAULT '',
+    deletion_date TIMESTAMP WITH TIME ZONE,
+    errors JSONB DEFAULT '[]'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
+    CONSTRAINT fk_telemetry_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_telemetry_product ON telemetry(product_id);
+CREATE INDEX idx_telemetry_generation_run ON telemetry(generation_run_id);
+
+-- Table: llm_invocations
+-- Stores all LLM API invocations for auditing, analysis, and cost tracking
+CREATE TABLE llm_invocations (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
+    invocation_id UUID NOT NULL UNIQUE,
+    model_id VARCHAR(255) NOT NULL,
+    request_payload JSONB NOT NULL,
+    response_data JSONB,
+    sanitized_response JSONB,
+    generated_text TEXT,
+    status VARCHAR(50) DEFAULT 'success' CHECK (status IN ('success', 'failed', 'error')),
+    error_code VARCHAR(100),
+    error_message TEXT,
+    latency_ms FLOAT,
+    prompt_tokens INTEGER DEFAULT 0,
+    completion_tokens INTEGER DEFAULT 0,
+    total_tokens INTEGER DEFAULT 0,
+    conversation_id VARCHAR(100),
+    turn_id VARCHAR(100),
+    generation_run_id UUID,
+    cache_hit BOOLEAN DEFAULT FALSE,
+    retry_count INTEGER DEFAULT 0,
+    invocation_type VARCHAR(50) DEFAULT 'async' CHECK (invocation_type IN ('async', 'sync')),
+    caller_context JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    completed_at TIMESTAMP WITH TIME ZONE,
+    
+    CONSTRAINT fk_llm_invocations_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_llm_invocations_product ON llm_invocations(product_id);
+CREATE INDEX idx_llm_invocations_id ON llm_invocations(invocation_id);
+CREATE INDEX idx_llm_invocations_model ON llm_invocations(model_id);
+CREATE INDEX idx_llm_invocations_status ON llm_invocations(status);
+CREATE INDEX idx_llm_invocations_conversation ON llm_invocations(conversation_id);
+CREATE INDEX idx_llm_invocations_turn ON llm_invocations(turn_id);
+CREATE INDEX idx_llm_invocations_generation_run ON llm_invocations(generation_run_id);
+CREATE INDEX idx_llm_invocations_created ON llm_invocations(created_at);
+CREATE INDEX idx_llm_invocations_model_created ON llm_invocations(model_id, created_at);
+CREATE INDEX idx_llm_invocations_status_created ON llm_invocations(status, created_at);
 
 -- ============================================================================
 -- SAFETY ASSESSMENTS & RESULTS
 -- ============================================================================
 
 -- Table: safety_assessments
--- Safety evaluations of model outputs
+-- Safety evaluations of model outputs (AI-Range product)
 CREATE TABLE safety_assessments (
     assessment_id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
     output_id BIGINT REFERENCES model_outputs(output_id),
     evaluator_agent_id BIGINT REFERENCES ai_agents(agent_id),
     
@@ -855,9 +1213,13 @@ CREATE TABLE safety_assessments (
     confidence_score NUMERIC(5,2) CHECK (confidence_score >= 0 AND confidence_score <= 100),
     
     assessed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    metadata JSONB
+    metadata JSONB,
+    
+    CONSTRAINT fk_safety_assessments_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
 
+CREATE INDEX idx_assessments_product ON safety_assessments(product_id);
 CREATE INDEX idx_assessments_output ON safety_assessments(output_id);
 CREATE INDEX idx_assessments_safe ON safety_assessments(is_safe);
 CREATE INDEX idx_assessments_risk ON safety_assessments(risk_level);
@@ -955,8 +1317,10 @@ CREATE INDEX idx_alerts_status ON safety_alerts(status);
 CREATE INDEX idx_alerts_severity ON safety_alerts(severity);
 
 -- Table: compliance_reports
+-- Compliance and safety reports (AI-Range product)
 CREATE TABLE compliance_reports (
     report_id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
     report_type TEXT NOT NULL,
     model_id BIGINT REFERENCES client_models(model_id),
     
@@ -975,9 +1339,13 @@ CREATE TABLE compliance_reports (
     report_data JSONB,
     
     generated_by_agent_id BIGINT REFERENCES ai_agents(agent_id),
-    generated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    generated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
+    CONSTRAINT fk_compliance_reports_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
 
+CREATE INDEX idx_reports_product ON compliance_reports(product_id);
 CREATE INDEX idx_reports_model ON compliance_reports(model_id);
 CREATE INDEX idx_reports_period ON compliance_reports(report_period_start, report_period_end);
 

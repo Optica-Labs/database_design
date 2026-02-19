@@ -6,6 +6,175 @@
 -- ============================================================================
 
 -- ============================================================================
+-- PRODUCT LAYER QUERIES
+-- ============================================================================
+
+-- View all available products
+SELECT 
+    product_code,
+    product_name,
+    description,
+    status,
+    features
+FROM products
+ORDER BY product_code;
+
+-- Subscribe a client to AI-Range product
+INSERT INTO client_product_subscriptions (tenant_id, product_id, subscription_tier, subscription_status, usage_limits, features_enabled)
+SELECT 
+    t.id,
+    p.id,
+    'enterprise',
+    'active',
+    '{"api_calls_per_day": 10000, "test_sessions_per_month": 100, "concurrent_tests": 10}'::jsonb,
+    '{"adversarial_testing": true, "compliance_reports": true, "custom_scenarios": true}'::jsonb
+FROM tenants t
+CROSS JOIN products p
+WHERE t.tenant_name = 'Acme Corp'
+  AND p.product_code = 'ai-range';
+
+-- Subscribe a client to Nexus product
+INSERT INTO client_product_subscriptions (tenant_id, product_id, subscription_tier, subscription_status, usage_limits, features_enabled)
+SELECT 
+    t.id,
+    p.id,
+    'premium',
+    'active',
+    '{"api_calls_per_day": 5000, "persona_tests_per_month": 50}'::jsonb,
+    '{"persona_generation": true, "risk_analysis": true, "scenario_testing": true}'::jsonb
+FROM tenants t
+CROSS JOIN products p
+WHERE t.tenant_name = 'Acme Corp'
+  AND p.product_code = 'nexus';
+
+-- Link a client model to both products
+INSERT INTO client_model_products (model_id, product_id, tenant_id, enabled, configuration)
+SELECT 
+    cm.model_id,
+    p.id,
+    cm.tenant_id,
+    TRUE,
+    CASE 
+        WHEN p.product_code = 'ai-range' THEN '{"test_types": ["adversarial", "safety", "compliance"]}'::jsonb
+        WHEN p.product_code = 'nexus' THEN '{"persona_types": ["adversarial", "normal", "edge-case"]}'::jsonb
+    END
+FROM client_models cm
+CROSS JOIN products p
+WHERE cm.model_name = 'CustomerChatBot'
+  AND p.product_code IN ('ai-range', 'nexus');
+
+-- Get all products a client has access to
+SELECT 
+    t.tenant_name,
+    t.client_id,
+    p.product_code,
+    p.product_name,
+    cps.subscription_tier,
+    cps.subscription_status,
+    cps.start_date,
+    cps.end_date,
+    cps.usage_limits,
+    cps.features_enabled
+FROM client_product_subscriptions cps
+JOIN tenants t ON cps.tenant_id = t.id
+JOIN products p ON cps.product_id = p.id
+WHERE cps.subscription_status = 'active'
+  AND (cps.end_date IS NULL OR cps.end_date > NOW())
+ORDER BY t.tenant_name, p.product_code;
+
+-- Get all models using a specific product
+SELECT 
+    t.tenant_name,
+    cm.model_name,
+    cm.model_version,
+    p.product_code,
+    p.product_name,
+    cmp.enabled,
+    cmp.configuration,
+    cm.status AS model_status,
+    cm.risk_level
+FROM client_model_products cmp
+JOIN client_models cm ON cmp.model_id = cm.model_id
+JOIN tenants t ON cmp.tenant_id = t.id
+JOIN products p ON cmp.product_id = p.id
+WHERE p.product_code = 'ai-range'
+  AND cmp.enabled = TRUE
+ORDER BY t.tenant_name, cm.model_name;
+
+-- Check if a client has access to a specific product
+SELECT 
+    t.tenant_name,
+    p.product_code,
+    CASE 
+        WHEN cps.id IS NOT NULL 
+            AND cps.subscription_status = 'active'
+            AND (cps.end_date IS NULL OR cps.end_date > NOW())
+        THEN TRUE
+        ELSE FALSE
+    END AS has_access,
+    cps.subscription_tier,
+    cps.subscription_status
+FROM tenants t
+CROSS JOIN products p
+LEFT JOIN client_product_subscriptions cps 
+    ON cps.tenant_id = t.id AND cps.product_id = p.id
+WHERE t.tenant_name = 'Acme Corp'
+  AND p.product_code = 'nexus';
+
+-- Get product usage summary by client
+SELECT 
+    t.tenant_name,
+    p.product_name,
+    p.product_code,
+    COUNT(DISTINCT cmp.model_id) AS models_count,
+    cps.subscription_tier,
+    cps.subscription_status,
+    cps.usage_limits,
+    cps.features_enabled
+FROM tenants t
+JOIN client_product_subscriptions cps ON t.id = cps.tenant_id
+JOIN products p ON cps.product_id = p.id
+LEFT JOIN client_model_products cmp 
+    ON cps.tenant_id = cmp.tenant_id 
+    AND cps.product_id = cmp.product_id
+    AND cmp.enabled = TRUE
+WHERE cps.subscription_status = 'active'
+GROUP BY t.tenant_name, p.product_name, p.product_code, 
+         cps.subscription_tier, cps.subscription_status, 
+         cps.usage_limits, cps.features_enabled
+ORDER BY t.tenant_name, p.product_code;
+
+-- Get models that use both AI-Range and Nexus
+SELECT 
+    t.tenant_name,
+    cm.model_name,
+    cm.model_version,
+    COUNT(DISTINCT p.product_code) AS product_count,
+    STRING_AGG(p.product_code, ', ' ORDER BY p.product_code) AS products_used
+FROM client_model_products cmp
+JOIN client_models cm ON cmp.model_id = cm.model_id
+JOIN tenants t ON cmp.tenant_id = t.id
+JOIN products p ON cmp.product_id = p.id
+WHERE cmp.enabled = TRUE
+GROUP BY t.tenant_name, cm.model_name, cm.model_version
+HAVING COUNT(DISTINCT p.product_code) > 1
+ORDER BY t.tenant_name, cm.model_name;
+
+-- Update subscription status (e.g., suspend a subscription)
+UPDATE client_product_subscriptions
+SET subscription_status = 'suspended',
+    updated_at = NOW()
+WHERE tenant_id = (SELECT id FROM tenants WHERE tenant_name = 'Acme Corp')
+  AND product_id = (SELECT id FROM products WHERE product_code = 'nexus');
+
+-- Disable a model's access to a specific product
+UPDATE client_model_products
+SET enabled = FALSE,
+    updated_at = NOW()
+WHERE model_id = (SELECT model_id FROM client_models WHERE model_name = 'CustomerChatBot' LIMIT 1)
+  AND product_id = (SELECT id FROM products WHERE product_code = 'ai-range');
+
+-- ============================================================================
 -- REGISTRATION & SETUP QUERIES
 -- ============================================================================
 
