@@ -1,5 +1,7 @@
 # Entity Relationship Diagram
 
+**Note**: This document shows the original ER diagrams. For the integrated schema with Nexus ground truth, see [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md).
+
 ## Adversarial AI Safety Database
 
 ### Core Entity Relationships
@@ -297,6 +299,52 @@ model_outputs
 - Covering indexes for views
 - Filtered indexes for active records
 - Consider columnstore for large fact tables
+
+## Nexus Ground Truth Integration (NEW)
+
+The integrated schema now includes **Nexus ground truth** for unified prompt management:
+
+```
+┌─────────────────────────────┐
+│  NEXUS_PROMPT_LIBRARY       │
+│─────────────────────────────│
+│ id (PK)                     │
+│ product_id (FK → nexus)     │
+│ tenant_id (FK)              │
+│ source_type (cat-astro|cli) │
+│ cat_turn_id (FK) or         │
+│ client_prompt_id (FK)       │
+│ prompt_text                 │
+│ status                      │
+└─────────────────────────────┘
+         │
+         │ linked by trigger
+         ▼
+┌────────────────────────────────────┐
+│  PRODUCT_PROMPT_LINEAGE (AUTO)     │
+│────────────────────────────────────│
+│ id (PK)                            │
+│ ai_range_turn_id (FK)              │
+│ nexus_prompt_id (FK)               │
+│ ai_range_product_id (FK)           │
+│ nexus_product_id (FK)              │
+│ lineage_type (stage4|other)        │
+│ created_at (auto-maintained)       │
+└────────────────────────────────────┘
+         │
+         │ allows bidirectional tracing
+         ├──────────────┬───────────────┐
+         ▼              ▼               ▼
+   AI-Range       Nexus Library   Cross-Product
+   Turn           Entry            Visibility
+```
+
+### Automatic Lineage
+
+When a Stage 4 prompt is ingested into Nexus:
+1. Insert row in `nexus_prompt_library` with `source_type = 'cat-astrophic'`
+2. Trigger automatically creates `product_prompt_lineage` entry
+3. Both products now have bidirectional visibility
 
 ## Normalization Level
 

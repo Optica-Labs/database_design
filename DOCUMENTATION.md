@@ -1,8 +1,10 @@
 # Database Documentation - Master Reference
 
-Complete consolidated documentation for the integrated adversarial AI safety and persona testing database.
+Complete consolidated documentation for the integrated adversarial AI safety and persona testing database, with unified Nexus prompt ingestion.
 
-**Version**: 2.0 (Integrated)  
+**Consolidation Note**: This file is the single master reference for the whole repository. All other docs are supporting deep dives and diagrams.
+
+**Version**: 2.1 (Nexus Integration Complete)  
 **Platform**: PostgreSQL 14+  
 **Status**: Production Ready
 
@@ -14,12 +16,13 @@ Complete consolidated documentation for the integrated adversarial AI safety and
 2. [Architecture Overview](#architecture-overview)
 3. [Table Directory](#table-directory)
 4. [Integration Summary](#integration-summary)
-5. [Common Workflows](#common-workflows)
-6. [Query Patterns](#query-patterns)
-7. [Deployment Guide](#deployment-guide)
-8. [Performance & Optimization](#performance--optimization)
-9. [Security & Compliance](#security--compliance)
-10. [Troubleshooting](#troubleshooting)
+5. [Nexus Ground Truth](#nexus-ground-truth)
+6. [Common Workflows](#common-workflows)
+7. [Query Patterns](#query-patterns)
+8. [Deployment Guide](#deployment-guide)
+9. [Performance & Optimization](#performance--optimization)
+10. [Security & Compliance](#security--compliance)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -30,14 +33,15 @@ Complete consolidated documentation for the integrated adversarial AI safety and
 | Concept | Description | Location |
 |---------|-------------|----------|
 | **Tenant** | Client organization (isolation boundary) | `tenants` table |
-| **Product** | AI-Range or Nexus product definition | `products` table |
+| **Product** | AI-Range (primary) or Nexus (prompt library) | `products` table |
 | **Model** | Client AI model under test | `client_models` table |
 | **Persona** | Simulated user for testing | `personas` table |
 | **Scenario** | Test scenario with personas | `scenarios` table |
 | **Test Case** | Adversarial prompt | `adversarial_test_cases` |
 | **Test Execution** | Result of running a test | `test_executions` table |
 | **Threat Vector** | Attack pattern/vulnerability | `threat_vectors` table |
-| **Generation Run** | Batch prompt generation session | `generation_runs` table |
+| **Generation Run** | Batch prompt generation session (AI-Range) | `generation_runs` table |
+| **Prompt Lineage** | Cross-product traceability AI-Range → Nexus | `product_prompt_lineage` table |
 
 ### File Quick Links
 
@@ -45,9 +49,12 @@ Complete consolidated documentation for the integrated adversarial AI safety and
 |------|---------|-----------|
 | [README.md](README.md) | Main overview | 5 min |
 | [docs/INDEX.md](docs/INDEX.md) | File guide | 5 min |
+| [AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md) | Unified architecture | 10 min |
 | [docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md) | Product architecture | 10 min |
-| [docs/INTEGRATION_GUIDE.md](docs/INTEGRATION_GUIDE.md) | Design decisions | 15 min |
-| [docs/ER_DIAGRAM_INTEGRATED.md](docs/ER_DIAGRAM_INTEGRATED.md) | Visual schema | 10 min |
+| [docs/PRODUCT_LAYER_ER_DIAGRAM.md](docs/PRODUCT_LAYER_ER_DIAGRAM.md) | Product layer ER diagram | 10 min |
+| [docs/ER_DIAGRAM.md](docs/ER_DIAGRAM.md) | Legacy ER diagrams (reference) | 10 min |
+| [docs/AGENT_ER_DIAGRAMS.md](docs/AGENT_ER_DIAGRAMS.md) | Agent ER diagrams | 10 min |
+| [docs/NEXUS_INTEGRATION.md](docs/NEXUS_INTEGRATION.md) | **Nexus prompt integration** | **10 min** |
 | [docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md) | Prompt generation | 10 min |
 | [sql/schemas/schema_integrated.sql](sql/schemas/schema_integrated.sql) | Full DDL | Reference |
 | [sql/queries/queries.sql](sql/queries/queries.sql) | Query examples | 20 min |
@@ -59,19 +66,38 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";      -- UUID generation
 CREATE EXTENSION IF NOT EXISTS "vector";         -- Vector search (pgvector)
 ```
 
+### Repository Map
+
+- **Consolidated master documentation**: [DOCUMENTATION.md](DOCUMENTATION.md)
+- **Repository overview**: [README.md](README.md)
+- **Architecture**: [AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md)
+- **Documentation index**: [docs/INDEX.md](docs/INDEX.md)
+- **Directory structure**: [DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md)
+- **Product layer**: [docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md)
+- **Nexus integration**: [docs/NEXUS_INTEGRATION.md](docs/NEXUS_INTEGRATION.md)
+- **Cat-Astrophic integration**: [docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md)
+- **Agent ER diagrams**: [docs/AGENT_ER_DIAGRAMS.md](docs/AGENT_ER_DIAGRAMS.md)
+- **Legacy ER diagrams**: [docs/ER_DIAGRAM.md](docs/ER_DIAGRAM.md)
+- **Schema**: [sql/schemas/schema_integrated.sql](sql/schemas/schema_integrated.sql)
+- **Queries**: [sql/queries/queries.sql](sql/queries/queries.sql)
+- **Sample data**: [sql/sample_data/sample_data.sql](sql/sample_data/sample_data.sql)
+- **Migrations**: [sql/migrations/migration_script.sql](sql/migrations/migration_script.sql)
+
 ---
 
 ## Architecture Overview
 
-### Two-Tier System
+### Three-Tier System
 
 ```
 Layer 1: TENANTS (Client Organizations)
          ↓
-Layer 2: MODELS (AI Models Under Test)
+Layer 2: PRODUCTS (AI-Range | Nexus)
+         ↓
+Layer 3: MODELS & DATA (AI Models, Personas, Prompts)
 ```
 
-### AI-Range Platform (Unified)
+### AI-Range Platform (Primary Product)
 
 All operational tables include `product_id` linking to AI-Range:
 
@@ -86,6 +112,16 @@ Prompts | generation_*, conversations, turns, quality_* | 6 tables
 Results | model_outputs, test_results | 3 tables
 Infrastructure | audit_logs, llm_invocations | 2 tables
 
+### Nexus Platform (Prompt Integration Product)
+
+New product for unified prompt ingestion:
+
+**Category** | **Tables** | **Purpose**
+---|---|---
+Prompt Ingestion | client_prompt_submissions | Client-provided prompts
+Prompt Library | nexus_prompt_library | Unified prompt library (Stage 4 + client)
+Cross-Product Lineage | product_prompt_lineage | AI-Range → Nexus traceability
+
 ### Multi-Tenancy Architecture
 
 ```
@@ -93,7 +129,9 @@ tenants (isolation boundary)
 ├── client_models (models for tenant)
 ├── personas (personas for tenant)
 ├── scenarios (scenarios for tenant)
-└── test_sessions (testing for tenant)
+├── test_sessions (testing for tenant)
+├── client_prompt_submissions (Nexus: prompts for tenant)
+└── nexus_prompt_library (Nexus: curated prompt library)
 ```
 
 ---
@@ -500,6 +538,7 @@ WHERE key = 'age_range' AND persona_type = 'regular';
 | **AI Persona Testing** | PostgreSQL | 50+ tables | ✅ Integrated |
 | **Cat-Astrophic Prompts** | PromptGoblin v2 | 6 tables | ✅ Integrated |
 | **Multi-Tenancy** | NEW | 3 tables | ✅ Added |
+| **Nexus Ground Truth** | NEW | 3 + 1 view | ✅ Active |
 
 ### Key Integration Points
 
@@ -527,11 +566,53 @@ WHERE key = 'age_range' AND persona_type = 'regular';
    - Full PromptGoblin v2 table structure
    - Generation runs → conversations → turns hierarchy
    - Quality metrics and LLM invocation tracking
+   - **Stage 4 prompts are primary source for Nexus**
 
-6. **Nexus Prompt Integration**
-  - Nexus prompt library unified across sources
-  - Ingests completed, successful Stage 4 Cat-Astrophic prompts
-  - Supports client-provided prompts with approval workflow
+6. **Nexus Ground Truth** (NEW - Now Part of Platform Foundation)
+   - Unified prompt library ingesting AI-Range Stage 4 + client prompts
+   - `product_prompt_lineage` enables automatic traceability
+   - Trigger-driven linkage: AI-Range → Nexus (zero-touch)
+   - All AI-Range Stage 4 prompts automatically surface in Nexus
+   - Cross-product visibility: every prompt is traceable through both products
+
+---
+
+## Nexus Ground Truth
+
+### What is Nexus Ground Truth?
+
+Nexus is now integrated as a **ground truth repository for prompts**, consuming:
+1. **Completed, successful Stage 4 Cat-Astrophic prompts** from AI-Range
+2. **Client-provided prompt submissions** (with approval workflow)
+
+### Automatic Traceability
+
+When a Stage 4 prompt is ingested into Nexus:
+- `nexus_prompt_library` row is created
+- `product_prompt_lineage` row is **automatically created** by trigger
+- Bidirectional links: AI-Range turn ↔ Nexus prompt
+
+### Key Tables for Ground Truth
+
+| Table | Purpose |
+|-------|---------|
+| `nexus_prompt_library` | Single source of truth for curated prompts |
+| `client_prompt_submissions` | Client submissions with review pipeline |
+| `product_prompt_lineage` | Cross-product audit trail (auto-maintained) |
+
+### Querying Ground Truth
+
+```sql
+-- View all prompts in Nexus ground truth with lineage
+SELECT * FROM vw_cross_product_prompt_trace;
+
+-- Get Stage 4 candidates ready for Nexus
+SELECT * FROM vw_nexus_stage4_prompt_candidates;
+
+-- Trace a specific prompt through both products
+SELECT * FROM vw_cross_product_prompt_trace 
+WHERE ai_range_turn_id = :turn_id;
+```
 
 ---
 
@@ -1173,9 +1254,13 @@ FOREIGN KEY (product_id) REFERENCES products(id);
 ### Related Files
 
 - **[README.md](README.md)** - Project overview
-- **[docs/INTEGRATION_GUIDE.md](docs/INTEGRATION_GUIDE.md)** - Design decisions
-- **[docs/ER_DIAGRAM_INTEGRATED.md](docs/ER_DIAGRAM_INTEGRATED.md)** - Visual diagrams
+- **[AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md)** - Unified architecture
+- **[docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md)** - Product layer design
+- **[docs/PRODUCT_LAYER_ER_DIAGRAM.md](docs/PRODUCT_LAYER_ER_DIAGRAM.md)** - Product ER diagrams
+- **[docs/ER_DIAGRAM.md](docs/ER_DIAGRAM.md)** - Legacy ER diagrams
+- **[docs/AGENT_ER_DIAGRAMS.md](docs/AGENT_ER_DIAGRAMS.md)** - Agent ER diagrams
 - **[docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md)** - Prompt generation details
+- **[docs/NEXUS_INTEGRATION.md](docs/NEXUS_INTEGRATION.md)** - Nexus prompt ingestion
 - **[sql/queries/queries.sql](sql/queries/queries.sql)** - Query examples
 
 ### PostgreSQL Resources
