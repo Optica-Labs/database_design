@@ -1,6 +1,6 @@
 # Integrated Adversarial AI Safety & Persona Testing Database
 
-A unified PostgreSQL database schema integrating adversarial AI safety testing with persona-driven risk assessment across multiple products.
+A unified PostgreSQL database schema integrating adversarial AI safety testing with persona-driven risk assessment, AI-Range prompt generation, and **Nexus ground truth for prompt curation**.
 
 ## 🎯 Overview
 
@@ -8,19 +8,24 @@ This repository contains a **comprehensive integrated database** serving as the 
 
 - **Adversarial AI Safety Testing** - Traditional model testing, safety assessments, and compliance tracking
 - **AI Persona Testing** - Persona-driven testing, scenario generation, and cognitive risk analysis
-- **Cat-Astrophic Integration** - Full PromptGoblin v2 prompt generation tracking
+- **Cat-Astrophic Integration** - Full PromptGoblin v2 prompt generation tracking (AI-Range)
+- **Nexus Ground Truth** - Unified prompt library with automatic cross-product lineage (NEW)
 - **Multi-tenant Operations** - Enterprise-grade client and subscription management
 - **Risk & Threat Framework** - Comprehensive threat vectors and harm category modeling
 
-## 🏗️ Two-Tier Architecture
+## 🏗️ Three-Tier Architecture
 
-**Clients (Tenants)** → **Models**
+**Products** → **Clients (Tenants)** → **Models**
 
-### Layer 1: Client Layer 🏢
-- **Tenants**: Organizations using AI-Range (testing, personas, risk analysis) and Nexus (prompt ingestion + library)
+### Layer 1: Product Layer 🎁
+- **AI-Range**: Comprehensive testing, personas, scenarios, and prompt generation
+- **Nexus**: Ground truth for prompt ingestion, curation, and cross-product lineage
+
+### Layer 2: Client Layer 🏢
+- **Tenants**: Organizations using AI-Range and/or Nexus
 - **Central management** for all client operations
 
-### Layer 2: Model Layer 🤖
+### Layer 3: Model Layer 🤖
 - **Client Models**: AI models under test
 - **AI Agents**: ML models performing safety assessments
 
@@ -42,7 +47,14 @@ This repository contains a **comprehensive integrated database** serving as the 
 - Conversation-level metadata with human-in-the-loop support
 - Turn-level prompt-response exchanges with token counting
 - Quality metrics and telemetry aggregation
-- LLM invocation auditing and cost tracking
+- **Stage 4 prompts automatically surface in Nexus ground truth**
+
+### ✅ Nexus Ground Truth (NEW)
+- Unified prompt library ingesting AI-Range Stage 4 prompts + client submissions
+- Automatic cross-product lineage via `product_prompt_lineage` (trigger-maintained)
+- **All AI-Range prompts are traceable through both products**
+- Client submission workflow with approval pipeline
+- Query views for both forward (AI-Range → Nexus) and reverse tracing
 
 ### ✅ Comprehensive Risk & Threat Framework
 - Threat vectors with examples and detection methods
@@ -57,7 +69,7 @@ This repository contains a **comprehensive integrated database** serving as the 
 - Complete audit trail of all operations
 
 ## 📁 Repository Structure
-
+See [DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md) for a full, up-to-date tree and file map.
 ## ✨ Key Features
 
 | Feature | Description |
@@ -67,7 +79,8 @@ This repository contains a **comprehensive integrated database** serving as the 
 | **🎬 Scenario Generation** | Dynamic scenario creation with intent mapping and persona relevance |
 | **⚠️ Threat Framework** | Comprehensive threat vectors, examples, and harm categories |
 | **📊 Risk Assessment** | Multi-dimensional risk analysis linked to personas and scenarios |
-| **🔄 Prompt Generation** | Cat-Astrophic/PromptGoblin v2 integration with full generation tracking |
+| **🔄 Prompt Generation** | Cat-Astrophic/PromptGoblin v2 integration with full generation tracking (AI-Range) |
+| **🏆 Nexus Ground Truth** | Unified prompt library with automatic AI-Range → Nexus lineage (NEW) |
 | **🛡️ Safety Assessment** | Multi-agent evaluation with detailed metrics and compliance tracking |
 | **🚨 Alert Management** | Real-time critical safety incident tracking and escalation |
 | **📋 Compliance Reports** | Automated compliance reporting and trend analysis |
@@ -138,6 +151,13 @@ This repository contains a **comprehensive integrated database** serving as the 
 - `llm_invocations` - LLM API call audit trail
 - `prompt_generator_responses` - Generated prompt storage
 - `prompt_response_metadata` - Execution metadata
+
+### Nexus Platform Tables (NEW - Ground Truth)
+
+**Prompt Ingestion & Curation:**
+- `client_prompt_submissions` - Client-provided prompts with review pipeline
+- `nexus_prompt_library` - Unified prompt library (Stage 4 + client prompts)
+- `product_prompt_lineage` - Cross-product traceability (auto-maintained by trigger)
 
 **Knowledge Base & Sources:**
 - `sources` - Information sources
@@ -260,31 +280,32 @@ Automated compliance documentation including:
 - Safety scores and metrics
 - Audit trail verification
 
-## 📚 Documentation Resources
+## 📚 Documentation Resources (Consolidated)
 
-### Getting Started
+### Start Here
+- **[DOCUMENTATION.md](DOCUMENTATION.md)** - Consolidated master documentation for the full repository
 - **[docs/INDEX.md](docs/INDEX.md)** - Quick reference guide and file index
-- **[docs/README_INTEGRATED.md](docs/README_INTEGRATED.md)** - Detailed integrated system overview
-- **[docs/INTEGRATION_SUMMARY.md](docs/INTEGRATION_SUMMARY.md)** - Executive summary of what was integrated
+- **[DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md)** - Repository map and file locations
 
 ### Architecture & Design
+- **[AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md)** - AI-Range + Nexus unified architecture
 - **[docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md)** - Product layer and multi-tenancy design
-- **[docs/PRODUCT_LAYER_ER_DIAGRAM.md](docs/PRODUCT_LAYER_ER_DIAGRAM.md)** - Product architecture diagrams
-- **[docs/INTEGRATION_GUIDE.md](docs/INTEGRATION_GUIDE.md)** - Detailed integration strategy and design decisions
-- **[AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md)** - AI-Range product ownership model
+- **[docs/PRODUCT_LAYER_ER_DIAGRAM.md](docs/PRODUCT_LAYER_ER_DIAGRAM.md)** - Product layer ER diagram
 
-### Schema & Entities
-- **[docs/ER_DIAGRAM_INTEGRATED.md](docs/ER_DIAGRAM_INTEGRATED.md)** - Complete entity relationship diagrams (12+ diagrams)
-- **[docs/ER_DIAGRAM.md](docs/ER_DIAGRAM.md)** - Original system diagrams (reference)
-- **[sql/schemas/schema_integrated.sql](sql/schemas/schema_integrated.sql)** - Complete DDL schema
+### Schema & Diagrams
+- **[docs/ER_DIAGRAM.md](docs/ER_DIAGRAM.md)** - Original ER diagrams (reference)
+- **[docs/AGENT_ER_DIAGRAMS.md](docs/AGENT_ER_DIAGRAMS.md)** - Agent-specific ER diagrams
+- **[sql/schemas/schema_integrated.sql](sql/schemas/schema_integrated.sql)** - Integrated DDL schema
 
 ### Specialized Systems
-- **[docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md)** - PromptGoblin v2 prompt generation system
-- **[sql/queries/cat_astrophic_queries.sql](sql/queries/cat_astrophic_queries.sql)** - Cat-Astrophic query examples
-- **[sql/views/cat_astrophic_views.sql](sql/views/cat_astrophic_views.sql)** - Pre-built analytical views
+- **[docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md)** - Cat-Astrophic (PromptGoblin v2) integration
+- **[docs/NEXUS_INTEGRATION.md](docs/NEXUS_INTEGRATION.md)** - Nexus prompt ingestion and lineage
+- **[sql/views/cat_astrophic_views.sql](sql/views/cat_astrophic_views.sql)** - Cat-Astrophic analytical views
+- **[sql/views/nexus_views.sql](sql/views/nexus_views.sql)** - Nexus analytical views
 
 ### Code & Examples
 - **[sql/queries/queries.sql](sql/queries/queries.sql)** - Comprehensive query examples
+- **[sql/queries/cat_astrophic_queries.sql](sql/queries/cat_astrophic_queries.sql)** - Cat-Astrophic query examples
 - **[sql/sample_data/sample_data.sql](sql/sample_data/sample_data.sql)** - Sample data for testing
 - **[sql/migrations/migration_script.sql](sql/migrations/migration_script.sql)** - Data migration from legacy systems
 
@@ -335,7 +356,7 @@ The schema includes:
 - **Query optimization** - CTEs, window functions, efficient joins
 - **Maintenance tools** - VACUUM, ANALYZE, REINDEX procedures
 
-See [docs/INTEGRATION_GUIDE.md](docs/INTEGRATION_GUIDE.md#performance-considerations) for optimization details.
+See [DOCUMENTATION.md](DOCUMENTATION.md) for optimization details.
 
 ## 🔐 Security Features
 
@@ -354,7 +375,7 @@ VACUUM;                     -- Reclaim space (weekly)
 REINDEX DATABASE ...;       -- Rebuild indexes (monthly)
 ```
 
-See [docs/README_INTEGRATED.md](docs/README_INTEGRATED.md#-maintenance) for full maintenance procedures.
+See [DOCUMENTATION.md](DOCUMENTATION.md) for full maintenance procedures.
 
 ## 🤝 Contributing
 
@@ -363,7 +384,7 @@ To extend or modify the database:
 1. Update `sql/schemas/schema_integrated.sql` with table changes
 2. Document changes in relevant `docs/` files
 3. Add example queries to `sql/queries/queries.sql`
-4. Update ER diagrams in `docs/ER_DIAGRAM_INTEGRATED.md`
+4. Update ER diagrams in `docs/PRODUCT_LAYER_ER_DIAGRAM.md` or `docs/ER_DIAGRAM.md`
 5. Add migration steps if needed to `sql/migrations/migration_script.sql`
 6. Update this README if architecture changes
 
@@ -373,9 +394,9 @@ This database design is provided as-is for use in AI safety and security testing
 
 ## 🙋 Support & Questions
 
-- **Schema questions?** → See [docs/ER_DIAGRAM_INTEGRATED.md](docs/ER_DIAGRAM_INTEGRATED.md)
-- **Integration questions?** → See [docs/INTEGRATION_GUIDE.md](docs/INTEGRATION_GUIDE.md)
-- **Deployment questions?** → See [docs/README_INTEGRATED.md](docs/README_INTEGRATED.md)
+- **Schema questions?** → See [DOCUMENTATION.md](DOCUMENTATION.md)
+- **Integration questions?** → See [DOCUMENTATION.md](DOCUMENTATION.md)
+- **Deployment questions?** → See [DOCUMENTATION.md](DOCUMENTATION.md)
 - **Query examples?** → See [sql/queries/queries.sql](sql/queries/queries.sql)
 - **Architecture questions?** → See [docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md)
 - **Prompt generation?** → See [docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md)

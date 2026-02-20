@@ -10,6 +10,7 @@ This document provides a visual representation of the database_design repository
 database_design/
 │
 ├── README.md                                    # Main repository documentation
+├── DOCUMENTATION.md                             # Consolidated master documentation
 ├── AI_RANGE_UNIFIED_ARCHITECTURE.md            # Complete unified architecture
 ├── DIRECTORY_STRUCTURE.md                      # This file - directory guide
 │
@@ -19,13 +20,11 @@ database_design/
 │   ├── PRODUCT_LAYER_ARCHITECTURE.md          # Product layer comprehensive guide
 │   ├── PRODUCT_LAYER_ER_DIAGRAM.md            # Product layer ER diagram
 │   │
-│   ├── README_INTEGRATED.md                   # Integrated system overview
-│   ├── INTEGRATION_SUMMARY.md                 # Integration executive summary
-│   ├── INTEGRATION_GUIDE.md                   # Detailed integration guide
 │   ├── CAT_ASTROPHIC_INTEGRATION.md           # Cat-Astrophic tables integration
 │   ├── NEXUS_INTEGRATION.md                   # Nexus prompt ingestion & library
-│   │
-│   ├── ER_DIAGRAM_INTEGRATED.md               # Integrated schema ER diagrams
+│   ├── AGENT_ER_DIAGRAMS.md                   # Agent-specific ER diagrams
+│   ├── PRODUCT_LAYER_ARCHITECTURE.md          # Product layer comprehensive guide
+│   ├── PRODUCT_LAYER_ER_DIAGRAM.md            # Product layer ER diagram
 │   └── ER_DIAGRAM.md                          # Original ER diagrams (reference)
 │
 └── sql/                                        # 💾 All SQL Files
@@ -44,6 +43,8 @@ database_design/
     ├── views/                                  # Database Views
     │   ├── cat_astrophic_views.sql            # Integrated views for analysis
     │   └── nexus_views.sql                    # Nexus prompt ingestion views
+    │   ├── cat_astrophic_views.sql            # Integrated views for analysis
+    │   └── nexus_views.sql                    # Nexus prompt ingestion views
     └── sample_data/                            # Sample Data
         └── sample_data.sql                    # Sample data for testing
 ```
@@ -52,14 +53,13 @@ database_design/
 
 ### By Purpose
 
-#### 🏗️ Product Layer (NEW)
+#### 🏗️ Product Layer
 - `docs/PRODUCT_LAYER_ARCHITECTURE.md` - Architecture guide
 - `docs/PRODUCT_LAYER_ER_DIAGRAM.md` - ER diagram
-- `PRODUCT_LAYER_SUMMARY.md` - Implementation summary
 
 #### 📖 Core Documentation
 - `README.md` - Main entry point
-- `docs/README_INTEGRATED.md` - Integrated system overview
+- `DOCUMENTATION.md` - Consolidated master documentation
 - `docs/INDEX.md` - File navigation guide
 
 #### 💾 Database Implementation
@@ -68,64 +68,55 @@ database_design/
 - `sql/sample_data/sample_data.sql` - Test data
 
 #### 📊 Diagrams & Guides
-- `docs/ER_DIAGRAM_INTEGRATED.md` - Visual schema
+- `docs/ER_DIAGRAM.md` - Legacy ER diagrams (reference)
 - `docs/PRODUCT_LAYER_ER_DIAGRAM.md` - Product architecture
-- `docs/INTEGRATION_GUIDE.md` - Integration details
+- `docs/AGENT_ER_DIAGRAMS.md` - Agent ER diagrams
 
 ### By Audience
 
 #### 👨‍💼 Business/Product Teams
 Start here:
-1. `PRODUCT_LAYER_SUMMARY.md` - What was built
+1. `DOCUMENTATION.md` - Consolidated overview
 2. `docs/PRODUCT_LAYER_ARCHITECTURE.md` - How it works
 3. `docs/PRODUCT_LAYER_ER_DIAGRAM.md` - Visual overview
 
 #### 👨‍💻 Developers
 Start here:
 1. `README.md` - Quick start
-2. `sql/schemas/schema_integrated.sql` - Full schema
-3. `sql/queries/queries.sql` - Query examples
-4. `docs/ER_DIAGRAM_INTEGRATED.md` - Schema relationships
+2. `DOCUMENTATION.md` - Consolidated reference
+3. `sql/schemas/schema_integrated.sql` - Full schema
+4. `sql/queries/queries.sql` - Query examples
 
 #### 🔧 Database Administrators
 Start here:
 1. `docs/INDEX.md` - Navigation guide
-2. `sql/schemas/schema_integrated.sql` - Deployment script
-3. `sql/migrations/migration_script.sql` - Migration path
-4. `sql/sample_data/sample_data.sql` - Test data
+2. `DOCUMENTATION.md` - Consolidated reference
+3. `sql/schemas/schema_integrated.sql` - Deployment script
+4. `sql/migrations/migration_script.sql` - Migration path
 
-## New Files Created
-
-| File | Purpose |
-|------|---------|
-| `PRODUCT_LAYER_SUMMARY.md` | Implementation summary and overview |
-| `docs/PRODUCT_LAYER_ARCHITECTURE.md` | Comprehensive architecture documentation |
-| `docs/PRODUCT_LAYER_ER_DIAGRAM.md` | Product layer ER diagram with Mermaid |
-
-## Updated Files
+## Recent Documentation Updates
 
 | File | Changes |
 |------|---------|
-| `README.md` | Added product layer overview, updated quick start |
-| `docs/INDEX.md` | Added new files, updated navigation |
-| `docs/ER_DIAGRAM_INTEGRATED.md` | Added product layer section |
-| `sql/schemas/schema_integrated.sql` | Added products table with versioning |
-| `sql/queries/queries.sql` | Added ~200 lines of product layer queries |
-| `sql/sample_data/sample_data.sql` | Added sample products, subscriptions, and linkages |
+| `DOCUMENTATION.md` | Consolidated master documentation for the full repo |
+| `README.md` | Points to consolidated documentation |
+| `docs/INDEX.md` | Updated to match current files |
+| `DIRECTORY_STRUCTURE.md` | Updated structure and file map |
 
 ## File Count
 
 ```
-Total Files: 15
-  Documentation (*.md): 10
-  SQL Scripts (*.sql): 5
+Total Files: 18
+  Documentation (*.md): 11
+  SQL Scripts (*.sql): 7
 
 Breakdown by Directory:
-  Root: 2 files (README.md, PRODUCT_LAYER_SUMMARY.md)
-  docs/: 9 files
+  Root: 5 files (README.md, DOCUMENTATION.md, AI_RANGE_UNIFIED_ARCHITECTURE.md, DIRECTORY_STRUCTURE.md, CHANGELOG.md)
+  docs/: 7 files
   sql/schemas/: 2 files
   sql/migrations/: 1 file
-  sql/queries/: 1 file
+  sql/queries/: 2 files
+  sql/views/: 2 files
   sql/sample_data/: 1 file
 ```
 
@@ -134,7 +125,7 @@ Breakdown by Directory:
 ### Finding Information Quickly
 
 **"I need to understand the product layer"**
-→ Start with `PRODUCT_LAYER_SUMMARY.md`
+→ Start with `docs/PRODUCT_LAYER_ARCHITECTURE.md`
 
 **"How do I deploy the database?"**
 → Use `sql/schemas/schema_integrated.sql`
@@ -143,7 +134,7 @@ Breakdown by Directory:
 → Check `sql/queries/queries.sql`
 
 **"I need visual diagrams"**
-→ See `docs/PRODUCT_LAYER_ER_DIAGRAM.md` and `docs/ER_DIAGRAM_INTEGRATED.md`
+→ See `docs/PRODUCT_LAYER_ER_DIAGRAM.md` and `docs/ER_DIAGRAM.md`
 
 **"How do products connect to clients?"**
 → Read `docs/PRODUCT_LAYER_ARCHITECTURE.md`

@@ -2,6 +2,8 @@
 
 Each of the 7 AI-Range agents works with specific tables. Below are the ER diagrams for each agent's operational domain.
 
+**Ground Truth Note**: All AI-Range outputs (especially Stage 4 prompts) are automatically traceable through Nexus integration via `product_prompt_lineage`, enabling cross-product lineage tracking.
+
 ---
 
 ## 1. Cat-Astrophic Prompt Agent (Generator)

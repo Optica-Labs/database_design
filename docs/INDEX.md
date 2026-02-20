@@ -35,22 +35,24 @@ The database is organized into **two interconnected layers**:
 
 | File | Purpose | Read This If... |
 |------|---------|-----------------|
-| **[README_INTEGRATED.md](README_INTEGRATED.md)** | Main documentation | You're new to the integrated system |
+| **[../DOCUMENTATION.md](../DOCUMENTATION.md)** | **⭐ Consolidated master doc** | You want the full repo documentation in one place |
 | **[PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)** | **⭐ Product layer guide** | You need to understand the multi-product architecture |
 | **[CAT_ASTROPHIC_INTEGRATION.md](CAT_ASTROPHIC_INTEGRATION.md)** | **⭐ Cat-Astrophic integration** | You want details on PromptGoblin v2 tables |
 | **[NEXUS_INTEGRATION.md](NEXUS_INTEGRATION.md)** | **⭐ Nexus integration** | You need Nexus prompt ingestion and library details |
-| **[INTEGRATION_SUMMARY.md](INTEGRATION_SUMMARY.md)** | Executive summary | You need a high-level overview |
-| **[../schema_integrated.sql](../sql/schemas/schema_integrated.sql)** | Complete schema | You're deploying the database |
+| **[AGENT_ER_DIAGRAMS.md](AGENT_ER_DIAGRAMS.md)** | Agent ER diagrams | You need per-agent table maps |
+| **[../AI_RANGE_UNIFIED_ARCHITECTURE.md](../AI_RANGE_UNIFIED_ARCHITECTURE.md)** | Unified architecture | You need the overall system architecture |
+| **[../sql/schemas/schema_integrated.sql](../sql/schemas/schema_integrated.sql)** | Complete schema | You're deploying the database |
 
 ### 📚 Documentation
 
 | File | Purpose | When to Use |
 |------|---------|-------------|
+| **[../DOCUMENTATION.md](../DOCUMENTATION.md)** | **⭐ Consolidated master doc** | Full repository documentation |
 | **[PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)** | **⭐ Product layer docs** | Understanding how products, clients, and models connect |
 | **[CAT_ASTROPHIC_INTEGRATION.md](CAT_ASTROPHIC_INTEGRATION.md)** | **⭐ Cat-Astrophic integration** | Detailed PromptGoblin v2 table definitions and queries |
 | **[NEXUS_INTEGRATION.md](NEXUS_INTEGRATION.md)** | **⭐ Nexus integration** | Nexus prompt ingestion and library tables |
-| **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)** | Detailed integration guide | Planning migration, understanding design decisions |
-| **[ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md)** | Visual schema documentation | Understanding table relationships |
+| **[AGENT_ER_DIAGRAMS.md](AGENT_ER_DIAGRAMS.md)** | Agent ER diagrams | Agent-specific ER maps |
+| **[ER_DIAGRAM.md](ER_DIAGRAM.md)** | Original ER diagrams | Reference for legacy system |
 | **[PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md)** | Product layer diagram | Visualizing product architecture |
 
 ### 💾 Database Files
@@ -64,6 +66,7 @@ The database is organized into **two interconnected layers**:
 | **[../sql/queries/cat_astrophic_queries.sql](../sql/queries/cat_astrophic_queries.sql)** | **⭐ Cat-Astrophic queries** | Query examples for PromptGoblin v2 tables |
 | **[../sql/views/cat_astrophic_views.sql](../sql/views/cat_astrophic_views.sql)** | **⭐ Cat-Astrophic views** | Pre-built views for common analyses |
 | **[../sql/views/nexus_views.sql](../sql/views/nexus_views.sql)** | **⭐ Nexus views** | Pre-built views for Nexus prompt ingestion |
+| **[../sql/views/nexus_views.sql](../sql/views/nexus_views.sql)** | **⭐ Nexus views** | Pre-built views for Nexus prompt ingestion |
 | **[../sql/sample_data/sample_data.sql](../sql/sample_data/sample_data.sql)** | Sample data | Testing the schema |
 
 ### 📊 Diagrams
@@ -71,17 +74,16 @@ The database is organized into **two interconnected layers**:
 | File | Purpose | When to Use |
 |------|---------|-------------|
 | **[PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md)** | **⭐ Product layer ER diagram** | Understanding product architecture |
-| **[ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md)** | **⭐ Integrated diagrams** | Understanding integrated schema |
 | **[ER_DIAGRAM.md](ER_DIAGRAM.md)** | Original diagrams | Reference for legacy system |
 
 ## 🚀 Common Workflows
 
 ### New Installation
 
-1. Read [README_INTEGRATED.md](README_INTEGRATED.md) - Overview
+1. Read [../DOCUMENTATION.md](../DOCUMENTATION.md) - Consolidated overview
 2. Read [PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md) - Product architecture
-3. Review [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md) - Schema structure
-4. Review [PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md) - Product layer
+3. Review [PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md) - Product layer
+4. Review [ER_DIAGRAM.md](ER_DIAGRAM.md) - Reference diagrams
 5. Deploy [schema_integrated.sql](../sql/schemas/schema_integrated.sql) - Create database
 6. Run [queries.sql](../sql/queries/queries.sql) - Validate installation
 
@@ -95,45 +97,45 @@ The database is organized into **two interconnected layers**:
 
 ### Data Migration
 
-1. Read [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) - Migration strategy
-2. Configure [migration_script.sql](migration_script.sql) - Set data sources
-3. Run [migration_script.sql](migration_script.sql) - Migrate data
+1. Read [../DOCUMENTATION.md](../DOCUMENTATION.md) - Migration summary and notes
+2. Configure [../sql/migrations/migration_script.sql](../sql/migrations/migration_script.sql) - Set data sources
+3. Run [../sql/migrations/migration_script.sql](../sql/migrations/migration_script.sql) - Migrate data
 4. Validate using queries in the script - Check integrity
 
 ### Understanding the Schema
 
-1. Read [INTEGRATION_SUMMARY.md](INTEGRATION_SUMMARY.md) - High-level overview
-2. Review [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md) - Visual reference
-3. Check [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) - Detailed explanations
-4. Study [queries.sql](queries.sql) - Example usage
+1. Read [../DOCUMENTATION.md](../DOCUMENTATION.md) - High-level overview
+2. Review [PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md) - Visual reference
+3. Check [PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md) - Detailed explanations
+4. Study [../sql/queries/queries.sql](../sql/queries/queries.sql) - Example usage
 
 ### Development
 
-1. Reference [README_INTEGRATED.md](README_INTEGRATED.md) - Quick start
-2. Use [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md) - Table relationships
-3. Check [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) - Query patterns
-4. Test with [sample_data.sql](sample_data.sql) - Sample data
+1. Reference [../DOCUMENTATION.md](../DOCUMENTATION.md) - Quick start
+2. Use [PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md) - Table relationships
+3. Check [PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md) - Query patterns
+4. Test with [../sql/sample_data/sample_data.sql](../sql/sample_data/sample_data.sql) - Sample data
 
 ## 📖 Documentation Map
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│           INTEGRATION_SUMMARY.md                    │
-│         (Executive Summary - Start Here)            │
+│           DOCUMENTATION.md                          │
+│         (Consolidated Master Doc)                   │
 └─────────────────────────────────────────────────────┘
                          │
          ┌───────────────┴───────────────┐
          ▼                               ▼
 ┌──────────────────┐          ┌──────────────────────┐
-│ README_          │          │ INTEGRATION_GUIDE.md │
-│ INTEGRATED.md    │          │ (Detailed Guide)     │
-│ (User Guide)     │          └──────────────────────┘
+│ PRODUCT_LAYER_   │          │ CAT_ASTROPHIC_       │
+│ ARCHITECTURE.md  │          │ INTEGRATION.md       │
+│ (Design)         │          └──────────────────────┘
 └──────────────────┘                     │
          │                               │
          ▼                               ▼
 ┌──────────────────┐          ┌──────────────────────┐
-│ ER_DIAGRAM_      │          │ migration_script.sql │
-│ INTEGRATED.md    │          │ (Migration)          │
+│ PRODUCT_LAYER_   │          │ migration_script.sql │
+│ ER_DIAGRAM.md    │          │ (Migration)          │
 │ (Visual)         │          └──────────────────────┘
 └──────────────────┘
          │
@@ -147,39 +149,36 @@ The database is organized into **two interconnected layers**:
 ## 🔍 Find Information By Topic
 
 ### Architecture & Design
-- **Overview**: [INTEGRATION_SUMMARY.md](INTEGRATION_SUMMARY.md)
-- **Detailed Design**: [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)
-- **Visual Diagrams**: [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md)
+- **Overview**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
+- **Detailed Design**: [PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)
+- **Visual Diagrams**: [PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md)
 
 ### Personas
-- **Schema**: [schema_integrated.sql](schema_integrated.sql) - Lines 118-352
-- **Diagram**: [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md) - Section 2
-- **Guide**: [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) - "Unified Persona System"
+- **Schema**: [../sql/schemas/schema_integrated.sql](../sql/schemas/schema_integrated.sql)
+- **Diagram**: [AGENT_ER_DIAGRAMS.md](AGENT_ER_DIAGRAMS.md)
+- **Guide**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
 
 ### Testing Framework
-- **Schema**: [schema_integrated.sql](schema_integrated.sql) - Lines 580-850
-- **Diagram**: [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md) - Section 6
-- **Examples**: [README_INTEGRATED.md](README_INTEGRATED.md) - "Usage Examples"
+- **Schema**: [../sql/schemas/schema_integrated.sql](../sql/schemas/schema_integrated.sql)
+- **Diagram**: [ER_DIAGRAM.md](ER_DIAGRAM.md)
+- **Examples**: [../sql/queries/queries.sql](../sql/queries/queries.sql)
 
 ### Threat & Risk
-- **Schema**: [schema_integrated.sql](schema_integrated.sql) - Lines 480-550
-- **Diagram**: [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md) - Section 3
-- **Migration**: [migration_script.sql](migration_script.sql) - Step 7
+- **Schema**: [../sql/schemas/schema_integrated.sql](../sql/schemas/schema_integrated.sql)
+- **Diagram**: [ER_DIAGRAM.md](ER_DIAGRAM.md)
+- **Migration**: [../sql/migrations/migration_script.sql](../sql/migrations/migration_script.sql)
 
 ### Migration
-- **Script**: [migration_script.sql](migration_script.sql)
-- **Guide**: [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) - "Migration Path"
-- **Summary**: [INTEGRATION_SUMMARY.md](INTEGRATION_SUMMARY.md) - "Migration Strategy"
+- **Script**: [../sql/migrations/migration_script.sql](../sql/migrations/migration_script.sql)
+- **Guide**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
 
 ### Performance
-- **Indexes**: [schema_integrated.sql](schema_integrated.sql) - Lines 1150-1160
-- **Guide**: [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) - "Performance Considerations"
-- **README**: [README_INTEGRATED.md](README_INTEGRATED.md) - "Performance Optimization"
+- **Indexes**: [../sql/schemas/schema_integrated.sql](../sql/schemas/schema_integrated.sql)
+- **Guide**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
 
 ### Security
-- **Schema**: [schema_integrated.sql](schema_integrated.sql) - Comments throughout
-- **Guide**: [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) - "Security Considerations"
-- **README**: [README_INTEGRATED.md](README_INTEGRATED.md) - "Security Considerations"
+- **Schema**: [../sql/schemas/schema_integrated.sql](../sql/schemas/schema_integrated.sql)
+- **Guide**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
 
 ## 📊 Key Statistics
 
@@ -197,43 +196,42 @@ The database is organized into **two interconnected layers**:
 ## ✅ Quick Checklist
 
 ### For New Users
-- [ ] Read [README_INTEGRATED.md](README_INTEGRATED.md)
-- [ ] Review [INTEGRATION_SUMMARY.md](INTEGRATION_SUMMARY.md)
-- [ ] Browse [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md)
-- [ ] Deploy [schema_integrated.sql](schema_integrated.sql)
+- [ ] Read [../DOCUMENTATION.md](../DOCUMENTATION.md)
+- [ ] Browse [PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md)
+- [ ] Deploy [../sql/schemas/schema_integrated.sql](../sql/schemas/schema_integrated.sql)
 
 ### For Migration
-- [ ] Read [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)
-- [ ] Review [migration_script.sql](migration_script.sql)
+- [ ] Read [../DOCUMENTATION.md](../DOCUMENTATION.md)
+- [ ] Review [../sql/migrations/migration_script.sql](../sql/migrations/migration_script.sql)
 - [ ] Test migration on staging environment
 - [ ] Validate using provided queries
 
 ### For Development
-- [ ] Bookmark [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md)
-- [ ] Study example queries in [README_INTEGRATED.md](README_INTEGRATED.md)
-- [ ] Review [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) query patterns
+- [ ] Bookmark [PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md)
+- [ ] Study example queries in [../sql/queries/queries.sql](../sql/queries/queries.sql)
+- [ ] Review [PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md) query patterns
 - [ ] Set up development environment
 
 ## 🆘 Troubleshooting
 
 | Issue | Where to Look |
 |-------|---------------|
-| Schema errors | [schema_integrated.sql](schema_integrated.sql) comments |
-| Migration failures | [migration_script.sql](migration_script.sql) validation section |
-| Query performance | [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) performance section |
-| Missing relationships | [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md) |
-| General questions | [README_INTEGRATED.md](README_INTEGRATED.md) Support section |
+| Schema errors | [../sql/schemas/schema_integrated.sql](../sql/schemas/schema_integrated.sql) comments |
+| Migration failures | [../sql/migrations/migration_script.sql](../sql/migrations/migration_script.sql) validation section |
+| Query performance | [../DOCUMENTATION.md](../DOCUMENTATION.md) |
+| Missing relationships | [PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md) |
+| General questions | [../DOCUMENTATION.md](../DOCUMENTATION.md) |
 
 ## 📞 Support Resources
 
 1. **Quick Reference**: This file
-2. **User Guide**: [README_INTEGRATED.md](README_INTEGRATED.md)
-3. **Technical Guide**: [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)
-4. **Visual Reference**: [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md)
-5. **Executive Summary**: [INTEGRATION_SUMMARY.md](INTEGRATION_SUMMARY.md)
+2. **Master Doc**: [../DOCUMENTATION.md](../DOCUMENTATION.md)
+3. **Technical Guide**: [PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)
+4. **Visual Reference**: [PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md)
+5. **Architecture Summary**: [../AI_RANGE_UNIFIED_ARCHITECTURE.md](../AI_RANGE_UNIFIED_ARCHITECTURE.md)
 
 ---
 
-**Last Updated**: 2024  
-**Version**: 2.0 (Integrated)  
+**Last Updated**: 2026  
+**Version**: 2.1 (Consolidated)  
 **Status**: ✅ Production Ready
