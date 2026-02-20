@@ -4,6 +4,8 @@
 
 **AI-Range now owns ALL functionality** - both testing/safety operations AND persona/scenario capabilities have been consolidated into a single unified product.
 
+**✅ COMPLETE**: All 36 operational tables are now linked to the AI-Range UUID via `product_id` foreign key, ensuring complete audit trail and product ownership.
+
 ## What Changed
 
 ### Before
@@ -16,49 +18,63 @@
 
 ## Complete List of Tables with product_id
 
-All the following tables now include `product_id UUID NOT NULL REFERENCES products(id)` linking to AI-Range:
+All the following tables now include `product_id UUID NOT NULL REFERENCES products(id)` linking to AI-Range (38 tables total):
 
 ### Testing & Safety (9 tables)
-1. ✅ `test_categories`
-2. ✅ `test_sessions`
-3. ✅ `adversarial_test_cases`
-4. ✅ `test_executions`
-5. ✅ `safety_assessments`
-6. ✅ `compliance_reports`
-7. ✅ `safety_alerts` (via execution/assessment)
-8. ✅ `audit_logs`
-9. ✅ `model_outputs` (via execution)
+1. ✅ `test_categories` - Test categorization framework
+2. ✅ `test_sessions` - Testing sessions for tenants
+3. ✅ `test_types` - Types of tests available
+4. ✅ `adversarial_test_cases` - Individual adversarial test cases
+5. ✅ `test_executions` - Test execution records
+6. ✅ `safety_assessments` - Safety evaluation results
+7. ✅ `compliance_reports` - Compliance assessment reports
+8. ✅ `audit_logs` - System audit trail
+9. ✅ `model_outputs` - Model responses from tests
+
+### AI Agents (1 table)
+10. ✅ `ai_agents` - Testing and evaluation agents
+
+### Threats, Risks & Harms (5 tables)
+11. ✅ `threat_vectors` - Threat intelligence vectors
+12. ✅ `threat_examples` - Examples of threats
+13. ✅ `risks` - Risk definitions
+14. ✅ `harms` - Harm definitions
+15. ✅ `context_profiles` - Customer context for testing
+
+### Risk Assessment (1 table)
+16. ✅ `risk_assessments` - Risk assessment results
 
 ### Personas & Scenarios (3 tables)
-10. ✅ `use_cases`
-11. ✅ `personas`
-12. ✅ `scenarios`
+17. ✅ `use_cases` - Business use cases for testing
+18. ✅ `personas` - AI personas for testing
+19. ✅ `scenarios` - Test scenarios
 
 ### Persona Cognition & Memory (4 tables)
-13. ✅ `persona_memories`
-14. ✅ `persona_reflections`
-15. ✅ `persona_plans`
-16. ✅ `persona_actions`
+20. ✅ `persona_memories` - Persona memory storage
+21. ✅ `persona_reflections` - Persona reflections
+22. ✅ `persona_plans` - Persona plans and goals
+23. ✅ `persona_actions` - Persona actions taken
 
 ### Scenario & Intent Framework (6 tables)
-17. ✅ `scenario_intents`
-18. ✅ `scenario_intent_personas`
-19. ✅ `scenario_personas`
-20. ✅ `scenario_threats`
-21. ✅ `scenario_scores`
-22. ✅ `scenario_test_types`
+24. ✅ `scenario_intents` - Intents within scenarios
+25. ✅ `scenario_intent_personas` - Personas for each intent
+26. ✅ `scenario_personas` - Personas in scenarios
+27. ✅ `scenario_threats` - Threats in scenarios
+28. ✅ `scenario_scores` - Scenario evaluation scores
+29. ✅ `scenario_test_types` - Test types for scenarios
 
-### Prompt Generation (2 tables)
-23. ✅ `prompt_generator_responses`
-24. ✅ `prompt_response_metadata`
+### Prompt Generation (1 table - consolidated)
+30. ✅ `prompt_generator_responses` - Generated responses with metadata (combined from prompt_generator_responses + prompt_response_metadata)
 
-### Cat-Astrophic Prompt Generation (6 tables)
-25. ✅ `generation_runs`
-26. ✅ `conversations`
-27. ✅ `turns`
-28. ✅ `quality_metrics`
-29. ✅ `telemetry`
-30. ✅ `llm_invocations`
+### Cat-Astrophic Prompt Generation (5 tables - consolidated)
+31. ✅ `generation_runs` - Batch prompt generation sessions
+32. ✅ `conversations` - Conversation threads
+33. ✅ `turns` - Individual conversation turns
+34. ✅ `quality_metrics` - Quality metrics for generation
+35. ✅ `telemetry` - System telemetry data
+
+### Product Tracking (1 table)
+36. ✅ `product_usage` - Product usage audit trail
 
 ## Architecture Diagram
 
@@ -137,6 +153,50 @@ All the following tables now include `product_id UUID NOT NULL REFERENCES produc
 │              (Models tested with AI-Range)                 │
 └────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## AI-Range Core Agents (7 Agents)
+
+AI-Range is powered by 7 specialized agents that work in concert to orchestrate all testing operations:
+
+| Agent | Type | Model | Purpose |
+|-------|------|-------|---------|
+| **Cat-Astrophic Prompt Agent** | Generator | Claude-3.5-Sonnet | Generates adversarial prompts and attack scenarios |
+| **Evaluation Agent** | Evaluator | GPT-4-Turbo | Evaluates responses and safety outcomes |
+| **Scenario Agent** | Generator | Claude-3-Opus | Creates realistic test scenarios and contexts |
+| **Persona Agent** | Generator | GPT-4 | Generates personas with behavioral patterns |
+| **Test Agent** | Classifier | BERT-Large | Orchestrates test execution and management |
+| **Analysis Agent** | Evaluator | Claude-3-Sonnet | Analyzes results and generates reports |
+| **Commander Agent** | Orchestration | GPT-4-Turbo | Master coordinator of all agents and workflows |
+
+### Agent Workflow
+
+```
+        ┌─────────────────────┐
+        │  Commander Agent    │ (Master Orchestrator)
+        │  (GPS-4-Turbo)      │
+        └──────────┬──────────┘
+                   │
+        ┌──────────┴──────────┬──────────────┬────────────┐
+        │                     │              │            │
+        ▼                     ▼              ▼            ▼
+   ┌──────────┐         ┌──────────┐  ┌──────────┐ ┌──────────┐
+   │ Cat-Astro│         │ Scenario │  │ Persona  │ │   Test   │
+   │ Prompt   │         │ Agent    │  │ Agent    │ │ Agent    │
+   │ Agent    │         │ (Claude) │  │ (GPT-4)  │ │ (BERT)   │
+   └────┬─────┘         └────┬─────┘  └────┬─────┘ └────┬─────┘
+        │                    │             │            │
+        └────────┬───────────┴─────────────┴────────────┘
+                 │
+                 ▼
+        ┌──────────────────┐
+        │ Evaluation Agent │ (GPT-4-Turbo)
+        │  Analysis Agent  │ (Claude-3-Sonnet)
+        └──────────────────┘
+```
+
+---
 
 ## SQL Examples
 

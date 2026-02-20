@@ -646,3 +646,95 @@ CROSS APPLY (
         AND te.execution_start >= DATEADD(DAY, -7, GETUTCDATE())
 ) stats
 WHERE cm.model_id = 1;
+-- ============================================================================
+-- PRODUCT USAGE TRACKING QUERIES
+-- ============================================================================
+
+-- Record a product usage event (AI-Range test execution)
+INSERT INTO product_usage (product_id, tenant_id, usage_type, usage_metadata)
+SELECT 
+    p.id,
+    t.id,
+    'test_execution',
+    jsonb_build_object(
+        'model_id', $1::bigint,
+        'test_count', $2::integer,
+        'duration_seconds', $3::integer
+    )
+FROM products p
+CROSS JOIN tenants t
+WHERE p.product_code = 'ai-range'
+  AND t.tenant_name = $4;
+
+-- Get usage statistics by type for a specific tenant and product
+SELECT 
+    usage_type,
+    COUNT(*) as usage_count,
+    MAX(created_at) as last_used,
+    MIN(created_at) as first_used
+FROM product_usage
+WHERE product_id = (SELECT id FROM products WHERE product_code = 'ai-range')
+  AND tenant_id = (SELECT id FROM tenants WHERE tenant_name = 'Acme Corporation')
+GROUP BY usage_type
+ORDER BY usage_count DESC;
+
+-- Track daily usage trends for a product
+SELECT 
+    DATE(created_at) as usage_date,
+    COUNT(*) as daily_usage_count,
+    COUNT(DISTINCT tenant_id) as unique_tenants,
+    COUNT(DISTINCT usage_type) as usage_types_used
+FROM product_usage
+WHERE product_id = (SELECT id FROM products WHERE product_code = 'ai-range')
+  AND created_at >= NOW() - INTERVAL '30 days'
+GROUP BY DATE(created_at)
+ORDER BY usage_date DESC;
+
+-- Compare product usage between tenants (billing analysis)
+SELECT 
+    t.tenant_name,
+    p.product_code,
+    COUNT(*) as total_usage_events,
+    COUNT(DISTINCT usage_type) as unique_usage_types,
+    MAX(pu.created_at) as last_used,
+    STRING_AGG(DISTINCT pu.usage_type, ', ' ORDER BY pu.usage_type) as usage_types
+FROM product_usage pu
+JOIN tenants t ON pu.tenant_id = t.id
+JOIN products p ON pu.product_id = p.id
+WHERE pu.created_at >= NOW() - INTERVAL '90 days'
+GROUP BY t.tenant_name, p.product_code
+ORDER BY total_usage_events DESC;
+
+-- Detailed audit trail for a specific tenant's product usage
+SELECT 
+    pu.created_at,
+    pu.usage_type,
+    pu.usage_metadata,
+    p.product_code,
+    t.tenant_name
+FROM product_usage pu
+JOIN products p ON pu.product_id = p.id
+JOIN tenants t ON pu.tenant_id = t.id
+WHERE t.tenant_name = 'Acme Corporation'
+  AND pu.created_at >= NOW() - INTERVAL '7 days'
+ORDER BY pu.created_at DESC;
+
+-- Calculate usage frequency and engagement level
+SELECT 
+    t.tenant_name,
+    p.product_code,
+    COUNT(*) as total_events,
+    COUNT(DISTINCT DATE(pu.created_at)) as active_days,
+    ROUND(COUNT(*) / NULLIF(COUNT(DISTINCT DATE(pu.created_at)), 0), 2) as avg_daily_usage,
+    CASE 
+        WHEN COUNT(*) > 100 THEN 'high_engagement'
+        WHEN COUNT(*) > 50 THEN 'medium_engagement'
+        WHEN COUNT(*) > 10 THEN 'low_engagement'
+        ELSE 'minimal_engagement'
+    END as engagement_level
+FROM product_usage pu
+JOIN tenants t ON pu.tenant_id = t.id
+JOIN products p ON pu.product_id = p.id
+WHERE pu.created_at >= NOW() - INTERVAL '90 days'
+GROUP BY t.tenant_name, p.product_code
+ORDER BY total_events DESC;

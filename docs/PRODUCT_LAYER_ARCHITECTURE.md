@@ -2,15 +2,28 @@
 
 ## Overview
 
-The Product Layer serves as the top-tier architecture that connects clients (tenants) with the platform's core products and their AI models. This layer manages product access, subscriptions, and model-product relationships.
+The Product Layer defines the two core products available on the platform: AI-Range (primary) and Nexus (reserved). Clients (tenants) use AI-Range for comprehensive AI testing, safety assessment, and persona-based analysis.
+
+## Architecture
+
+### Two-Tier Structure
+
+```
+Products (AI-Range, Nexus)    ↓ (tracked via product_usage)
+Product Usage Events (Audit Trail)    ↓
+Tenants (Client Organizations)
+    ↓
+Client Models (AI Models Under Test)
+```
 
 ## Products
 
-The platform currently supports two core products:
+The platform currently supports two products:
 
 ### 1. **AI-Range** (Comprehensive AI Testing & Safety Platform)
 - **Product Code**: `ai-range`
-- **Description**: Unified AI testing, safety assessment, persona-based testing, and threat intelligence platform
+- **Version**: Tracked in products table with timestamp history
+- **Description**: Unified AI testing, safety assessment, persona-based testing, advanced risk analysis, and threat intelligence platform
 - **Purpose**: Provides integrated testing operations, threat-informed safety evaluations, compliance assessments, and persona-based behavioral analysis
 
 **Core Features**:
@@ -24,12 +37,13 @@ The platform currently supports two core products:
 - Alert management
 - Audit logging
 - **Persona system with cognitive memory**
-- **Persona classification via cohorts and sub_cohorts**
+- **Advanced persona classification via cohorts and sub_cohorts**
 - **Scenario creation and testing**
 - **Behavioral analysis and long-term learning**
 - **Prompt generation for testing**
+- **Risk analysis and threat modeling**
 
-**Database Tables Owned by AI-Range** (all 24 tables include `product_id`):
+**Database Tables Owned by AI-Range** (all operational tables include references):
 
 *Testing Hub (with Use Cases & Threats):*
 - `use_cases` - Business context anchor (links to personas and tests)
@@ -72,18 +86,31 @@ The platform currently supports two core products:
 - `prompt_generator_responses` - Generated prompts for testing
 - `prompt_response_metadata` - Prompt execution metadata
 
-### 2. **Nexus** (Future Product)
+### 2. **Nexus** (Reserved Product)
 - **Product Code**: `nexus`
-- **Status**: Reserved for future advanced analytics or monitoring capabilities
+- **Status**: Reserved for future use
 - **Note**: Currently, all functionality is consolidated under AI-Range
 
-## Architecture Components
+## Multi-Tenancy Architecture
 
-### Three-Tier Connection Model
+### Two-Tier Connection Model
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                      PRODUCT LAYER (Top Tier)                 │
+│                    PRODUCTS (Top Tier)                        │
+│              AI-Range | Nexus (Reserved)                      │
+└──────────────────────────────────────────────────────────────┘
+                          │
+┌──────────────────────────────────────────────────────────────┐
+│              TENANTS (Middle Tier - Clients)                  │
+│        Organizations subscribing to AI-Range                 │
+└──────────────────────────────────────────────────────────────┘
+                          │
+┌──────────────────────────────────────────────────────────────┐
+│           CLIENT_MODELS (Bottom Tier - Models)                │
+│         AI Models registered for testing on AI-Range         │
+└──────────────────────────────────────────────────────────────┘
+```
 │                                                               │
 │  ┌──────────┐                              ┌──────────┐      │
 │  │ AI-Range │                              │  Nexus   │      │

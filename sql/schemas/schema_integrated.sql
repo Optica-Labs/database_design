@@ -39,6 +39,27 @@ INSERT INTO products (product_code, product_name, description, status) VALUES
 ('nexus', 'Nexus', 'Advanced AI persona testing and risk analysis system', 'active');
 
 -- ============================================================================
+-- PRODUCT USAGE TRACKING
+-- ============================================================================
+
+-- Table: product_usage
+-- Tracks every use of a product by a tenant (for auditing, billing, analytics)
+CREATE TABLE product_usage (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    usage_type TEXT NOT NULL,  -- e.g., 'test_execution', 'persona_creation', 'scenario_run', 'report_generation'
+    usage_metadata JSONB DEFAULT '{}'::jsonb,  -- Flexible metadata (model_id, test_count, parameters, etc.)
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_product_usage_product ON product_usage(product_id);
+CREATE INDEX idx_product_usage_tenant ON product_usage(tenant_id);
+CREATE INDEX idx_product_usage_created ON product_usage(created_at);
+CREATE INDEX idx_product_usage_type ON product_usage(usage_type);
+CREATE INDEX idx_product_usage_product_tenant_date ON product_usage(product_id, tenant_id, created_at);
+
+-- ============================================================================
 -- CORE TENANT & CLIENT MANAGEMENT
 -- ============================================================================
 
@@ -85,6 +106,7 @@ CREATE INDEX idx_client_subscriptions_status ON client_product_subscriptions(sub
 -- Stores adversarial, evaluator, and testing AI agents
 CREATE TABLE ai_agents (
     agent_id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
     agent_name TEXT NOT NULL,
     agent_type TEXT NOT NULL CHECK (agent_type IN ('adversarial', 'evaluator', 'classifier', 'monitor', 'generator', 'other')),
     model_architecture TEXT,
@@ -95,9 +117,12 @@ CREATE TABLE ai_agents (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     created_by TEXT,
-    metadata JSONB
+    metadata JSONB,
+    CONSTRAINT fk_ai_agents_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
 
+CREATE INDEX idx_ai_agents_product ON ai_agents(product_id);
 CREATE INDEX idx_ai_agents_type_status ON ai_agents(agent_type, status);
 
 -- Table: client_models
@@ -434,6 +459,7 @@ CREATE INDEX idx_persona_actions_product ON persona_actions(product_id);
 -- Customer context and intake information
 CREATE TABLE context_profiles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id),
     source_intake_id TEXT NOT NULL UNIQUE,
     tenant_id UUID REFERENCES tenants(id),
     
@@ -478,12 +504,17 @@ CREATE TABLE context_profiles (
     notes TEXT,
     
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_context_profiles_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_context_profiles_product ON context_profiles(product_id);
 
 -- Table: risk_assessments
 CREATE TABLE risk_assessments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id),
     context_profile_id UUID REFERENCES context_profiles(id),
     source_intake_id TEXT NOT NULL,
     assessment_mode TEXT DEFAULT 'agentic' CHECK (assessment_mode IN ('agentic', 'mock')),
@@ -498,8 +529,12 @@ CREATE TABLE risk_assessments (
     error_message TEXT,
     
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_risk_assessments_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_risk_assessments_product ON risk_assessments(product_id);
 
 -- ============================================================================
 -- THREATS, RISKS & HARMS
@@ -509,6 +544,7 @@ CREATE TABLE risk_assessments (
 CREATE TABLE threat_vectors (
     id TEXT PRIMARY KEY,
     id_uuid UUID,
+    product_id UUID NOT NULL REFERENCES products(id),
     source TEXT NOT NULL,
     name TEXT,
     description TEXT,
@@ -529,15 +565,19 @@ CREATE TABLE threat_vectors (
     embedding vector,
     
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_threat_vectors_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
 
+CREATE INDEX idx_threat_vectors_product ON threat_vectors(product_id);
 CREATE INDEX idx_threat_vectors_severity ON threat_vectors(severity);
 CREATE INDEX idx_threat_vectors_category ON threat_vectors(category);
 
 -- Table: threat_examples
 CREATE TABLE threat_examples (
     id TEXT PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
     vector_id TEXT REFERENCES threat_vectors(id),
     source TEXT,
     raw_json JSONB,
@@ -556,24 +596,38 @@ CREATE TABLE threat_examples (
     modalities TEXT[],
     
     embedding vector,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_threat_examples_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_threat_examples_product ON threat_examples(product_id);
 
 -- Table: risks
 CREATE TABLE risks (
     id TEXT PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
     name TEXT NOT NULL,
     description TEXT,
-    embedding vector
+    embedding vector,
+    CONSTRAINT fk_risks_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_risks_product ON risks(product_id);
 
 -- Table: harms
 CREATE TABLE harms (
     id TEXT PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
     name TEXT NOT NULL,
     description TEXT,
-    embedding vector
+    embedding vector,
+    CONSTRAINT fk_harms_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_harms_product ON harms(product_id);
 
 -- ============================================================================
 -- TEST CATEGORIES & TEST TYPES
@@ -598,14 +652,19 @@ CREATE INDEX idx_test_categories_product ON test_categories(product_id);
 -- Specific types of tests (unified from both schemas)
 CREATE TABLE test_types (
     id TEXT PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id),
     name TEXT NOT NULL,
     description TEXT,
     category TEXT NOT NULL DEFAULT 'general',
     category_id INTEGER REFERENCES test_categories(category_id),
     session_id TEXT,
     embedding vector,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    CONSTRAINT fk_test_types_product FOREIGN KEY (product_id) 
+        REFERENCES products(id) ON DELETE RESTRICT
 );
+
+CREATE INDEX idx_test_types_product ON test_types(product_id);
 
 -- ============================================================================
 -- SCENARIOS & INTENTS
@@ -939,52 +998,81 @@ CREATE TABLE model_outputs (
 CREATE INDEX idx_outputs_execution ON model_outputs(execution_id);
 
 -- Table: prompt_generator_responses
+-- Combined response and LLM invocation tracking - stores both generated content and API execution details
 CREATE TABLE prompt_generator_responses (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     product_id UUID NOT NULL REFERENCES products(id),
-    session_id TEXT NOT NULL,
-    persona_id TEXT REFERENCES personas(id),
-    persona_name TEXT NOT NULL,
     
+    -- Session and context
+    generation_run_id UUID REFERENCES generation_runs(id),
+    session_id UUID REFERENCES test_sessions(id),
+    conversation_id VARCHAR(100),
+    turn_id VARCHAR(100),
+    
+    -- Persona and scenario context
+    persona_id TEXT REFERENCES personas(id),
+    persona_name TEXT,
+    scenario_id TEXT REFERENCES scenarios(id),
+    test_type_id TEXT REFERENCES test_types(id),
+    threat_vector_id TEXT REFERENCES threat_vectors(id),
+    
+    -- Generated content
+    final_prompt TEXT NOT NULL,
+    final_response JSONB NOT NULL,
+    generated_text TEXT,
     test_types JSONB,
-    prompts JSONB,
     raw_output JSONB,
     
+    -- LLM API Invocation Details
+    invocation_id UUID NOT NULL UNIQUE,
+    model_id VARCHAR(255) NOT NULL,
+    model_name TEXT,
+    model_version TEXT,
+    provider TEXT,
+    
+    -- Request/Response tracking
+    request_payload JSONB,
+    response_data JSONB,
+    sanitized_response JSONB,
+    
+    -- Execution metrics
+    status VARCHAR(50) DEFAULT 'success' CHECK (status IN ('success', 'failed', 'error')),
+    latency_ms FLOAT,
+    prompt_tokens INTEGER DEFAULT 0,
+    completion_tokens INTEGER DEFAULT 0,
+    total_tokens INTEGER DEFAULT 0,
+    
+    -- Error handling
+    error_code VARCHAR(100),
+    error_message TEXT,
+    
+    -- Caching and retry
+    cache_hit BOOLEAN DEFAULT FALSE,
+    retry_count INTEGER DEFAULT 0,
+    invocation_type VARCHAR(50) DEFAULT 'async' CHECK (invocation_type IN ('async', 'sync')),
+    
+    -- Additional metadata
+    caller_context JSONB,
+    metadata JSONB DEFAULT '{}'::jsonb,
+    
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    completed_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
     CONSTRAINT fk_prompt_generator_responses_product FOREIGN KEY (product_id) 
         REFERENCES products(id) ON DELETE RESTRICT
 );
 
 CREATE INDEX idx_prompt_generator_responses_product ON prompt_generator_responses(product_id);
+CREATE INDEX idx_prompt_generator_responses_session ON prompt_generator_responses(session_id);
+CREATE INDEX idx_prompt_generator_responses_persona ON prompt_generator_responses(persona_id);
+CREATE INDEX idx_prompt_generator_responses_scenario ON prompt_generator_responses(scenario_id);
+CREATE INDEX idx_prompt_generator_responses_model ON prompt_generator_responses(model_id);
+CREATE INDEX idx_prompt_generator_responses_invocation ON prompt_generator_responses(invocation_id);
 
--- Table: prompt_response_metadata
-CREATE TABLE prompt_response_metadata (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    product_id UUID NOT NULL REFERENCES products(id),
-    prompt_response_id UUID REFERENCES prompt_generator_responses(id),
-    session_id UUID REFERENCES test_sessions(id),
-    persona_id TEXT REFERENCES personas(id),
-    test_type_id TEXT REFERENCES test_types(id),
-    scenario_id TEXT REFERENCES scenarios(id),
-    threat_vector_id TEXT REFERENCES threat_vectors(id),
-    
-    final_prompt TEXT NOT NULL,
-    final_response JSONB NOT NULL,
-    
-    model_name TEXT,
-    model_version TEXT,
-    provider TEXT,
-    latency_ms INTEGER,
-    token_input INTEGER,
-    token_output INTEGER,
-    
-    metadata JSONB DEFAULT '{}'::jsonb,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    CONSTRAINT fk_prompt_response_metadata_product FOREIGN KEY (product_id) 
-        REFERENCES products(id) ON DELETE RESTRICT
-);
-
-CREATE INDEX idx_prompt_response_metadata_product ON prompt_response_metadata(product_id);
+-- ============================================================================
+-- GENERATION METRICS & TELEMETRY
+-- ============================================================================
 
 -- ============================================================================
 -- CAT-ASTROPHIC PROMPT DATABASE (PromptGoblin v2) INTEGRATION
@@ -1148,39 +1236,9 @@ CREATE TABLE telemetry (
 CREATE INDEX idx_telemetry_product ON telemetry(product_id);
 CREATE INDEX idx_telemetry_generation_run ON telemetry(generation_run_id);
 
--- Table: llm_invocations
--- Stores all LLM API invocations for auditing, analysis, and cost tracking
-CREATE TABLE llm_invocations (
-    id BIGSERIAL PRIMARY KEY,
-    product_id UUID NOT NULL REFERENCES products(id),
-    invocation_id UUID NOT NULL UNIQUE,
-    model_id VARCHAR(255) NOT NULL,
-    request_payload JSONB NOT NULL,
-    response_data JSONB,
-    sanitized_response JSONB,
-    generated_text TEXT,
-    status VARCHAR(50) DEFAULT 'success' CHECK (status IN ('success', 'failed', 'error')),
-    error_code VARCHAR(100),
-    error_message TEXT,
-    latency_ms FLOAT,
-    prompt_tokens INTEGER DEFAULT 0,
-    completion_tokens INTEGER DEFAULT 0,
-    total_tokens INTEGER DEFAULT 0,
-    conversation_id VARCHAR(100),
-    turn_id VARCHAR(100),
-    generation_run_id UUID,
-    cache_hit BOOLEAN DEFAULT FALSE,
-    retry_count INTEGER DEFAULT 0,
-    invocation_type VARCHAR(50) DEFAULT 'async' CHECK (invocation_type IN ('async', 'sync')),
-    caller_context JSONB,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    completed_at TIMESTAMP WITH TIME ZONE,
-    
-    CONSTRAINT fk_llm_invocations_product FOREIGN KEY (product_id) 
-        REFERENCES products(id) ON DELETE RESTRICT
-);
-
-CREATE INDEX idx_llm_invocations_product ON llm_invocations(product_id);
+-- ============================================================================
+-- AUDIT & LOGGING
+-- ============================================================================CREATE INDEX idx_llm_invocations_product ON llm_invocations(product_id);
 CREATE INDEX idx_llm_invocations_id ON llm_invocations(invocation_id);
 CREATE INDEX idx_llm_invocations_model ON llm_invocations(model_id);
 CREATE INDEX idx_llm_invocations_status ON llm_invocations(status);

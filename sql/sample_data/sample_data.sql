@@ -291,62 +291,85 @@ CROSS JOIN (VALUES
 WHERE p.product_code = 'ai-range';
 
 -- ============================================================================
--- 7. INSERT AI AGENTS
+-- 7. INSERT AI AGENTS (7 Core AI-Range Agents)
 -- ============================================================================
 
-INSERT INTO ai_agents (agent_name, agent_type, model_architecture, version, description, capabilities, created_by)
-VALUES 
+INSERT INTO ai_agents (product_id, agent_name, agent_type, model_architecture, version, description, capabilities, status, created_by)
+SELECT 
+    p.id,
+    agent_data.name,
+    agent_data.type,
+    agent_data.architecture,
+    agent_data.version,
+    agent_data.description,
+    agent_data.capabilities,
+    'active',
+    'system'
+FROM products p
+CROSS JOIN (
+    VALUES
     (
-        'AdversarialAgent-GPT4',
-        'adversarial',
-        'GPT-4',
-        '1.0.0',
-        'Primary adversarial agent for generating and executing attack prompts',
-        '["jailbreak_generation", "prompt_crafting", "context_manipulation"]',
-        'system'
+        'Cat-Astrophic Prompt Agent',
+        'generator',
+        'Claude-3.5-Sonnet',
+        '2.0.0',
+        'Generates adversarial prompts and attack scenarios for comprehensive AI testing',
+        '["prompt_generation", "jailbreak_crafting", "scenario_creation", "attack_pattern_synthesis"]'::jsonb
     ),
     (
-        'SafetyEvaluator-v1',
+        'Evaluation Agent',
         'evaluator',
+        'GPT-4-Turbo',
+        '1.5.0',
+        'Evaluates model responses and safety outcomes from test executions',
+        '["response_evaluation", "safety_scoring", "harm_detection", "bias_analysis"]'::jsonb
+    ),
+    (
+        'Scenario Agent',
+        'generator',
+        'Claude-3-Opus',
+        '1.0.0',
+        'Creates realistic test scenarios and contextual environments for persona-based testing',
+        '["scenario_generation", "context_creation", "environment_setup", "complexity_scaling"]'::jsonb
+    ),
+    (
+        'Persona Agent',
+        'generator',
         'GPT-4',
-        '1.0.0',
-        'Primary safety evaluation agent for assessing model outputs',
-        '["toxicity_detection", "bias_analysis", "jailbreak_detection", "prompt_injection_detection"]',
-        'system'
+        '1.2.0',
+        'Generates and manages AI personas with realistic behavioral patterns and psychological profiles',
+        '["persona_creation", "behavior_generation", "memory_management", "trait_synthesis"]'::jsonb
     ),
     (
-        'SafetyEvaluator-Claude',
+        'Test Agent',
+        'classifier',
+        'BERT-Large',
+        '1.0.0',
+        'Orchestrates test case execution, management, and result collection',
+        '["test_execution", "case_management", "result_collection", "test_coordination"]'::jsonb
+    ),
+    (
+        'Analysis Agent',
         'evaluator',
-        'Claude-3',
-        '1.0.0',
-        'Secondary safety evaluator using Claude for cross-validation',
-        '["safety_scoring", "reasoning_analysis", "harm_detection"]',
-        'system'
+        'Claude-3-Sonnet',
+        '1.1.0',
+        'Analyzes test results, generates insights, and produces compliance reports',
+        '["result_analysis", "pattern_recognition", "compliance_reporting", "insight_generation", "trend_analysis"]'::jsonb
     ),
     (
-        'ToxicityClassifier-BERT',
-        'classifier',
-        'BERT',
-        '1.0.0',
-        'Specialized classifier for toxicity detection',
-        '["toxicity_scoring", "hate_speech_detection", "offensive_language_detection"]',
-        'system'
-    ),
-    (
-        'BiasDetector-v1',
-        'classifier',
-        'Custom',
-        '1.0.0',
-        'Specialized agent for detecting various forms of bias',
-        '["gender_bias", "racial_bias", "age_bias", "stereotype_detection"]',
-        'system'
-    );
+        'Commander Agent (Orchestration)',
+        'monitor',
+        'GPT-4-Turbo',
+        '2.0.0',
+        'Master orchestration agent that coordinates all other agents and manages test workflows',
+        '["workflow_orchestration", "agent_coordination", "state_management", "task_distribution", "error_handling", "pipeline_management"]'::jsonb
+    )
+) AS agent_data(name, type, architecture, version, description, capabilities)
+WHERE p.product_code = 'ai-range';
 
 -- ============================================================================
--- 3. INSERT CLIENT MODELS
+-- 8. INSERT CLIENT MODELS
 -- ============================================================================
-
-PRINT 'Inserting client models...';
 
 INSERT INTO client_models (client_id, model_name, model_version, model_type, endpoint_url, deployment_environment, status, risk_level)
 VALUES 
@@ -615,6 +638,40 @@ VALUES
     ('assessment_completed', 'safety_assessment', @assessment_id1, 'agent', '2', 'create', '{"safety_score": 95.5, "is_safe": true}'),
     ('alert_generated', 'safety_alert', @alert_id2, 'agent', '2', 'create', '{"severity": "critical", "model_id": 5}'),
     ('risk_level_changed', 'client_model', 5, 'system', 'auto_update', 'update', '{"old_risk_level": "high", "new_risk_level": "critical"}');
+
+-- ============================================================================
+-- 7. PRODUCT USAGE TRACKING (Audit Trail)
+-- ============================================================================
+
+PRINT 'Inserting product usage records...';
+
+-- Get the product IDs (they should exist from the initial products insert)
+WITH product_ids AS (
+    SELECT id, product_code FROM products WHERE product_code IN ('ai-range', 'nexus')
+),
+tenant_ids AS (
+    SELECT id, tenant_name FROM tenants LIMIT 2
+)
+INSERT INTO product_usage (product_id, tenant_id, usage_type, usage_metadata, created_at)
+SELECT
+    (SELECT id FROM products WHERE product_code = 'ai-range'),
+    tenants.id,
+    usage_types.type,
+    usage_types.metadata,
+    usage_types.timestamp
+FROM (
+    VALUES
+    ('test_execution', '{"test_count": 25, "duration_seconds": 1847, "model_id": 1}'::jsonb, NOW() - INTERVAL '2 days'),
+    ('test_execution', '{"test_count": 18, "duration_seconds": 1203, "model_id": 2}'::jsonb, NOW() - INTERVAL '1 day'),
+    ('persona_creation', '{"persona_count": 5, "cohort_id": "cohort-001"}'::jsonb, NOW() - INTERVAL '3 days'),
+    ('scenario_run', '{"scenario_count": 12, "safety_checks": 36}'::jsonb, NOW() - INTERVAL '2 days'),
+    ('report_generation', '{"report_type": "safety_assessment", "pages": 42}'::jsonb, NOW() - INTERVAL '1 day'),
+    ('test_execution', '{"test_count": 32, "duration_seconds": 2145, "model_id": 3}'::jsonb, NOW()),
+    ('api_call', '{"endpoint": "/adversarial/test", "calls": 847}'::jsonb, NOW() - INTERVAL '6 hours'),
+    ('export_data', '{"format": "csv", "records": 5000}'::jsonb, NOW() - INTERVAL '12 hours')
+) AS usage_types(type, metadata, timestamp)
+CROSS JOIN tenants
+WHERE tenants.tenant_name IN ('Acme Corporation', 'TechStart Inc');
 
 -- ============================================================================
 -- SUMMARY

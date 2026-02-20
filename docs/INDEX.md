@@ -1,24 +1,33 @@
-# Database Integration - Quick Reference Index
+# Database Documentation Index
 
 ## 📋 Overview
 
-This directory contains the integrated database schema combining adversarial AI safety testing with persona-based risk assessment, connected through a unified product layer architecture.
+Complete consolidated reference for the integrated adversarial AI safety and persona testing database.
+
+**Current Version**: 2.0 (Integrated)  
+**Status**: Production Ready  
+**Database**: PostgreSQL 14+
+
+---
+
+This directory contains:
+- Integrated database schema combining adversarial AI safety testing with persona-based risk assessment
+- Unified product layer architecture (AI-Range + Nexus)
+- Multi-tenancy support and subscription management
+- Cat-Astrophic (PromptGoblin v2) prompt generation system
+- Comprehensive threat and risk framework
 
 ## 🏗️ Architecture
 
-The database is organized into **three interconnected layers**:
+The database is organized into **two interconnected layers**:
 
-### 🔝 Layer 1: Product Layer
-- **AI-Range**: Comprehensive AI testing and safety assessment
-- **Nexus**: Advanced AI persona testing and risk analysis
+### 🏢 Layer 1: Client Layer
+- **Tenants**: Client organizations using AI-Range
+- **Central management** for all client operations
 
-### 🏢 Layer 2: Client Layer
-- **Tenants**: Organizations subscribing to products
-- **Subscriptions**: Managing product access and features
-
-### 🤖 Layer 3: Model Layer
+### 🤖 Layer 2: Model Layer
 - **Client Models**: AI models under test
-- **Model-Product Links**: Connecting models to products
+- **AI Agents**: ML models performing safety assessments
 
 ## 🗂️ File Guide
 
@@ -75,11 +84,10 @@ The database is organized into **three interconnected layers**:
 
 ### Onboard a New Client
 
-1. Review [PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md) - Subscription model
+1. Review [PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md) - Architecture overview
 2. Create tenant in `tenants` table
-3. Subscribe to products in `client_product_subscriptions`
-4. Register models in `client_models`
-5. Link models to products in `client_model_products`
+3. Register models in `client_models`
+4. Start using AI-Range for testing and personas
 
 
 ### Data Migration

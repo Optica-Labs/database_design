@@ -107,7 +107,7 @@ Start here:
 | `README.md` | Added product layer overview, updated quick start |
 | `docs/INDEX.md` | Added new files, updated navigation |
 | `docs/ER_DIAGRAM_INTEGRATED.md` | Added product layer section |
-| `sql/schemas/schema_integrated.sql` | Added 3 new tables (products, client_product_subscriptions, client_model_products) |
+| `sql/schemas/schema_integrated.sql` | Added products table with versioning |
 | `sql/queries/queries.sql` | Added ~200 lines of product layer queries |
 | `sql/sample_data/sample_data.sql` | Added sample products, subscriptions, and linkages |
 
