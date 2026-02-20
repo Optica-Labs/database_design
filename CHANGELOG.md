@@ -321,7 +321,7 @@ SELECT * FROM personas WHERE name = 'Sarah' AND tenant_id = $tenant_id;
 - [ ] **Advanced Analytics**: Dashboard and reporting platform
 - [ ] **Real-time Alerts**: WebSocket-based alert streaming
 - [ ] **API Layer**: REST/GraphQL API for system access
-- [ ] **Nexus Product**: Second product tier development
+- [x] **Nexus Product**: Prompt ingestion + library integration
 - [ ] **Extended Integrations**: Additional testing frameworks
 - [ ] **Advanced Personas**: ML-generated persona variants
 - [ ] **Multilingual Support**: Enhanced language support

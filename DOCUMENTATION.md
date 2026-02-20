@@ -528,6 +528,11 @@ WHERE key = 'age_range' AND persona_type = 'regular';
    - Generation runs → conversations → turns hierarchy
    - Quality metrics and LLM invocation tracking
 
+6. **Nexus Prompt Integration**
+  - Nexus prompt library unified across sources
+  - Ingests completed, successful Stage 4 Cat-Astrophic prompts
+  - Supports client-provided prompts with approval workflow
+
 ---
 
 ## AI-Range Core Agents

@@ -17,7 +17,7 @@ This repository contains a **comprehensive integrated database** serving as the 
 **Clients (Tenants)** → **Models**
 
 ### Layer 1: Client Layer 🏢
-- **Tenants**: Organizations using AI-Range (testing, personas, risk analysis) and Nexus (reserved for future use)
+- **Tenants**: Organizations using AI-Range (testing, personas, risk analysis) and Nexus (prompt ingestion + library)
 - **Central management** for all client operations
 
 ### Layer 2: Model Layer 🤖

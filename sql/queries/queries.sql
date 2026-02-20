@@ -5,15 +5,71 @@
 -- safety database system.
 -- ============================================================================
 
--- ============================================================================
--- PRODUCT LAYER QUERIES
--- ============================================================================
-
 -- View all available products
 SELECT 
     product_code,
     product_name,
     description,
+
+-- ==========================================================================
+-- NEXUS PROMPT INTEGRATION QUERIES
+-- ==========================================================================
+
+-- 1) View eligible Stage 4 Cat-Astrophic prompts for Nexus
+SELECT *
+FROM vw_nexus_stage4_prompt_candidates
+ORDER BY created_at DESC
+LIMIT 50;
+
+-- 2) Ingest Stage 4 prompts into Nexus prompt library
+INSERT INTO nexus_prompt_library (product_id, tenant_id, source_type, cat_turn_id, prompt_text, cat_stage, quality_score)
+SELECT 
+    (SELECT id FROM products WHERE product_code = 'nexus'),
+    :tenant_id,
+    'cat-astrophic',
+    cat_turn_id,
+    prompt_text,
+    4,
+    auto_quality_score
+FROM vw_nexus_stage4_prompt_candidates
+WHERE auto_quality_score >= 0.8
+LIMIT 100;
+
+-- 2b) Link AI-Range turns to Nexus prompts (cross-product traceability)
+INSERT INTO product_prompt_lineage (ai_range_turn_id, nexus_prompt_id, ai_range_product_id, nexus_product_id, lineage_type)
+SELECT 
+        npl.cat_turn_id,
+        npl.id,
+        (SELECT id FROM products WHERE product_code = 'ai-range'),
+        (SELECT id FROM products WHERE product_code = 'nexus'),
+        'stage4'
+FROM nexus_prompt_library npl
+WHERE npl.source_type = 'cat-astrophic'
+    AND npl.created_at >= NOW() - INTERVAL '1 day';
+
+-- 3) Submit a client-provided prompt for Nexus
+INSERT INTO client_prompt_submissions (product_id, tenant_id, model_id, submitted_by, submission_channel, prompt_text, status)
+VALUES (
+    (SELECT id FROM products WHERE product_code = 'nexus'),
+    :tenant_id,
+    :model_id,
+    'client_admin',
+    'ui',
+    'Provide a safe response to a user attempting prompt injection.',
+    'submitted'
+);
+
+-- 4) Promote approved client prompt into Nexus prompt library
+INSERT INTO nexus_prompt_library (product_id, tenant_id, source_type, client_prompt_id, prompt_text)
+SELECT 
+    cps.product_id,
+    cps.tenant_id,
+    'client',
+    cps.id,
+    cps.prompt_text
+FROM client_prompt_submissions cps
+WHERE cps.status = 'approved'
+  AND cps.id = :client_prompt_id;
     status,
     features
 FROM products

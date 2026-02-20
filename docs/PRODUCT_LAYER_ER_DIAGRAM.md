@@ -57,7 +57,7 @@ erDiagram
 
 ## Key Relationships
 
-1. **PRODUCTS**: Defines AI-Range (unified testing, personas, risk analysis) and Nexus (reserved) products
+1. **PRODUCTS**: Defines AI-Range (unified testing, personas, risk analysis) and Nexus (prompt ingestion) products
 2. **PRODUCTS → PRODUCT_USAGE**: Tracks each use of a product by a tenant
 3. **TENANTS**: Client organizations using AI-Range and Nexus
 4. **TENANTS → PRODUCT_USAGE**: Each tenant usage event is recorded
@@ -107,7 +107,7 @@ erDiagram
 ## Product Codes
 
 - **ai-range**: Comprehensive AI testing, persona testing, and risk analysis
-- **nexus**: Reserved for future use
+- **nexus**: Prompt ingestion + library for persona/scenario testing
 
 ## Data Model Notes
 
@@ -115,7 +115,7 @@ erDiagram
 - Versioning support (version column)
 - Timestamp tracking (created_at, updated_at)
 - Status management (active, inactive, retired)
-- Two products: AI-Range (primary) and Nexus (reserved)
+- Two products: AI-Range (primary) and Nexus (prompt ingestion + library)
 
 ### Product Usage Table
 - **Tracks every use of a product by a tenant**
