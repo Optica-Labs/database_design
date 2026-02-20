@@ -66,6 +66,7 @@ The database is organized into **two interconnected layers**:
 | **[../sql/queries/cat_astrophic_queries.sql](../sql/queries/cat_astrophic_queries.sql)** | **⭐ Cat-Astrophic queries** | Query examples for PromptGoblin v2 tables |
 | **[../sql/views/cat_astrophic_views.sql](../sql/views/cat_astrophic_views.sql)** | **⭐ Cat-Astrophic views** | Pre-built views for common analyses |
 | **[../sql/views/nexus_views.sql](../sql/views/nexus_views.sql)** | **⭐ Nexus views** | Pre-built views for Nexus prompt ingestion |
+| **[../sql/views/nexus_views.sql](../sql/views/nexus_views.sql)** | **⭐ Nexus views** | Pre-built views for Nexus prompt ingestion |
 | **[../sql/sample_data/sample_data.sql](../sql/sample_data/sample_data.sql)** | Sample data | Testing the schema |
 
 ### 📊 Diagrams

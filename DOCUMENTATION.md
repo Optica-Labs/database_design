@@ -614,6 +614,11 @@ SELECT * FROM vw_cross_product_prompt_trace
 WHERE ai_range_turn_id = :turn_id;
 ```
 
+6. **Nexus Prompt Integration**
+  - Nexus prompt library unified across sources
+  - Ingests completed, successful Stage 4 Cat-Astrophic prompts
+  - Supports client-provided prompts with approval workflow
+
 ---
 
 ## AI-Range Core Agents

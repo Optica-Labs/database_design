@@ -43,6 +43,8 @@ database_design/
     ├── views/                                  # Database Views
     │   ├── cat_astrophic_views.sql            # Integrated views for analysis
     │   └── nexus_views.sql                    # Nexus prompt ingestion views
+    │   ├── cat_astrophic_views.sql            # Integrated views for analysis
+    │   └── nexus_views.sql                    # Nexus prompt ingestion views
     └── sample_data/                            # Sample Data
         └── sample_data.sql                    # Sample data for testing
 ```
