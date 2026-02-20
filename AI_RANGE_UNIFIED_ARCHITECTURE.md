@@ -14,11 +14,11 @@
 
 ### After
 - **AI-Range**: EVERYTHING (Testing, Safety, Personas, Scenarios)
-- **Nexus**: Reserved for future use
+- **Nexus**: Prompt ingestion + library (Stage 4 Cat-Astrophic + client prompts)
 
 ## Complete List of Tables with product_id
 
-All the following tables now include `product_id UUID NOT NULL REFERENCES products(id)` linking to AI-Range (38 tables total):
+All the following tables now include `product_id UUID NOT NULL REFERENCES products(id)` linking to AI-Range or Nexus (38 tables total):
 
 ### Testing & Safety (9 tables)
 1. ✅ `test_categories` - Test categorization framework
@@ -412,25 +412,23 @@ CREATE INDEX idx_scenarios_product ON scenarios(product_id);
 
 ## Nexus Product Status
 
-**Current Status**: Reserved / Inactive
+**Current Status**: Active (prompt ingestion + library)
 
-**No tables assigned**: All functionality is under AI-Range
+**Assigned Tables**:
+- `client_prompt_submissions`
+- `nexus_prompt_library`
+- `vw_nexus_stage4_prompt_candidates` (view)
 
-**Future Use Cases**:
-- Advanced monitoring and alerting
-- Real-time analytics dashboard
-- Cross-client benchmarking
-- AI model performance tracking
-- Threat intelligence aggregation
-
-**Activation**: Would require deciding which new tables or features belong to Nexus vs AI-Range
+**Sources**:
+- Completed, successful Stage 4 Cat-Astrophic prompts
+- Client-provided prompt submissions
 
 ## Key Takeaways
 
 1. ✅ **AI-Range is the unified platform** - owns all testing, safety, persona, and scenario tables
 2. ✅ **12 tables now have product_id** - all link to ai-range product
 3. ✅ **Simpler subscription model** - clients subscribe to AI-Range for everything
-4. ✅ **Nexus is reserved** - available for future platform expansion
+4. ✅ **Nexus is active** - prompt ingestion and library integration
 5. ✅ **Complete documentation** - all docs updated to reflect unified architecture
 
 ## Files to Review

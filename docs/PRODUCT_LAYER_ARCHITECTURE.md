@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Product Layer defines the two core products available on the platform: AI-Range (primary) and Nexus (reserved). Clients (tenants) use AI-Range for comprehensive AI testing, safety assessment, and persona-based analysis.
+The Product Layer defines the two core products available on the platform: AI-Range (primary) and Nexus (prompt ingestion and library). Clients (tenants) use AI-Range for comprehensive AI testing, safety assessment, and persona-based analysis.
 
 ## Architecture
 
@@ -86,10 +86,13 @@ The platform currently supports two products:
 - `prompt_generator_responses` - Generated prompts for testing
 - `prompt_response_metadata` - Prompt execution metadata
 
-### 2. **Nexus** (Reserved Product)
+### 2. **Nexus** (Prompt Integration Product)
 - **Product Code**: `nexus`
-- **Status**: Reserved for future use
-- **Note**: Currently, all functionality is consolidated under AI-Range
+- **Status**: Active
+- **Focus**: Curated prompt ingestion for persona/scenario testing
+- **Sources**:
+  - Completed, successful Stage 4 Cat-Astrophic prompts
+  - Client-provided prompt submissions (approval workflow)
 
 ## Multi-Tenancy Architecture
 
@@ -98,7 +101,7 @@ The platform currently supports two products:
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                    PRODUCTS (Top Tier)                        │
-│              AI-Range | Nexus (Reserved)                      │
+│              AI-Range | Nexus (Prompt Library)                │
 └──────────────────────────────────────────────────────────────┘
                           │
 ┌──────────────────────────────────────────────────────────────┐

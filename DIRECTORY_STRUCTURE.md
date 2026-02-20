@@ -23,6 +23,7 @@ database_design/
 │   ├── INTEGRATION_SUMMARY.md                 # Integration executive summary
 │   ├── INTEGRATION_GUIDE.md                   # Detailed integration guide
 │   ├── CAT_ASTROPHIC_INTEGRATION.md           # Cat-Astrophic tables integration
+│   ├── NEXUS_INTEGRATION.md                   # Nexus prompt ingestion & library
 │   │
 │   ├── ER_DIAGRAM_INTEGRATED.md               # Integrated schema ER diagrams
 │   └── ER_DIAGRAM.md                          # Original ER diagrams (reference)
@@ -41,7 +42,8 @@ database_design/
     │   └── cat_astrophic_queries.sql          # Cat-Astrophic specific queries
     │
     ├── views/                                  # Database Views
-    │   └── cat_astrophic_views.sql            # Integrated views for analysis
+    │   ├── cat_astrophic_views.sql            # Integrated views for analysis
+    │   └── nexus_views.sql                    # Nexus prompt ingestion views
     └── sample_data/                            # Sample Data
         └── sample_data.sql                    # Sample data for testing
 ```

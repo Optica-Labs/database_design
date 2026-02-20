@@ -38,6 +38,7 @@ The database is organized into **two interconnected layers**:
 | **[README_INTEGRATED.md](README_INTEGRATED.md)** | Main documentation | You're new to the integrated system |
 | **[PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)** | **⭐ Product layer guide** | You need to understand the multi-product architecture |
 | **[CAT_ASTROPHIC_INTEGRATION.md](CAT_ASTROPHIC_INTEGRATION.md)** | **⭐ Cat-Astrophic integration** | You want details on PromptGoblin v2 tables |
+| **[NEXUS_INTEGRATION.md](NEXUS_INTEGRATION.md)** | **⭐ Nexus integration** | You need Nexus prompt ingestion and library details |
 | **[INTEGRATION_SUMMARY.md](INTEGRATION_SUMMARY.md)** | Executive summary | You need a high-level overview |
 | **[../schema_integrated.sql](../sql/schemas/schema_integrated.sql)** | Complete schema | You're deploying the database |
 
@@ -47,6 +48,7 @@ The database is organized into **two interconnected layers**:
 |------|---------|-------------|
 | **[PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)** | **⭐ Product layer docs** | Understanding how products, clients, and models connect |
 | **[CAT_ASTROPHIC_INTEGRATION.md](CAT_ASTROPHIC_INTEGRATION.md)** | **⭐ Cat-Astrophic integration** | Detailed PromptGoblin v2 table definitions and queries |
+| **[NEXUS_INTEGRATION.md](NEXUS_INTEGRATION.md)** | **⭐ Nexus integration** | Nexus prompt ingestion and library tables |
 | **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)** | Detailed integration guide | Planning migration, understanding design decisions |
 | **[ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md)** | Visual schema documentation | Understanding table relationships |
 | **[PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md)** | Product layer diagram | Visualizing product architecture |
@@ -61,6 +63,7 @@ The database is organized into **two interconnected layers**:
 | **[../sql/queries/queries.sql](../sql/queries/queries.sql)** | Example queries | Learning the schema |
 | **[../sql/queries/cat_astrophic_queries.sql](../sql/queries/cat_astrophic_queries.sql)** | **⭐ Cat-Astrophic queries** | Query examples for PromptGoblin v2 tables |
 | **[../sql/views/cat_astrophic_views.sql](../sql/views/cat_astrophic_views.sql)** | **⭐ Cat-Astrophic views** | Pre-built views for common analyses |
+| **[../sql/views/nexus_views.sql](../sql/views/nexus_views.sql)** | **⭐ Nexus views** | Pre-built views for Nexus prompt ingestion |
 | **[../sql/sample_data/sample_data.sql](../sql/sample_data/sample_data.sql)** | Sample data | Testing the schema |
 
 ### 📊 Diagrams
