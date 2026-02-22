@@ -1,12 +1,13 @@
-# AI-Range & Nexus Unified Platform - Final Architecture
+# Archived: AI-Range & Nexus Unified Platform - Final Architecture
 
-## Executive Summary
+This file has been archived and consolidated into the canonical documentation.
 
-**Complete Product Integration**:
-- **AI-Range**: Comprehensive platform for testing, safety, personas, scenarios, and prompt generation
-- **Nexus**: Ground truth prompt library with automatic cross-product lineage
+See the canonical documents:
+- `DOCUMENTATION.md` (master reference)
+- `MASTER_DOCUMENTATION_INDEX.md` (navigation)
+- `docs/NEXUS_PRODUCTS_INTEGRATION.md` (product comparison)
 
-**✅ CURRENT STATE**: All operational tables are linked via `product_id` foreign key. AI-Range Stage 4 prompts automatically integrate with Nexus through trigger-maintained cross-product lineage.
+Archived copy (full content preserved): `docs/archive/AI-Range & Nexus Unified Platform .md`
 
 ## Complete List of Tables with product_id
 
@@ -119,94 +120,47 @@ All operational tables now include `product_id UUID NOT NULL REFERENCES products
 
 ## Architecture Diagram
 
-```
-┌────────────────────────────────────────────────────────────┐
-│                     AI-RANGE PRODUCT                       │
-│                  (Unified Platform)                        │
-│                                                            │
-│  ┌──────────────────────────────────────────────┐        │
-│  │         Testing Hub (with Use Cases)         │        │
-│  ├──────────────────────────────────────────────┤        │
-│  │ • use_cases (business context)               │        │
-│  │ • test_categories                            │        │
-│  │ • test_sessions                              │        │
-│  │ • test_cases                                 │        │
-│  │ • test_executions                            │        │
-│  │ • safety_assessments                         │        │
-│  │ • compliance_reports                         │        │
-│  │ • safety_alerts                              │        │
-│  │ • threat_vectors & harms (risk framework)    │        │
-│  └──────────────────────────────────────────────┘        │
-│                                                            │
-│  ┌──────────────────────────────────────────────┐        │
-│  │         Persona System                       │        │
-│  ├──────────────────────────────────────────────┤        │
-│  │ • personas (linked to use_cases)             │        │
-│  │ • cohorts & sub_cohorts (classifiers)        │        │
-│  │ • persona_memories                           │        │
-│  │ • persona_reflections                        │        │
-│  │ • persona_plans                              │        │
-│  │ • persona_actions                            │        │
-│  └──────────────────────────────────────────────┘        │
-│                                                            │
-│  ┌──────────────────────────────────────────────┐        │
-│  │         Scenario & Intent Framework          │        │
-│  ├──────────────────────────────────────────────┤        │
-│  │ • scenarios                                  │        │
-│  │ • scenario_intents                           │        │
-│  │ • scenario_intent_personas                   │        │
-│  │ • scenario_personas                          │        │
-│  │ • scenario_threats                           │        │
-│  │ • scenario_scores                            │        │
-│  │ • scenario_test_types                        │        │
-│  └──────────────────────────────────────────────┘        │
-│                                                            │
-│  ┌──────────────────────────────────────────────┐        │
-│  │         Prompt Generation                    │        │
-│  ├──────────────────────────────────────────────┤        │
-│  │ • prompt_generator_responses                 │        │
-│  │ • prompt_response_metadata                   │        │
-│  └──────────────────────────────────────────────┘        │
-│                                                            │
-│  ┌──────────────────────────────────────────────┐        │
-│  │    Cat-Astrophic Prompt Generation Hub       │        │
-│  ├──────────────────────────────────────────────┤        │
-│  │ • generation_runs (batch sessions)           │        │
-│  │ • conversations (prompt-level metadata)      │        │
-│  │ • turns (individual exchanges - Stage 4)    │        │
-│  │ • quality_metrics (assessment data)          │        │
-│  │ • telemetry (aggregated metrics)             │        │
-│  │ • llm_invocations (API audit trail)          │        │
-│  └──────────────────────────────────────────────┘        │
-│                                                            │
-│  ALL tables include: product_id → ai-range                │
-└────────────────────────────────────────────────────────────┘
-                             │
-                             ▼
-┌──────────────────────┐   ┌──────────────────────┐ (AUTO)
-│   NEXUS PRODUCT      │   │ product_prompt_      │ INSERT
-│  (Ground Truth)      │   │ lineage              │ TRIGGER
-├──────────────────────┤   └──────────────────────┘
-│ • client_prompt_     │        ↓        ↑
-│   submissions        │        └────────┘
-│ • nexus_prompt_      │   (Cross-Product
-│   library (Stage 4   │    Traceability)
-│   + client)          │
-│ product_id → nexus   │   Automatic linkage:
-│                      │   Stage 4 Turn → 
-└──────────────────────┘   Nexus Library → All Products
-        ↑
-        │
-   ┌────────────────────────────────────────────────────────┐
-│                    CLIENT SUBSCRIPTIONS                     │
-│            (Subscribe to AI-Range or Nexus)               │
-└────────────────────────────────────────────────────────────┘
-                             │
-                             ▼
-┌────────────────────────────────────────────────────────────┐
-│                      CLIENT MODELS                         │
-│              (Models tested with AI-Range)                 │
-└────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph airange["🟦 AI-RANGE PRODUCT"]
+        usecase["Use Cases<br/>Business Context"]
+        personas["Personas<br/>Test Personas"]
+        scenarios["Scenarios<br/>Test Scenarios"]
+        testing["Testing Hub<br/>Test Execution"]
+        safety["Safety Assessment<br/>Compliance"]
+        prompts["Prompt Generation<br/>Adversarial Prompts"]
+    end
+    
+    subgraph nexus["🟪 NEXUS PRODUCT"]
+        library["Prompt Library<br/>Ground Truth"]
+        lineage["Product Lineage<br/>Cross-Product Traceability"]
+    end
+    
+    subgraph infra["🔧 INFRASTRUCTURE"]
+        products["Products Table"]
+        tenants["Tenants Table"]
+        subscriptions["Subscriptions"]
+    end
+    
+    usecase --> personas
+    personas --> scenarios
+    scenarios --> testing
+    testing --> safety
+    safety --> prompts
+    prompts -->|Auto INSERT trigger| library
+    library --> lineage
+    lineage -->|Links to| airange
+    lineage -->|Links to| nexus
+    
+    products -.->|product_id| airange
+    tenants -.->|tenant_id| airange
+    subscriptions -.->|manages access| nexus
+    
+    style airange fill:#e1f5ff
+    style nexus fill:#f3e5f5
+    style infra fill:#f5f5f5
+    style library fill:#fff9c4
+    style lineage fill:#c8e6c9
 ```
 
 ---
@@ -227,28 +181,34 @@ AI-Range is powered by 7 specialized agents that work in concert to orchestrate 
 
 ### Agent Workflow
 
-```
-        ┌─────────────────────┐
-        │  Commander Agent    │ (Master Orchestrator)
-        │  (GPS-4-Turbo)      │
-        └──────────┬──────────┘
-                   │
-        ┌──────────┴──────────┬──────────────┬────────────┐
-        │                     │              │            │
-        ▼                     ▼              ▼            ▼
-   ┌──────────┐         ┌──────────┐  ┌──────────┐ ┌──────────┐
-   │ Cat-Astro│         │ Scenario │  │ Persona  │ │   Test   │
-   │ Prompt   │         │ Agent    │  │ Agent    │ │ Agent    │
-   │ Agent    │         │ (Claude) │  │ (GPT-4)  │ │ (BERT)   │
-   └────┬─────┘         └────┬─────┘  └────┬─────┘ └────┬─────┘
-        │                    │             │            │
-        └────────┬───────────┴─────────────┴────────────┘
-                 │
-                 ▼
-        ┌──────────────────┐
-        │ Evaluation Agent │ (GPT-4-Turbo)
-        │  Analysis Agent  │ (Claude-3-Sonnet)
-        └──────────────────┘
+```mermaid
+flowchart TD
+    Commander["Commander Agent<br/>(GPT-4-Turbo)<br/>Master Orchestrator"]
+    
+    Scenario["Scenario Agent<br/>(Claude-3-Opus)<br/>Generate Scenarios"]
+    Persona["Persona Agent<br/>(GPT-4)<br/>Generate Personas"]
+    CatAstro["Cat-Astrophic Agent<br/>(Claude-3.5-Sonnet)<br/>Generate Prompts"]
+    Test["Test Agent<br/>(BERT-Large)<br/>Test Orchestration"]
+    
+    Evaluation["Evaluation Agent<br/>(GPT-4-Turbo)<br/>Evaluate Responses"]
+    Analysis["Analysis Agent<br/>(Claude-3-Sonnet)<br/>Analyze Results"]
+    
+    Commander --> Scenario
+    Commander --> Persona
+    Commander --> Test
+    
+    Scenario --> CatAstro
+    Persona --> CatAstro
+    Test --> CatAstro
+    
+    CatAstro --> Evaluation
+    Evaluation --> Analysis
+    Analysis --> Output["Final Prompts<br/>Ready for Nexus"]
+    
+    style Commander fill:#ff6b6b
+    style Evaluation fill:#4ecdc4
+    style Analysis fill:#45b7d1
+    style Output fill:#96ceb4
 ```
 
 ---
@@ -344,6 +304,47 @@ LEFT JOIN scenarios s ON s.tenant_id = t.id::text
 GROUP BY uc.name;
 ```
 
+
+#### Complete Test Workflow
+
+```mermaid
+flowchart TD
+    TestStart["Start Test Session"]
+    
+    UseCase["Define Use Case<br/>Business Context"]
+    Personas["Create Test Personas<br/>Adversarial Traits"]
+    Scenarios["Build Test Scenarios<br/>Real-world Contexts"]
+    
+    GenRun["Create Generation Run"]
+    Threats["Load Threat Vectors<br/>& Risk Assessments"]
+    
+    AgentExec["Execute AI Agents<br/>Prompt Generation"]
+    
+    Safety["Safety Assessment<br/>Policy Compliance"]
+    Quality["Quality Metrics<br/>Diversity & Fit"]
+    
+    PromptCreate["Prompts Created"]
+    NexusLink["Auto-linked to Nexus<br/>via Lineage Trigger"]
+    
+    Complete["Test Complete"]
+    
+    TestStart --> UseCase
+    UseCase --> Personas
+    Personas --> Scenarios
+    Scenarios --> GenRun
+    GenRun --> Threats
+    Threats --> AgentExec
+    AgentExec --> Safety
+    Safety --> Quality
+    Quality --> PromptCreate
+    PromptCreate --> NexusLink
+    NexusLink --> Complete
+    
+    style TestStart fill:#90EE90
+    style Complete fill:#FFB6C6
+    style NexusLink fill:#FFD700
+    style Safety fill:#FF6B6B
+```
 ### 4. **Integrated Workflows**
 - Use cases provide context for both testing and personas
 - Use personas in adversarial tests
@@ -389,7 +390,39 @@ The Cat-Astrophic Prompt (PromptGoblin v2) system has been fully integrated into
 
 - **Full traceability**: Every prompt and response traceable to specific generation runs and LLM calls
 - **Base model tracking**: Captures underlying LLM model IDs, versions, and parameters
-- **Quality assessment**: Metrics for fit, diversity, policy risk, and length scoring
+- **Prompt Generation Workflow
+
+```mermaid
+sequenceDiagram
+    participant User as User/Tenant
+    participant AiRange as AI-Range Platform
+    participant Agent as AI Agents
+    participant Nexus as Nexus Library
+    participant DB as Database
+    
+    User->>AiRange: Create Generation Run
+    AiRange->>DB: Insert generation_run record
+    AiRange->>Agent: Initiate workflow
+    
+    activate Agent
+    Agent->>DB: Access use_cases, personas, scenarios
+    Agent->>Agent: Generate adversarial prompts
+    DB->>Agent: Load threat vectors, risks
+    deactivate Agent
+    
+    Agent->>DB: Insert turns with prompts (Stage 4)
+    DB->>Nexus: Trigger: Auto-ingest Stage 4 prompts
+    
+    activate Nexus
+    Nexus->>DB: Insert nexus_prompt_library records
+    Nexus->>DB: Trigger: Create product_prompt_lineage entries
+    deactivate Nexus
+    
+    DB->>AiRange: Lineage created for all products
+    AiRange->>User: Generation complete with lineage
+```
+
+### Quality assessment**: Metrics for fit, diversity, policy risk, and length scoring
 - **Aggregated telemetry**: Run-level statistics including token counts, latency, success rates
 - **Audit trail**: Complete API invocation history for compliance and debugging
 - **Pipeline metadata**: Captures agentic pipeline execution traces and strategy selection

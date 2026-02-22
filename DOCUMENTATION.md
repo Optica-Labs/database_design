@@ -1,10 +1,12 @@
 # Database Documentation - Master Reference
 
-Complete consolidated documentation for the integrated adversarial AI safety and persona testing database, with unified Nexus prompt ingestion.
+**👉 For complete navigation by role and topic, see [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)**
+
+Complete consolidated documentation for the integrated adversarial AI safety and persona testing database, with unified Nexus prompt ingestion, and Nexus Alpha AI assurance platform.
 
 **Consolidation Note**: This file is the single master reference for the whole repository. All other docs are supporting deep dives and diagrams.
 
-**Version**: 2.1 (Nexus Integration Complete)  
+**Version**: 2.1 (Nexus Alpha Integration Complete)  
 **Platform**: PostgreSQL 14+  
 **Status**: Production Ready
 
@@ -47,14 +49,16 @@ Complete consolidated documentation for the integrated adversarial AI safety and
 
 | File | Purpose | Read Time |
 |------|---------|-----------|
-| [README.md](README.md) | Main overview | 5 min |
-| [docs/INDEX.md](docs/INDEX.md) | File guide | 5 min |
+| [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) | Main overview | 5 min |
+| [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) | File guide | 5 min |
 | [AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md) | Unified architecture | 10 min |
-| [docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md) | Product architecture | 10 min |
-| [docs/PRODUCT_LAYER_ER_DIAGRAM.md](docs/PRODUCT_LAYER_ER_DIAGRAM.md) | Product layer ER diagram | 10 min |
-| [docs/ER_DIAGRAM.md](docs/ER_DIAGRAM.md) | Legacy ER diagrams (reference) | 10 min |
-| [docs/AGENT_ER_DIAGRAMS.md](docs/AGENT_ER_DIAGRAMS.md) | Agent ER diagrams | 10 min |
-| [docs/NEXUS_INTEGRATION.md](docs/NEXUS_INTEGRATION.md) | **Nexus prompt integration** | **10 min** |
+| [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | Product architecture & integration | 10 min |
+| [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) | Product layer ER diagram (see index) | 10 min |
+| [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) | Legacy ER diagrams (see index) | 10 min |
+| [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) | Agent ER diagrams (see index) | 10 min |
+| [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | **Nexus (Prompt Library)** integration | **10 min** |
+| [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md) | **Nexus Alpha (AI Assurance)** platform | **15 min** |
+| [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | **Nexus Products** relationship & workflow | **10 min** |
 | [docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md) | Prompt generation | 10 min |
 | [sql/schemas/schema_integrated.sql](sql/schemas/schema_integrated.sql) | Full DDL | Reference |
 | [sql/queries/queries.sql](sql/queries/queries.sql) | Query examples | 20 min |
@@ -69,15 +73,15 @@ CREATE EXTENSION IF NOT EXISTS "vector";         -- Vector search (pgvector)
 ### Repository Map
 
 - **Consolidated master documentation**: [DOCUMENTATION.md](DOCUMENTATION.md)
-- **Repository overview**: [README.md](README.md)
+- **Repository overview**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
 - **Architecture**: [AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md)
-- **Documentation index**: [docs/INDEX.md](docs/INDEX.md)
-- **Directory structure**: [DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md)
-- **Product layer**: [docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md)
-- **Nexus integration**: [docs/NEXUS_INTEGRATION.md](docs/NEXUS_INTEGRATION.md)
+- **Documentation index**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
+- **Directory structure**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
+- **Product layer**: [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)
+- **Nexus integration**: [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)
 - **Cat-Astrophic integration**: [docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md)
-- **Agent ER diagrams**: [docs/AGENT_ER_DIAGRAMS.md](docs/AGENT_ER_DIAGRAMS.md)
-- **Legacy ER diagrams**: [docs/ER_DIAGRAM.md](docs/ER_DIAGRAM.md)
+- **Agent ER diagrams**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
+- **Legacy ER diagrams**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
 - **Schema**: [sql/schemas/schema_integrated.sql](sql/schemas/schema_integrated.sql)
 - **Queries**: [sql/queries/queries.sql](sql/queries/queries.sql)
 - **Sample data**: [sql/sample_data/sample_data.sql](sql/sample_data/sample_data.sql)
@@ -1258,12 +1262,12 @@ FOREIGN KEY (product_id) REFERENCES products(id);
 
 ### Related Files
 
-- **[README.md](README.md)** - Project overview
+- **[MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)** - Project overview
 - **[AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md)** - Unified architecture
-- **[docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md)** - Product layer design
-- **[docs/PRODUCT_LAYER_ER_DIAGRAM.md](docs/PRODUCT_LAYER_ER_DIAGRAM.md)** - Product ER diagrams
-- **[docs/ER_DIAGRAM.md](docs/ER_DIAGRAM.md)** - Legacy ER diagrams
-- **[docs/AGENT_ER_DIAGRAMS.md](docs/AGENT_ER_DIAGRAMS.md)** - Agent ER diagrams
+- **[docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)** - Product layer design
+- **[MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)** - Product ER diagrams (see index)
+- **[MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)** - Legacy ER diagrams (see index)
+- **[MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)** - Agent ER diagrams (see index)
 - **[docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md)** - Prompt generation details
 - **[docs/NEXUS_INTEGRATION.md](docs/NEXUS_INTEGRATION.md)** - Nexus prompt ingestion
 - **[sql/queries/queries.sql](sql/queries/queries.sql)** - Query examples

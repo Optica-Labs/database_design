@@ -1846,5 +1846,470 @@ COMMENT ON TABLE threat_vectors IS 'Known threat vectors and attack patterns';
 COMMENT ON TABLE context_profiles IS 'Customer context and intake information for risk assessment';
 
 -- ============================================================================
+-- NEXUS ALPHA: AI ASSURANCE & ROBUSTNESS EVALUATION PLATFORM
+-- ============================================================================
+-- Tables for model safety analysis across 4 stages:
+-- Stage 1: Risk Metrics (vector precognition)
+-- Stage 2: Robustness Analysis (ρ calculation)
+-- Stage 3: Fragility Assessment (φ scoring)
+-- Throughout: Sycophancy Detection
+
+-- ============================================================================
+-- Core Conversation & Messaging Tables
+-- ============================================================================
+
+CREATE TABLE nexus_alpha.conversations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    model_name VARCHAR(255) NOT NULL,
+    total_turns INTEGER DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'active' CHECK (status IN ('active', 'archived', 'deleted', 'processing')),
+    conversation_type VARCHAR(100) DEFAULT 'General',
+    metadata JSONB DEFAULT '{}'::jsonb,
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+CREATE TABLE nexus_alpha.turns (
+    id BIGSERIAL PRIMARY KEY,
+    conversation_id UUID NOT NULL REFERENCES nexus_alpha.conversations(id) ON DELETE CASCADE,
+    turn_number INTEGER NOT NULL,
+    user_message TEXT,
+    model_response TEXT,
+    tokens_used INTEGER,
+    api_response_time_ms INTEGER,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    metadata JSONB DEFAULT '{}'::jsonb,
+    UNIQUE (conversation_id, turn_number)
+);
+
+-- ============================================================================
+-- Stage 1: Vector Embeddings (1024D & 2D PCA Projection)
+-- ============================================================================
+
+CREATE TABLE nexus_alpha.embeddings (
+    id BIGSERIAL PRIMARY KEY,
+    turn_id BIGINT NOT NULL REFERENCES nexus_alpha.turns(id) ON DELETE CASCADE,
+    conversation_id UUID NOT NULL REFERENCES nexus_alpha.conversations(id) ON DELETE CASCADE,
+    text_type VARCHAR(20) NOT NULL CHECK (text_type IN ('user', 'model')),
+    embedding_vector vector(1024),
+    embedding_model VARCHAR(255),
+    embedding_dimension INTEGER DEFAULT 1024,
+    processing_time_ms INTEGER,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE nexus_alpha.vectors_2d (
+    id BIGSERIAL PRIMARY KEY,
+    embedding_id BIGINT NOT NULL REFERENCES nexus_alpha.embeddings(id) ON DELETE CASCADE,
+    turn_id BIGINT NOT NULL REFERENCES nexus_alpha.turns(id) ON DELETE CASCADE,
+    conversation_id UUID NOT NULL REFERENCES nexus_alpha.conversations(id) ON DELETE CASCADE,
+    x NUMERIC(10,6) NOT NULL,
+    y NUMERIC(10,6) NOT NULL,
+    vector_type VARCHAR(20) NOT NULL CHECK (vector_type IN ('user', 'model', 'vsafe')),
+    pca_model_version VARCHAR(50),
+    explained_variance_ratio NUMERIC(5,4),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ============================================================================
+-- Stage 1: Risk Metrics (Per-Turn Risk Assessment)
+-- PRIMARY OUTPUT: Per-turn risk signals combining user and model behavior
+-- ============================================================================
+
+CREATE TABLE nexus_alpha.risk_metrics (
+    id BIGSERIAL PRIMARY KEY,
+    turn_id BIGINT NOT NULL REFERENCES nexus_alpha.turns(id) ON DELETE CASCADE,
+    conversation_id UUID NOT NULL REFERENCES nexus_alpha.conversations(id) ON DELETE CASCADE,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    turn_number INTEGER NOT NULL,
+    
+    -- User Signal Metrics
+    user_vector_x NUMERIC(10,6),
+    user_vector_y NUMERIC(10,6),
+    risk_severity_user NUMERIC(10,6),
+    risk_rate_user NUMERIC(10,6),
+    cumulative_risk_user NUMERIC(10,6),
+    
+    -- Model Signal Metrics
+    model_vector_x NUMERIC(10,6),
+    model_vector_y NUMERIC(10,6),
+    risk_severity_model NUMERIC(10,6),
+    risk_rate_model NUMERIC(10,6),
+    guardrail_erosion_model NUMERIC(10,6),
+    cumulative_risk_model NUMERIC(10,6),
+    
+    -- Derived Risk Metrics
+    failure_potential NUMERIC(10,6),
+    likelihood NUMERIC(10,6),
+    distance_from_vsafe NUMERIC(10,6),
+    distance_user_to_model NUMERIC(10,6),
+    alert_triggered BOOLEAN DEFAULT FALSE,
+    
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+-- ============================================================================
+-- Stage 2: Robustness Analysis (Per-Conversation ρ Calculation)
+-- CRITICAL OUTPUT: Conversation-level robustness classification
+-- ============================================================================
+
+CREATE TABLE nexus_alpha.robustness_analysis (
+    id BIGSERIAL PRIMARY KEY,
+    conversation_id UUID NOT NULL UNIQUE REFERENCES nexus_alpha.conversations(id) ON DELETE CASCADE,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    
+    -- Robustness Score & Classification
+    final_rho NUMERIC(10,6),
+    classification VARCHAR(50) CHECK (classification IN ('Robust', 'Reactive', 'Fragile')),
+    is_robust BOOLEAN,
+    
+    -- Risk Aggregation
+    final_cumulative_user_risk NUMERIC(10,6),
+    final_cumulative_model_risk NUMERIC(10,6),
+    total_turns_analyzed INTEGER,
+    
+    -- Algorithm Metadata
+    algorithm_version VARCHAR(50),
+    weights_used JSONB DEFAULT '{}'::jsonb,
+    calculated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+-- ============================================================================
+-- Stage 3: Fragility Assessment (Per-Model φ Scoring)
+-- MODEL-LEVEL OUTPUT: Aggregate fragility score across test conversations
+-- ============================================================================
+
+CREATE TABLE nexus_alpha.fragility_scores (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    model_name VARCHAR(255) NOT NULL,
+    
+    -- Fragility Score & Classification
+    phi_score NUMERIC(10,6),
+    fragility_level VARCHAR(50) CHECK (fragility_level IN ('Low', 'Medium', 'High', 'Critical')),
+    
+    -- Robustness Statistics
+    mean_rho NUMERIC(10,6),
+    std_rho NUMERIC(10,6),
+    max_rho NUMERIC(10,6),
+    rho_variance NUMERIC(10,6),
+    
+    -- Analysis Metadata
+    conversations_analyzed INTEGER,
+    test_ids JSONB DEFAULT '[]'::jsonb,
+    algorithm_version VARCHAR(50),
+    calculated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
+    UNIQUE (product_id, tenant_id, model_name),
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+-- ============================================================================
+-- Sycophancy Detection (Per-Turn Events & Conversation Analysis)
+-- ============================================================================
+
+CREATE TABLE nexus_alpha.sycophancy_events (
+    id BIGSERIAL PRIMARY KEY,
+    turn_id BIGINT NOT NULL REFERENCES nexus_alpha.turns(id) ON DELETE CASCADE,
+    conversation_id UUID NOT NULL REFERENCES nexus_alpha.conversations(id) ON DELETE CASCADE,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    
+    -- Sycophancy Metrics
+    user_risk NUMERIC(5,4),
+    agreement_level NUMERIC(5,4),
+    toxic_sycophancy NUMERIC(5,4),
+    
+    -- Detection Flags
+    is_sycophantic BOOLEAN DEFAULT FALSE,
+    severity VARCHAR(50) CHECK (severity IN ('Low', 'Medium', 'High', 'Critical')),
+    manipulation_detected BOOLEAN DEFAULT FALSE,
+    gradual_escalation BOOLEAN DEFAULT FALSE,
+    
+    detected_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+CREATE TABLE nexus_alpha.sycophancy_analysis (
+    id BIGSERIAL PRIMARY KEY,
+    conversation_id UUID NOT NULL UNIQUE REFERENCES nexus_alpha.conversations(id) ON DELETE CASCADE,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    
+    -- Aggregated Metrics
+    avg_user_risk NUMERIC(5,4),
+    avg_agreement NUMERIC(5,4),
+    avg_toxic_sycophancy NUMERIC(5,4),
+    
+    max_user_risk NUMERIC(5,4),
+    max_agreement NUMERIC(5,4),
+    max_toxic_sycophancy NUMERIC(5,4),
+    
+    -- Event Counts
+    total_sycophancy_events INTEGER,
+    high_severity_events INTEGER,
+    
+    -- Classification
+    overall_classification VARCHAR(50) CHECK (overall_classification IN ('Robust', 'Borderline', 'Sycophantic')),
+    confidence_score NUMERIC(5,4),
+    
+    calculated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+-- ============================================================================
+-- Operational Metadata Tables
+-- ============================================================================
+
+CREATE TABLE nexus_alpha.pca_models (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    version VARCHAR(50) NOT NULL,
+    n_components INTEGER DEFAULT 2,
+    embedding_dimension INTEGER DEFAULT 1024,
+    explained_variance JSONB DEFAULT '{}'::jsonb,
+    training_samples INTEGER,
+    is_active BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE (product_id, tenant_id, version),
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+CREATE TABLE nexus_alpha.configuration_snapshots (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    conversation_id UUID REFERENCES nexus_alpha.conversations(id) ON DELETE SET NULL,
+    
+    vsafe_text TEXT,
+    vsafe_vector_x NUMERIC(10,6),
+    vsafe_vector_y NUMERIC(10,6),
+    
+    weight_r NUMERIC(10,6),
+    weight_v NUMERIC(10,6),
+    weight_a NUMERIC(10,6),
+    bias NUMERIC(10,6),
+    
+    alert_threshold NUMERIC(10,6),
+    pca_model_version VARCHAR(50),
+    
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+CREATE TABLE nexus_alpha.api_usage (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    conversation_id UUID REFERENCES nexus_alpha.conversations(id) ON DELETE SET NULL,
+    
+    provider VARCHAR(100),
+    model_name VARCHAR(255),
+    request_type VARCHAR(50),
+    
+    tokens_prompt INTEGER,
+    tokens_completion INTEGER,
+    response_time_ms INTEGER,
+    estimated_cost_usd NUMERIC(10,6),
+    
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+CREATE TABLE nexus_alpha.benchmark_tests (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    
+    test_name VARCHAR(255),
+    model_name VARCHAR(255),
+    test_type VARCHAR(100),
+    
+    total_conversations INTEGER,
+    avg_rho NUMERIC(10,6),
+    phi_score NUMERIC(10,6),
+    
+    test_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    results JSONB DEFAULT '{}'::jsonb,
+    
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+CREATE TABLE nexus_alpha.model_recommendations (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    
+    evaluated_model_name VARCHAR(255),
+    recommended_alternative VARCHAR(255),
+    reason TEXT,
+    confidence_score NUMERIC(5,4),
+    
+    phi_evaluated NUMERIC(10,6),
+    phi_recommended NUMERIC(10,6),
+    estimated_improvement NUMERIC(5,4),
+    
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+CREATE TABLE nexus_alpha.exports (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    
+    export_type VARCHAR(100),
+    export_format VARCHAR(50),
+    conversation_ids JSONB DEFAULT '[]'::jsonb,
+    
+    file_path VARCHAR(500),
+    file_size_bytes BIGINT,
+    
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+CREATE TABLE nexus_alpha.audit_log (
+    id BIGSERIAL PRIMARY KEY,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    
+    action VARCHAR(255),
+    entity_type VARCHAR(100),
+    entity_id VARCHAR(500),
+    
+    old_values JSONB,
+    new_values JSONB,
+    
+    actor_id UUID,
+    ip_address INET,
+    user_agent TEXT,
+    
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    FOREIGN KEY (product_id, tenant_id) REFERENCES client_product_subscriptions(product_id, tenant_id) ON DELETE CASCADE
+);
+
+-- ============================================================================
+-- NEXUS ALPHA DATABASE VIEWS
+-- ============================================================================
+
+CREATE OR REPLACE VIEW nexus_alpha.v_conversation_summary AS
+SELECT 
+    c.id,
+    c.created_at,
+    c.model_name,
+    c.total_turns,
+    ra.final_rho,
+    ra.classification AS robustness_classification,
+    sa.overall_classification AS sycophancy_classification,
+    fs.phi_score,
+    fs.fragility_level,
+    c.product_id,
+    c.tenant_id
+FROM nexus_alpha.conversations c
+LEFT JOIN nexus_alpha.robustness_analysis ra ON c.id = ra.conversation_id
+LEFT JOIN nexus_alpha.sycophancy_analysis sa ON c.id = sa.conversation_id
+LEFT JOIN nexus_alpha.fragility_scores fs ON c.model_name = fs.model_name 
+    AND c.product_id = fs.product_id 
+    AND c.tenant_id = fs.tenant_id;
+
+CREATE OR REPLACE VIEW nexus_alpha.v_risk_trends AS
+SELECT 
+    rm.conversation_id,
+    rm.turn_number,
+    rm.risk_severity_user,
+    rm.risk_severity_model,
+    rm.guardrail_erosion_model,
+    rm.failure_potential,
+    rm.cumulative_risk_user,
+    rm.cumulative_risk_model,
+    rm.alert_triggered,
+    rm.product_id,
+    rm.tenant_id
+FROM nexus_alpha.risk_metrics rm
+ORDER BY rm.conversation_id, rm.turn_number;
+
+CREATE OR REPLACE VIEW nexus_alpha.v_model_performance AS
+SELECT 
+    fs.model_name,
+    fs.phi_score,
+    fs.fragility_level,
+    fs.mean_rho,
+    fs.std_rho,
+    fs.max_rho,
+    fs.conversations_analyzed,
+    COUNT(DISTINCT c.id) AS total_conversations_in_db,
+    AVG(ra.final_rho) AS avg_robustness_score,
+    fs.product_id,
+    fs.tenant_id
+FROM nexus_alpha.fragility_scores fs
+LEFT JOIN nexus_alpha.conversations c ON c.model_name = fs.model_name 
+    AND c.product_id = fs.product_id 
+    AND c.tenant_id = fs.tenant_id
+LEFT JOIN nexus_alpha.robustness_analysis ra ON c.id = ra.conversation_id
+GROUP BY fs.id, fs.model_name, fs.phi_score, fs.fragility_level, fs.mean_rho, fs.std_rho, 
+         fs.max_rho, fs.conversations_analyzed, fs.product_id, fs.tenant_id;
+
+-- ============================================================================
+-- NEXUS ALPHA INDEXES
+-- ============================================================================
+
+CREATE INDEX idx_conversations_product_tenant ON nexus_alpha.conversations(product_id, tenant_id);
+CREATE INDEX idx_conversations_model ON nexus_alpha.conversations(model_name);
+CREATE INDEX idx_conversations_status ON nexus_alpha.conversations(status);
+CREATE INDEX idx_conversations_created ON nexus_alpha.conversations(created_at DESC);
+
+CREATE INDEX idx_turns_conversation ON nexus_alpha.turns(conversation_id);
+CREATE INDEX idx_turns_created ON nexus_alpha.turns(created_at DESC);
+
+CREATE INDEX idx_risk_metrics_conversation ON nexus_alpha.risk_metrics(conversation_id);
+CREATE INDEX idx_risk_metrics_product_tenant ON nexus_alpha.risk_metrics(product_id, tenant_id);
+CREATE INDEX idx_risk_metrics_alert ON nexus_alpha.risk_metrics(alert_triggered);
+CREATE INDEX idx_risk_metrics_created ON nexus_alpha.risk_metrics(created_at DESC);
+
+CREATE INDEX idx_robustness_product_tenant ON nexus_alpha.robustness_analysis(product_id, tenant_id);
+CREATE INDEX idx_robustness_classification ON nexus_alpha.robustness_analysis(classification);
+
+CREATE INDEX idx_fragility_model ON nexus_alpha.fragility_scores(model_name);
+CREATE INDEX idx_fragility_level ON nexus_alpha.fragility_scores(fragility_level);
+CREATE INDEX idx_fragility_product_tenant ON nexus_alpha.fragility_scores(product_id, tenant_id);
+
+CREATE INDEX idx_sycophancy_events_conversation ON nexus_alpha.sycophancy_events(conversation_id);
+CREATE INDEX idx_sycophancy_events_severity ON nexus_alpha.sycophancy_events(severity);
+
+CREATE INDEX idx_embeddings_turn ON nexus_alpha.embeddings(turn_id);
+CREATE INDEX idx_vectors_2d_embedding ON nexus_alpha.vectors_2d(embedding_id);
+
+-- ============================================================================
+-- NEXUS ALPHA TABLE COMMENTS
+-- ============================================================================
+
+COMMENT ON TABLE nexus_alpha.conversations IS 'Parent container for all analysis conversations in Nexus Alpha assurance platform';
+COMMENT ON TABLE nexus_alpha.turns IS 'Individual message exchanges within conversations for risk and sycophancy analysis';
+COMMENT ON TABLE nexus_alpha.embeddings IS '1024-dimensional embeddings from AWS Titan before PCA transformation';
+COMMENT ON TABLE nexus_alpha.vectors_2d IS '2D spatial representation after PCA transformation for visualization and analysis';
+COMMENT ON TABLE nexus_alpha.risk_metrics IS 'Stage 1 output: Per-turn risk assessment combining user and model signals';
+COMMENT ON TABLE nexus_alpha.robustness_analysis IS 'Stage 2 output: Per-conversation robustness score (ρ) and classification';
+COMMENT ON TABLE nexus_alpha.fragility_scores IS 'Stage 3 output: Per-model fragility score (φ) across all test conversations';
+COMMENT ON TABLE nexus_alpha.sycophancy_events IS 'Per-turn sycophancy detection events and manipulation signals';
+COMMENT ON TABLE nexus_alpha.sycophancy_analysis IS 'Conversation-level summary of sycophancy patterns and classification';
+COMMENT ON TABLE nexus_alpha.pca_models IS 'Versioned PCA transformation models for vector reduction';
+COMMENT ON TABLE nexus_alpha.configuration_snapshots IS 'System configuration snapshots at analysis time';
+COMMENT ON TABLE nexus_alpha.api_usage IS 'LLM API request tracking for cost and performance analysis';
+COMMENT ON TABLE nexus_alpha.benchmark_tests IS 'Test results and benchmark scores across model evaluations';
+COMMENT ON TABLE nexus_alpha.model_recommendations IS 'Recommended model alternatives based on fragility assessment';
+COMMENT ON TABLE nexus_alpha.exports IS 'Generated reports and data exports';
+COMMENT ON TABLE nexus_alpha.audit_log IS 'System audit trail for compliance and debugging';
+
+-- ============================================================================
 -- END OF INTEGRATED SCHEMA
 -- ============================================================================

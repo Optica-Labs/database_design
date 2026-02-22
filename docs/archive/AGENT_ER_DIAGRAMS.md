@@ -1,8 +1,13 @@
-# AI-Range Agent Entity Relationship Diagrams
+# Archived: AI-Range Agent Entity Relationship Diagrams
 
-Each of the 7 AI-Range agents works with specific tables. Below are the ER diagrams for each agent's operational domain.
+This file was archived and consolidated into canonical documentation.
 
-**Ground Truth Note**: All AI-Range outputs (especially Stage 4 prompts) are automatically traceable through Nexus integration via `product_prompt_lineage`, enabling cross-product lineage tracking.
+See:
+- `DOCUMENTATION.md`
+- `docs/NEXUS_ALPHA_ARCHITECTURE.md`
+- `MASTER_DOCUMENTATION_INDEX.md`
+
+Archived copy (full content preserved): `docs/archive/AGENT_ER_DIAGRAMS.md`
 
 ---
 

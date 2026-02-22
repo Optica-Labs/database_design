@@ -1,8 +1,13 @@
-# Product Layer Architecture
+# Archived: Product Layer Architecture
 
-## Overview
+This file was archived and consolidated into the canonical documentation set.
 
-The Product Layer defines the two core products available on the platform: AI-Range (primary) and Nexus (prompt ingestion and library). Clients (tenants) use AI-Range for comprehensive AI testing, safety assessment, and persona-based analysis.
+See canonical files:
+- `DOCUMENTATION.md`
+- `MASTER_DOCUMENTATION_INDEX.md`
+- `docs/NEXUS_PRODUCTS_INTEGRATION.md`
+
+Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ARCHITECTURE.md`
 
 ## Architecture
 

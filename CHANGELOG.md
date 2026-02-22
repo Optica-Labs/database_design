@@ -1,10 +1,8 @@
-# Changelog - Database Integration
+# Archived: Changelog - Database Integration
 
-All notable changes to the adversarial AI safety database are documented here.
+This changelog was archived. The canonical change history is maintained in `DOCUMENTATION.md` and `MASTER_DOCUMENTATION_INDEX.md`.
 
----
-
-## [2.0] - Integrated - 2024
+Archived copy (full content preserved): `docs/archive/CHANGELOG.md`
 
 ### Overview
 Successfully integrated three systems into unified PostgreSQL database:
@@ -358,7 +356,7 @@ SELECT * FROM personas WHERE name = 'Sarah' AND tenant_id = $tenant_id;
 For integration-related questions:
 - See [docs/INTEGRATION_GUIDE.md](../docs/INTEGRATION_GUIDE.md)
 - Review [DOCUMENTATION.md](../DOCUMENTATION.md)
-- Check [docs/INDEX.md](./INDEX.md)
+- Check [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
 
 For deployment questions:
 - See [docs/README_INTEGRATED.md](./README_INTEGRATED.md)

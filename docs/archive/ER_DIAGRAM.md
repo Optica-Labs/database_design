@@ -1,6 +1,8 @@
-# Entity Relationship Diagram
+# Archived: Entity Relationship Diagram
 
-**Note**: This document shows the original ER diagrams. For the integrated schema with Nexus ground truth, see [ER_DIAGRAM_INTEGRATED.md](ER_DIAGRAM_INTEGRATED.md).
+This ER diagram document was archived and consolidated into the canonical ER diagrams and `DOCUMENTATION.md`.
+
+Archived copy (full content preserved): `docs/archive/ER_DIAGRAM.md`
 
 ## Adversarial AI Safety Database
 

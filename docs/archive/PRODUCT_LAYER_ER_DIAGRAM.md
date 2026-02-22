@@ -1,20 +1,8 @@
-# Product Layer Entity Relationship Diagram
+# Archived: Product Layer ER Diagram
 
-## Two-Tier Architecture: Clients → Models
+This file was archived and its content consolidated into canonical diagrams and `DOCUMENTATION.md`.
 
-```mermaid
-erDiagram
-    PRODUCTS ||--o{ PRODUCT_USAGE : "tracked by"
-    PRODUCTS {
-        uuid id PK
-        text product_code UK "ai-range or nexus"
-        text product_name
-        text description
-        text version
-        text status
-        timestamp created_at
-        timestamp updated_at
-    }
+Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ER_DIAGRAM.md`
     
     PRODUCT_USAGE {
         bigint id PK

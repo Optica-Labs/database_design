@@ -1,8 +1,8 @@
-# Repository Directory Structure
+# Archived: Repository Directory Structure
 
-## Overview
+This file was archived and its essential content has been consolidated into `DOCUMENTATION.md` and `MASTER_DOCUMENTATION_INDEX.md`.
 
-This document provides a visual representation of the database_design repository structure after implementing the product layer architecture.
+Archived copy (full content preserved): `docs/archive/DIRECTORY_STRUCTURE.md`
 
 ## Directory Tree
 
@@ -21,10 +21,10 @@ database_design/
 │   ├── PRODUCT_LAYER_ER_DIAGRAM.md            # Product layer ER diagram
 │   │
 │   ├── CAT_ASTROPHIC_INTEGRATION.md           # Cat-Astrophic tables integration
-│   ├── NEXUS_INTEGRATION.md                   # Nexus prompt ingestion & library
+│   ├── NEXUS_INTEGRATION.md                   # Nexus (Prompt Library) integration
+│   ├── NEXUS_ALPHA_ARCHITECTURE.md            # Nexus Alpha (AI Assurance Platform)
+│   ├── NEXUS_PRODUCTS_INTEGRATION.md          # Nexus products relationship & workflow
 │   ├── AGENT_ER_DIAGRAMS.md                   # Agent-specific ER diagrams
-│   ├── PRODUCT_LAYER_ARCHITECTURE.md          # Product layer comprehensive guide
-│   ├── PRODUCT_LAYER_ER_DIAGRAM.md            # Product layer ER diagram
 │   └── ER_DIAGRAM.md                          # Original ER diagrams (reference)
 │
 └── sql/                                        # 💾 All SQL Files

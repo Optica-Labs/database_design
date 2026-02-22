@@ -1,12 +1,8 @@
-# Database Documentation Index
+# Archived: Database Documentation Index
 
-## 📋 Overview
+This index was archived. Use `MASTER_DOCUMENTATION_INDEX.md` and `DOCUMENTATION.md` as the canonical navigation and master reference.
 
-Complete consolidated reference for the integrated adversarial AI safety and persona testing database.
-
-**Current Version**: 2.0 (Integrated)  
-**Status**: Production Ready  
-**Database**: PostgreSQL 14+
+Archived copy (full content preserved): `docs/archive/INDEX.md`
 
 ---
 
