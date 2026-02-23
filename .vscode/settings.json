@@ -1,0 +1,21 @@
+{
+    "sqltools.connections": [
+        {
+            "connectionMethod": "Server and Port",
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true
+                }
+            },
+            "previewLimit": 50,
+            "port": 5432,
+            "database": "postgres",
+            "driver": "Aurora DSQL Driver for SQLTools",
+            "name": "ai-range & nexus db",
+            "group": "production",
+            "server": "rjtsebct43cev63ma4xy4f3msa.dsql.eu-west-1.on.aws",
+            "region": "eu-west-1",
+            "profile": "Lexi"
+        }
+    ]
+}
