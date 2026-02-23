@@ -29,3 +29,7 @@ obj/
 *.bak
 *.log
 
+# environment-specific files
+*.env
+
+
