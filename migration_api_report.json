@@ -1,8 +1,81 @@
 {
-  "start_time": "2026-02-23T23:28:26.272405",
-  "tables_migrated": [],
+  "start_time": "2026-02-24T00:04:26.493285",
+  "tables_migrated": [
+    {
+      "table": "use_cases",
+      "rows": 2
+    },
+    {
+      "table": "cohorts",
+      "rows": 9
+    },
+    {
+      "table": "sub_cohorts",
+      "rows": 49
+    },
+    {
+      "table": "personas",
+      "rows": 67
+    },
+    {
+      "table": "persona_demographics",
+      "rows": 328
+    },
+    {
+      "table": "persona_behavioral_traits",
+      "rows": 156
+    },
+    {
+      "table": "persona_psychographic_traits",
+      "rows": 166
+    },
+    {
+      "table": "persona_technographic_traits",
+      "rows": 165
+    },
+    {
+      "table": "persona_linguistic_traits",
+      "rows": 114
+    },
+    {
+      "table": "context_profiles",
+      "rows": 32
+    },
+    {
+      "table": "risk_assessments",
+      "rows": 6
+    },
+    {
+      "table": "threat_vectors",
+      "rows": 276
+    },
+    {
+      "table": "threat_examples",
+      "rows": 37
+    },
+    {
+      "table": "risks",
+      "rows": 2
+    },
+    {
+      "table": "harms",
+      "rows": 1
+    },
+    {
+      "table": "test_types",
+      "rows": 12
+    },
+    {
+      "table": "scenarios",
+      "rows": 70
+    },
+    {
+      "table": "test_sessions",
+      "rows": 282
+    }
+  ],
   "errors": [],
   "warnings": [],
-  "end_time": "2026-02-23T23:28:40.314353",
-  "total_rows": 0
+  "end_time": "2026-02-24T00:05:38.237564",
+  "total_rows": 1774
 }

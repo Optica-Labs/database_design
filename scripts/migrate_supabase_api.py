@@ -126,31 +126,83 @@ class SupabaseAPIMigrator:
             return None
     
     def insert_table_data(self, base_url, api_key, table_name, data):
-        """Insert data into a table via API"""
+        """Insert or update data into a table via API (UPSERT)"""
         if not data:
             return True
         
-        url = f"{base_url}/rest/v1/{table_name}"
+        # Composite key tables (junction tables) use different conflict resolution
+        composite_key_tables = [
+            'persona_demographics',
+            'persona_behavioral_traits',
+            'persona_psychographic_traits',
+            'persona_technographic_traits',
+            'persona_linguistic_traits',
+            'scenario_intents',
+            'scenario_threats',
+            'scenario_scores',
+            'scenario_test_types'
+        ]
+        
+        # Use appropriate on_conflict parameter
+        if table_name in composite_key_tables:
+            # For composite key tables, specify both columns
+            if table_name.startswith('persona_'):
+                conflict_cols = 'persona_id,trait_id'
+            elif table_name.startswith('scenario_'):
+                # Different composite keys for scenario junction tables
+                if table_name == 'scenario_test_types':
+                    conflict_cols = 'scenario_id,test_type_id'
+                elif table_name == 'scenario_intents':
+                    conflict_cols = 'scenario_id,intent_id'
+                elif table_name == 'scenario_threats':
+                    conflict_cols = 'scenario_id,threat_vector_id'
+                elif table_name == 'scenario_scores':
+                    conflict_cols = 'scenario_id,score_type'
+                else:
+                    conflict_cols = 'id'
+            else:
+                conflict_cols = 'id'
+            url = f"{base_url}/rest/v1/{table_name}?on_conflict={conflict_cols}"
+        else:
+            url = f"{base_url}/rest/v1/{table_name}?on_conflict=id"
+        
         headers = {
             'apikey': api_key,
             'Authorization': f'Bearer {api_key}',
             'Content-Type': 'application/json',
-            'Prefer': 'resolution=ignore-duplicates'
+            'Prefer': 'resolution=merge-duplicates'
         }
         
-        # Insert in batches of 100
+        # Insert in batches of 100 (or individually for debugging)
         batch_size = 100
         for i in range(0, len(data), batch_size):
             batch = data[i:i+batch_size]
             try:
                 response = requests.post(url, headers=headers, json=batch, timeout=60)
                 response.raise_for_status()
-                self.log(f"  Inserted batch {i//batch_size + 1} ({len(batch)} rows)", 'INFO')
+                self.log(f"  Upserted batch {i//batch_size + 1} ({len(batch)} rows)", 'INFO')
             except requests.exceptions.RequestException as e:
-                self.log(f"Error inserting into {table_name}: {e}", 'ERROR')
-                if hasattr(e, 'response') and e.response:
-                    self.log(f"Response: {e.response.text[:200]}", 'ERROR')
-                return False
+                # If batch fails, try inserting one by one
+                if batch_size > 1 and len(batch) > 1:
+                    self.log(f"Batch failed, trying individual inserts for {table_name}...", 'INFO')
+                    success_count = 0
+                    for idx, row in enumerate(batch):
+                        try:
+                            ind_response = requests.post(url, headers=headers, json=[row], timeout=60)
+                            ind_response.raise_for_status()
+                            success_count += 1
+                        except requests.exceptions.RequestException as ind_e:
+                            self.log(f"  Row {i+idx} failed: {str(ind_e)[:200]}", 'WARNING')
+                            if hasattr(ind_e, 'response') and ind_e.response:
+                                self.log(f"  Response: {ind_e.response.text[:500]}", 'WARNING')
+                    self.log(f"  Individually inserted {success_count}/{len(batch)} rows", 'INFO')
+                    if success_count == 0:
+                        return False
+                else:
+                    self.log(f"Error upserting into {table_name}: {e}", 'ERROR')
+                    if hasattr(e, 'response') and e.response:
+                        self.log(f"Response: {e.response.text[:1000]}", 'ERROR')
+                    return False
         
         return True
     
