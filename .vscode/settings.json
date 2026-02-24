@@ -11,11 +11,9 @@
             "port": 5432,
             "database": "postgres",
             "driver": "Aurora DSQL Driver for SQLTools",
-            "name": "ai-range & nexus db",
-            "group": "production",
-            "server": "rjtsebct43cev63ma4xy4f3msa.dsql.eu-west-1.on.aws",
-            "region": "eu-west-1",
-            "profile": "Lexi"
+            "server": "ai-range-nexus-db.cluster-cpeg66mqsfpy.eu-west-1.rds.amazonaws.com",
+            "name": "ai-range-nexus-db",
+            "username": "postgres"
         }
     ]
 }
