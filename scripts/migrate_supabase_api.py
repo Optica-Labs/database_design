@@ -10,6 +10,7 @@ import requests
 import json
 from dotenv import load_dotenv
 from datetime import datetime
+from data_transformations import transform_table_data
 
 load_dotenv()
 
@@ -52,88 +53,56 @@ class SupabaseAPIMigrator:
         return True
     
     def get_tables(self, base_url, api_key):
-        """Get list of all tables from a Supabase project"""
-        # Using PostgREST to query pg_catalog
-        # Note: This is a simplified approach - may need adjustment
+        """Get list of all tables from a Supabase project in migration order"""
         headers = {
             'apikey': api_key,
             'Authorization': f'Bearer {api_key}',
             'Content-Type': 'application/json'
         }
         
-        # Manually define tables in order (since API doesn't expose schema easily)
-        # Based on your schema_complete.sql
+        # Tables in proper dependency order for migration
+        # Stage 1: Foundation (already done - skip)
+        # Stage 2: Use Cases and Cohorts
+        # Stage 3: Personas and Traits
+        # Stage 4: Context and Risk
+        # Stage 5: Threats
+        # Stage 6: Testing
+        # Stage 7: Sessions and Responses
         tables = [
-            'products',
-            'tenants',
-            'client_product_subscriptions',
-            'product_usage',
-            'ai_agents',
-            'client_models',
-            'client_model_products',
+            # Stage 2: Foundation tables
             'use_cases',
             'cohorts',
             'sub_cohorts',
-            'demographic_traits_catalog',
-            'behavioral_traits_catalog',
-            'psychographic_traits_catalog',
-            'technographic_traits_catalog',
-            'linguistic_traits_catalog',
+            
+            # Stage 3: Personas and traits
             'personas',
             'persona_demographics',
             'persona_behavioral_traits',
             'persona_psychographic_traits',
             'persona_technographic_traits',
             'persona_linguistic_traits',
-            'persona_memories',
-            'persona_reflections',
-            'persona_plans',
-            'persona_actions',
+            
+            # Stage 4: Context and risk
             'context_profiles',
             'risk_assessments',
+            
+            # Stage 5: Threats and risks
             'threat_vectors',
             'threat_examples',
             'risks',
             'harms',
-            'test_categories',
+            
+            # Stage 6: Testing infrastructure
             'test_types',
             'scenarios',
             'scenario_intents',
-            'scenario_intent_personas',
-            'scenario_personas',
             'scenario_threats',
             'scenario_scores',
             'scenario_test_types',
+            
+            # Stage 7: Sessions and responses
             'test_sessions',
-            'adversarial_test_cases',
-            'test_executions',
-            'test_sets',
-            'test_units',
-            'test_turns',
-            'model_outputs',
-            'generation_runs',
             'prompt_generator_responses',
-            'agent_interactions',
-            'agent_interaction_libraries',
-            'agent_interaction_inputs',
-            'agent_interaction_outputs',
-            'agent_interaction_flow',
-            'agent_interaction_decisions',
-            'agent_interaction_metrics',
-            'conversations',
-            'turns',
-            'quality_metrics',
-            'telemetry',
-            'client_prompt_submissions',
-            'nexus_prompt_library',
-            'product_prompt_lineage',
-            'safety_assessments',
-            'safety_metrics',
-            'ai_test_results',
-            'nyc_test_results',
-            'safety_alerts',
-            'compliance_reports',
-            'audit_logs'
         ]
         
         return tables
@@ -186,7 +155,7 @@ class SupabaseAPIMigrator:
         return True
     
     def migrate_table(self, table_name):
-        """Migrate a single table"""
+        """Migrate a single table with transformation support"""
         try:
             self.log(f"Migrating {table_name}...", 'INFO')
             
@@ -217,12 +186,23 @@ class SupabaseAPIMigrator:
                 self.log(f"No data to migrate for {table_name}", 'INFO')
                 return 0
             
+            # Transform data
+            try:
+                transformed_data = transform_table_data(table_name, all_data)
+                if len(transformed_data) != len(all_data):
+                    self.log(f"  ⚠️  Transformation changed row count: {len(all_data)} → {len(transformed_data)}", 'WARNING')
+                else:
+                    self.log(f"  ✓ Transformed {len(transformed_data)} rows", 'INFO')
+            except Exception as e:
+                self.log(f"  ❌ Error transforming {table_name}: {e}", 'ERROR')
+                return 0
+            
             # Insert into target
-            success = self.insert_table_data(self.target_url, self.target_key, table_name, all_data)
+            success = self.insert_table_data(self.target_url, self.target_key, table_name, transformed_data)
             
             if success:
-                self.log(f"✅ Migrated {len(all_data)} rows to {table_name}", 'SUCCESS')
-                return len(all_data)
+                self.log(f"✅ Migrated {len(transformed_data)} rows to {table_name}", 'SUCCESS')
+                return len(transformed_data)
             else:
                 self.log(f"❌ Failed to migrate {table_name}", 'ERROR')
                 return 0
