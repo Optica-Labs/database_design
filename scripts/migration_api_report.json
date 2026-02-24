@@ -1,5 +1,5 @@
 {
-  "start_time": "2026-02-24T00:14:24.237206",
+  "start_time": "2026-02-24T00:20:54.568508",
   "tables_migrated": [
     {
       "table": "use_cases",
@@ -92,6 +92,6 @@
   ],
   "errors": [],
   "warnings": [],
-  "end_time": "2026-02-24T00:15:01.248904",
+  "end_time": "2026-02-24T00:21:29.590005",
   "total_rows": 2664
 }

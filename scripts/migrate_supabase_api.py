@@ -136,32 +136,13 @@ class SupabaseAPIMigrator:
             'persona_behavioral_traits',
             'persona_psychographic_traits',
             'persona_technographic_traits',
-            'persona_linguistic_traits',
-            'scenario_intents',
-            'scenario_threats',
-            'scenario_scores',
-            'scenario_test_types'
+            'persona_linguistic_traits'
         ]
         
         # Use appropriate on_conflict parameter
         if table_name in composite_key_tables:
             # For composite key tables, specify both columns
-            if table_name.startswith('persona_'):
-                conflict_cols = 'persona_id,trait_id'
-            elif table_name.startswith('scenario_'):
-                # Different composite keys for scenario junction tables
-                if table_name == 'scenario_test_types':
-                    conflict_cols = 'scenario_id,test_type_id'
-                elif table_name == 'scenario_intents':
-                    conflict_cols = 'scenario_id,intent_id'
-                elif table_name == 'scenario_threats':
-                    conflict_cols = 'scenario_id,threat_vector_id'
-                elif table_name == 'scenario_scores':
-                    conflict_cols = 'scenario_id,score_type'
-                else:
-                    conflict_cols = 'id'
-            else:
-                conflict_cols = 'id'
+            conflict_cols = 'persona_id,trait_id'
             url = f"{base_url}/rest/v1/{table_name}?on_conflict={conflict_cols}"
         else:
             url = f"{base_url}/rest/v1/{table_name}?on_conflict=id"
@@ -182,6 +163,12 @@ class SupabaseAPIMigrator:
                 response.raise_for_status()
                 self.log(f"  Upserted batch {i//batch_size + 1} ({len(batch)} rows)", 'INFO')
             except requests.exceptions.RequestException as e:
+                # Log batch error details
+                self.log(f"Batch error: {str(e)[:500]}", 'WARNING')
+                if hasattr(e, 'response') and e.response:
+                    self.log(f"Batch error response: {e.response.text[:1000]}", 'WARNING')
+                    if len(batch) > 0:
+                        self.log(f"First row in failed batch: {str(batch[0])[:500]}", 'WARNING')
                 # If batch fails, try inserting one by one
                 if batch_size > 1 and len(batch) > 1:
                     self.log(f"Batch failed, trying individual inserts for {table_name}...", 'INFO')
@@ -192,9 +179,12 @@ class SupabaseAPIMigrator:
                             ind_response.raise_for_status()
                             success_count += 1
                         except requests.exceptions.RequestException as ind_e:
+                            # Log first failed row's data and error
+                            if idx == 0:
+                                self.log(f"  First failed row data: {str(row)[:500]}", 'WARNING')
                             self.log(f"  Row {i+idx} failed: {str(ind_e)[:200]}", 'WARNING')
                             if hasattr(ind_e, 'response') and ind_e.response:
-                                self.log(f"  Response: {ind_e.response.text[:500]}", 'WARNING')
+                                self.log(f"  Error response: {ind_e.response.text[:1000]}", 'WARNING')
                     self.log(f"  Individually inserted {success_count}/{len(batch)} rows", 'INFO')
                     if success_count == 0:
                         return False
