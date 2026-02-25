@@ -1,34 +1,75 @@
-# Aurora connection helper
+# Migration & Utility Scripts
 
-This folder contains a small helper script to retrieve DB credentials from AWS Secrets Manager and connect to an Aurora Postgres cluster.
+Complete documentation for database migration and verification scripts.
 
-Usage
+## Overview
 
-Install dependencies:
+Scripts organized by purpose:
+- **Production Scripts**: Ready for production use
+- **Verification Scripts**: Data quality & integrity checks
+- **Utility Scripts**: Helper tools
+- **Archive**: Historical/testing scripts
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+## Production Scripts
+
+These scripts are used for the migration and cleanup operations.
+
+### check_unmigrated_data.py
+**Purpose**: Verify migration status across all tables  
+**Usage**: `python3 check_unmigrated_data.py`  
+**Output**: Table-by-table migration status report
+
+### migrate_missing_scenario_intents.py
+**Purpose**: Migrate remaining scenario_intents  
+**Usage**: `python3 migrate_missing_scenario_intents.py`  
+**Status**: Handles orphaned scenario_id references
+
+### remove_ai_personas_from_pgr.py
+**Purpose**: Remove synthetic ai_personas records  
+**Removed**: 12,841 synthetic records
+
+### remove_llm_invocations_duplicates.py
+**Purpose**: Remove duplicates from llm_invocations  
+**Removed**: 9,000 duplicate records
+
+## Verification Scripts
+
+### test_supabase_connection.py
+**Purpose**: Verify database connectivity  
+**Usage**: `python3 test_supabase_connection.py`
+
+## Configuration
+
+All scripts require `.env`:
+```
+SOURCE_SUPABASE_SERVICE_KEY=...
+TARGET_SUPABASE_SERVICE_KEY=...
 ```
 
-Run (example using AWS profile `Lexi`):
+See `.env.example` for template.
+
+## Quick Start
 
 ```bash
-python3 scripts/connect_aurora.py \
-  --secret-arn arn:aws:secretsmanager:eu-west-1:619564767671:secret:rds!cluster-34a76e81-8fe9-4ec6-a65f-98a9d08e76bc-0sacoH \
-  --profile Lexi \
-  --sslrootcert /certs/global-bundle.pem \
-  --query "SELECT NOW();"
+# 1. Verify connection
+python3 test_supabase_connection.py
+
+# 2. Check migration status
+python3 check_unmigrated_data.py
+
+# 3. Migrate remaining records (if needed)
+python3 migrate_missing_scenario_intents.py
 ```
 
-Or provide connection fields directly:
+## Archive Scripts
 
-```bash
-python3 scripts/connect_aurora.py --host my-host --user postgres --password secret --query "SELECT 1;"
-```
+Historical scripts used during development:
+- Analysis scripts (check_*, analyze_*)
+- Debug scripts (debug_*, compare_*)
+- Migration scripts (migrate_*)
+- Utility scripts (create_*, setup_*, upload_*)
 
-Notes
+---
 
-- If using SSO or temporary credentials, run `aws sso login --profile <profile>` or ensure `AWS_SESSION_TOKEN` is present.
-- The script prefers CLI args over values stored in the secret.
+**Status**: ✅ Production Ready  
+**Last Updated**: February 25, 2026

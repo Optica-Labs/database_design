@@ -1,5 +1,5 @@
 {
-  "start_time": "2026-02-24T00:14:24.237206",
+  "start_time": "2026-02-24T11:26:38.516818",
   "tables_migrated": [
     {
       "table": "use_cases",
@@ -88,10 +88,22 @@
     {
       "table": "test_sessions",
       "rows": 282
+    },
+    {
+      "table": "prompt_generator_responses",
+      "rows": 1284
+    },
+    {
+      "table": "ai_personas",
+      "rows": 20767
+    },
+    {
+      "table": "ai_scenarios",
+      "rows": 4590
     }
   ],
   "errors": [],
   "warnings": [],
-  "end_time": "2026-02-24T00:15:01.248904",
-  "total_rows": 2664
+  "end_time": "2026-02-24T11:28:48.149797",
+  "total_rows": 29305
 }
