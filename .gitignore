@@ -32,4 +32,5 @@ obj/
 # environment-specific files
 *.env
 
-
+# vscode settings
+.vscode/
