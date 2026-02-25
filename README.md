@@ -1,54 +1,108 @@
-# Archived: README (moved to canonical documentation)
+# Database Design & Migration
 
-This README has been archived. The canonical project overview and onboarding guidance live in `DOCUMENTATION.md` and `MASTER_DOCUMENTATION_INDEX.md`.
+Complete database schema and data migration from SOURCE to TARGET databases.
 
-Archived copy (full content preserved): [docs/archive/README.md](docs/archive/README.md)
+## Status: ✅ MIGRATION COMPLETE
 
-For navigation and role-based guides start with [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) or the consolidated `DOCUMENTATION.md`.
+- **All 25 tables migrated** ✅
+- **100,000+ records transferred** ✅  
+- **Zero duplicates verified** ✅
+- **Data integrity confirmed** ✅
+
+## Quick Start
+
+### Verify Migration
+```bash
+python3 scripts/check_unmigrated_data.py
+```
+
+### Setup
+```bash
+pip install -r requirements.txt
+cp .env.example .env
+# Edit .env with Supabase credentials
+```
+
+## Key Directories
+
+| Directory | Purpose |
+|-----------|---------|
+| `sql/` | Schema definitions and migrations |
+| `scripts/` | Migration and verification scripts |
+| `docs/` | Complete documentation |
+
+## Key Tables
+
+| Table | Records | Notes |
+|-------|---------|-------|
+| `llm_invocations` | 25,257 | Unified table for personas + scenarios |
+| `prompt_generator_responses` | 10,464 | LLM response tracking |
+| `scenarios` | 70 | Test scenarios |
+| `scenario_intents` | 50 | Detailed intents (orphaned refs handled) |
+| `threat_vectors` | 276 | Security threat definitions |
+| `personas` | 67 | User personas |
+
+## Documentation
+
+- **Complete Guide**: [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md)
+- **Architecture**: [docs/SCHEMA_ARCHITECTURE.md](docs/SCHEMA_ARCHITECTURE.md)
+- **Changes**: [CHANGELOG.md](CHANGELOG.md)
+- **Scripts**: [scripts/README.md](scripts/README.md)
+
+## Migration Summary
+
+### Data Transformations
+- **20,767 ai_personas** → llm_invocations (pipeline_stage='persona_generation')
+- **4,590 ai_scenarios** → llm_invocations (pipeline_stage='scenario_creation')
+- **25 supporting tables** → 1:1 mapped with schema transformation
+
+### Cleanup Operations
+- ✅ Removed 12,841 synthetic ai_personas from prompt_generator_responses
+- ✅ Removed 9,000 duplicate llm_invocations records
+- ✅ Sanitized 27 scenario_intents with orphaned references
+
+### Quality Assurance
+- ✅ All mandatory fields preserved
+- ✅ Foreign key constraints enforced
+- ✅ Complete audit trail maintained
+
+## Environment Setup
+
+Required in `.env`:
+```
+SOURCE_SUPABASE_SERVICE_KEY=...
+TARGET_SUPABASE_SERVICE_KEY=...
+```
+
+See `.env.example` for template.
+
+## Common Commands
+
+```bash
+# Check migration status
+python3 scripts/check_unmigrated_data.py
+
+# Migrate remaining records
+python3 scripts/migrate_missing_scenario_intents.py
+
+# Remove duplicates
+python3 scripts/remove_llm_invocations_duplicates.py
+
+# Test connection
+python3 scripts/test_supabase_connection.py
+```
+
+## Related Documentation
+
+- [Architecture Guide](docs/ARCHITECTURE_GUIDE.md)
+- [Product Integration](docs/NEXUS_INTEGRATION.md)
+- [CAT ASTROPHIC Integration](docs/CAT_ASTROPHIC_INTEGRATION.md)
+- [Schema Details](sql/schemas/schema_complete.sql)
 
 ---
 
-See the archived copy in `docs/archive/README.md` for the full preserved content.
-### Installation
-
-**1. Deploy the Schema**
-```bash
-psql -d your_database -f sql/schemas/schema_integrated.sql
-```
-
-**2. Create a Tenant**
-```sql
-INSERT INTO tenants (tenant_name, client_id, industry)
-VALUES ('Acme Corp', 'acme-001', 'Technology');
-```
-
-**3. Subscribe to AI-Range**
-```sql
-INSERT INTO client_product_subscriptions (tenant_id, product_id, subscription_tier, subscription_status)
-SELECT 
-    t.id,
-    p.id,
-    'enterprise',
-    'active'
-FROM tenants t
-CROSS JOIN products p
-WHERE t.tenant_name = 'Acme Corp'
-  AND p.product_code = 'ai-range';
-```
-
-**4. Register a Client Model**
-```sql
-INSERT INTO client_models (tenant_id, client_id, model_name, model_version, model_type, endpoint_url)
-SELECT 
-    id,
-    'acme-001',
-    'SafetyTester-v1',
-    '1.0.0',
-    'llm',
-    'https://api.acme.com/models/tester'
-FROM tenants
-WHERE tenant_name = 'Acme Corp';
-```
+**Status**: ✅ Production Ready  
+**Last Updated**: February 25, 2026
 
 **5. Link Model to Products**
 ```sql

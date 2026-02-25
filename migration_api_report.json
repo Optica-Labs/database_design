@@ -1,0 +1,109 @@
+{
+  "start_time": "2026-02-24T11:26:38.516818",
+  "tables_migrated": [
+    {
+      "table": "use_cases",
+      "rows": 2
+    },
+    {
+      "table": "cohorts",
+      "rows": 9
+    },
+    {
+      "table": "sub_cohorts",
+      "rows": 49
+    },
+    {
+      "table": "personas",
+      "rows": 67
+    },
+    {
+      "table": "persona_demographics",
+      "rows": 328
+    },
+    {
+      "table": "persona_behavioral_traits",
+      "rows": 156
+    },
+    {
+      "table": "persona_psychographic_traits",
+      "rows": 166
+    },
+    {
+      "table": "persona_technographic_traits",
+      "rows": 165
+    },
+    {
+      "table": "persona_linguistic_traits",
+      "rows": 114
+    },
+    {
+      "table": "context_profiles",
+      "rows": 32
+    },
+    {
+      "table": "risk_assessments",
+      "rows": 6
+    },
+    {
+      "table": "threat_vectors",
+      "rows": 276
+    },
+    {
+      "table": "threat_examples",
+      "rows": 37
+    },
+    {
+      "table": "risks",
+      "rows": 2
+    },
+    {
+      "table": "harms",
+      "rows": 1
+    },
+    {
+      "table": "test_types",
+      "rows": 12
+    },
+    {
+      "table": "scenarios",
+      "rows": 70
+    },
+    {
+      "table": "scenario_intents",
+      "rows": 50
+    },
+    {
+      "table": "scenario_threats",
+      "rows": 60
+    },
+    {
+      "table": "scenario_scores",
+      "rows": 60
+    },
+    {
+      "table": "scenario_test_types",
+      "rows": 720
+    },
+    {
+      "table": "test_sessions",
+      "rows": 282
+    },
+    {
+      "table": "prompt_generator_responses",
+      "rows": 1284
+    },
+    {
+      "table": "ai_personas",
+      "rows": 20767
+    },
+    {
+      "table": "ai_scenarios",
+      "rows": 4590
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "end_time": "2026-02-24T11:28:48.149797",
+  "total_rows": 29305
+}
