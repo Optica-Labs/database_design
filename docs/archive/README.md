@@ -1,8 +1,18 @@
 # Archived: README (moved to canonical documentation)
 
+**ARCHIVED SNAPSHOT** (Feb 22-24, 2026): Historical project README.  
+For current documentation, see root-level `DOCUMENTATION.md`, `docs/testing/`, and `docs/verification/`.
+
 This README was archived. The canonical project overview and onboarding guidance now live in `DOCUMENTATION.md` and `MASTER_DOCUMENTATION_INDEX.md`.
 
 Archived copy (full content preserved): `docs/archive/README.md`
+
+## Recent Changes (Mar 4, 2026)
+
+Documentation has been reorganized with new folder structure:
+- **`docs/testing/`**: Connection testing and deployment documentation  
+- **`docs/verification/`**: Schema alignment and live database verification reports  
+- **`scripts/verify_live_alignment.py`**: Reusable verification tool for checking alignment  
 
 ## 🎯 Overview
 

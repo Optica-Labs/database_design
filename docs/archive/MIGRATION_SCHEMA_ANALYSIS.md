@@ -1,4 +1,8 @@
 # Migration Schema Analysis
+
+**ARCHIVED SNAPSHOT** (Feb 24, 2026): Historical schema analysis for migration.  
+For current live schema analysis, see `docs/verification/SCHEMA_ALIGNMENT_AUDIT.md`.
+
 ## SOURCE vs TARGET Database Comparison
 
 **Date:** 2026-02-23  

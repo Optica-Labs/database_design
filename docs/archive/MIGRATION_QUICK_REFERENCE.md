@@ -1,5 +1,8 @@
 # Data Migration - Quick Reference
 
+**ARCHIVED SNAPSHOT** (Feb 24, 2026): Historical quick reference for 24-table migration.  
+For current live database state, see `docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md`.
+
 ## 🚀 3-Step Migration
 
 ### Step 1: Configure Credentials

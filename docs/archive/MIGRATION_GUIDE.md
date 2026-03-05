@@ -1,5 +1,8 @@
 # Supabase Data Migration Guide
 
+**ARCHIVED SNAPSHOT** (Feb 23, 2026): Historical migration procedure documentation.  
+For current verification of live alignment, see `docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md` and run `scripts/verify_live_alignment.py`.
+
 **Purpose:** Migrate all data from the original AI-Range database to the consolidated database while preserving all relationships, IDs, and data integrity.
 
 ---

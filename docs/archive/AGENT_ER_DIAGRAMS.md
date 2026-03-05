@@ -1,5 +1,8 @@
 # Archived: AI-Range Agent Entity Relationship Diagrams
 
+**ARCHIVED SNAPSHOT**: Historical agent-specific entity relationship diagrams.  
+For current schema verification, see `docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md`.
+
 This file was archived and consolidated into canonical documentation.
 
 See:

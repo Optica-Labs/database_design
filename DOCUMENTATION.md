@@ -1,69 +1,179 @@
-# Documentation Index & Quick Reference
+# Complete Documentation Index
 
-**Status**: ✅ Migration Complete  
-**Last Updated**: February 25, 2026  
-**Production Ready**: Yes
+**Status**: ✅ FULLY ORGANIZED + Production-Ready  
+**Last Updated**: March 4, 2026  
+**Supabase Compatible**: 100% - Ready for deployment  
+**Documentation Files**: 50+
 
-## 📚 Documentation Overview
+---
 
-This repository contains comprehensive documentation for the database design, migration, and system architecture. Start with the document most relevant to your role.
+## 🎯 START HERE - Choose Your Role
 
-## 🚀 Quick Start
+### 📍 Complete Navigation Maps
+- **[REPOSITORY_MAP.md](REPOSITORY_MAP.md)** - Complete directory tree & navigation (READ FIRST!)
+- **[MASTER_INDEX.md](MASTER_INDEX.md)** - All links organized by category
 
-**New to the project?** Start here:
-1. Read [README.md](README.md) for overview (5 min)
-2. Check [CHANGELOG.md](CHANGELOG.md) for what changed (5 min)
-3. Review [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) for migration results (10 min)
+### 👥 Role-Specific Guides (New!)
+- **[guides/DEVELOPER_GUIDE.md](guides/DEVELOPER_GUIDE.md)** - Developer setup, deployment, API integration
+- **[guides/DBA_GUIDE.md](guides/DBA_GUIDE.md)** - Database admin deployment, monitoring, maintenance
+- **[guides/DATA_SCIENTIST_GUIDE.md](guides/DATA_SCIENTIST_GUIDE.md)** - Database access, analysis, queries
+- **[guides/PROJECT_MANAGER_GUIDE.md](guides/PROJECT_MANAGER_GUIDE.md)** - Status tracking, team coordination
 
-## 📖 Complete Documentation
+### 🚀 Quick Paths
+- **New User?** → [GETTING_STARTED.md](GETTING_STARTED.md) (5 min)
+- **Deploy Now?** → [sql/SUPABASE_QUICK_DEPLOYMENT.md](sql/SUPABASE_QUICK_DEPLOYMENT.md) (5 min)
+- **Understand Everything?** → [REPOSITORY_MAP.md](REPOSITORY_MAP.md) (10 min)
 
-### Primary Documents
+---
+
+## 📚 Complete Documentation Map
+
+### 🏠 Root Documentation (6 files)
+
+| Document | Purpose | Time |
+|----------|---------|------|
+| [README.md](README.md) | Project overview | 2 min |
+| [REPOSITORY_MAP.md](REPOSITORY_MAP.md) | Complete navigation & directory tree | 10 min |
+| [MASTER_INDEX.md](MASTER_INDEX.md) | Organized link index by category | 10 min |
+| [GETTING_STARTED.md](GETTING_STARTED.md) | 5-minute quick reference | 5 min |
+| [DOCUMENTATION.md](DOCUMENTATION.md) | Full documentation index | 15 min |
+| [CHANGELOG.md](CHANGELOG.md) | Complete change history | 10 min |
+
+### 👥 Role-Specific Guides (4 files)
+
+| Document | Purpose | Audience | Time |
+|----------|---------|----------|------|
+| [guides/DEVELOPER_GUIDE.md](guides/DEVELOPER_GUIDE.md) | Setup, deployment, API integration | Developers | 15 min |
+| [guides/DBA_GUIDE.md](guides/DBA_GUIDE.md) | Deployment, monitoring, security | DBAs | 20 min |
+| [guides/DATA_SCIENTIST_GUIDE.md](guides/DATA_SCIENTIST_GUIDE.md) | Database access, analysis, queries | Data Scientists | 20 min |
+| [guides/PROJECT_MANAGER_GUIDE.md](guides/PROJECT_MANAGER_GUIDE.md) | Status, team coordination | PMs | 10 min |
+
+### 📄 Reference Documentation (20 files)
+
+**Architecture & Integration**:
+| Document | Purpose |
+|----------|---------|
+| [docs/README.md](docs/README.md) | Docs directory index |
+| [docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md) | System architecture |
+| [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) | Migration completion |
+| [docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md) | CAT-A product |
+| [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md) | Nexus AI platform |
+| [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | Cross-product integration |
+
+**Testing Documentation** (4 files):
+| Document | Purpose |
+|----------|---------|
+| [docs/testing/README.md](docs/testing/README.md) | Testing overview |
+| [docs/testing/TESTING_QUICKSTART.md](docs/testing/TESTING_QUICKSTART.md) | Quick test guide |
+| [docs/testing/TESTING_CHECKLIST.md](docs/testing/TESTING_CHECKLIST.md) | Test checklist |
+| [docs/testing/TESTING_SETUP_SUMMARY.md](docs/testing/TESTING_SETUP_SUMMARY.md) | Setup guide |
+
+**Verification Documentation** (7 files):
+| Document | Purpose |
+|----------|---------|
+| [docs/verification/README.md](docs/verification/README.md) | Verification overview |
+| [docs/verification/NAVIGATION_GUIDE.md](docs/verification/NAVIGATION_GUIDE.md) | How to navigate |
+| [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md) | Latest test results |
+| [docs/verification/SCHEMA_ALIGNMENT_AUDIT.md](docs/verification/SCHEMA_ALIGNMENT_AUDIT.md) | Full audit |
+| [docs/verification/SCHEMA_ALIGNMENT_ISSUES.md](docs/verification/SCHEMA_ALIGNMENT_ISSUES.md) | Issues & resolution |
+| [docs/verification/ALIGNMENT_SUMMARY.md](docs/verification/ALIGNMENT_SUMMARY.md) | Executive summary |
+| [docs/verification/AUDIT_COMPLETION_REPORT.md](docs/verification/AUDIT_COMPLETION_REPORT.md) | Completion status |
+
+**Archive** (24 files):
+| Location |
+|----------|
+| [docs/archive/](docs/archive/) - Historical documentation for reference |
+
+### 🗄️ Schema Documentation (12 files)
+
+| Document | Purpose | Audience |
+|----------|---------|----------|
+| [sql/README.md](sql/README.md) | SQL directory index | Everyone |
+| [sql/SUPABASE_QUICK_DEPLOYMENT.md](sql/SUPABASE_QUICK_DEPLOYMENT.md) | 5-minute deployment guide ⭐ | Everyone |
+| [sql/SUPABASE_COMPATIBILITY_REPORT.md](sql/SUPABASE_COMPATIBILITY_REPORT.md) | Technical verification (472 lines) | DBAs |
+| [sql/ALIGNMENT_VERIFICATION.md](sql/ALIGNMENT_VERIFICATION.md) | Compatibility summary | Leads |
+| [sql/schemas/README.md](sql/schemas/README.md) | Schema selection guide | DBAs, Developers |
+| [sql/schemas/schema_unified_complete.sql](sql/schemas/schema_unified_complete.sql) | Full schema (84 tables) ⭐ | Everyone |
+| [sql/schemas/schema_ai_range_only.sql](sql/schemas/schema_ai_range_only.sql) | AI-Range schema (75 tables) | Developers |
+| [sql/schemas/schema_nexus_only.sql](sql/schemas/schema_nexus_only.sql) | Nexus schema (35 tables) | Developers |
+| [sql/schemas/AUDIT_REPORT.md](sql/schemas/AUDIT_REPORT.md) | Audit results | DBAs |
+| [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md) | Supabase setup | DBAs |
+| 6 archived schemas | Historical versions | Reference |
+
+### 🔧 Scripts Documentation (2 files)
+
+| Document | Purpose | Audience |
+|----------|---------|----------|
+| [scripts/README.md](scripts/README.md) | Scripts index & usage | DevOps, DBAs |
+| 8+ Python/Shell scripts | Migration, testing, verification | DevOps |
+
+---
+
+## 📖 Primary Documents - Schemas & Deployment
+
+| Document | Purpose | Audience |
+|----------|---------|----------|
+| [sql/schemas/schema_unified_complete.sql](sql/schemas/schema_unified_complete.sql) | **⭐ Production unified schema (84 tables)** | DBAs, developers |
+| [sql/schemas/schema_ai_range_only.sql](sql/schemas/schema_ai_range_only.sql) | AI-Range specific deployment (75 tables) | Developers |
+| [sql/schemas/schema_nexus_only.sql](sql/schemas/schema_nexus_only.sql) | Nexus specific deployment (35 tables) | Developers |
+| [sql/SUPABASE_QUICK_DEPLOYMENT.md](sql/SUPABASE_QUICK_DEPLOYMENT.md) | **⭐ 5-minute Supabase deployment guide** | Developers, DevOps |
+| [sql/SUPABASE_COMPATIBILITY_REPORT.md](sql/SUPABASE_COMPATIBILITY_REPORT.md) | Detailed Supabase compatibility (472 lines) | DBAs, architects |
+| [sql/ALIGNMENT_VERIFICATION.md](sql/ALIGNMENT_VERIFICATION.md) | Verification summary (100% compatible) | Project leads |
+
+### 📚 Primary Documents - Reference & Integration
 
 | Document | Purpose | Audience |
 |----------|---------|----------|
 | [README.md](README.md) | Project overview & quick start | Everyone |
 | [CHANGELOG.md](CHANGELOG.md) | Complete change history | Project managers, developers |
 | [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) | Migration results & verification | Project leads, DBAs |
-| [docs/SCHEMA_ARCHITECTURE.md](docs/SCHEMA_ARCHITECTURE.md) | Database design & structure | Developers, DBAs |
-| [sql/schemas/schema_complete.sql](sql/schemas/schema_complete.sql) | Full schema definition | DBAs, developers |
 | [scripts/README.md](scripts/README.md) | Migration tools & usage | DevOps, DBAs |
+| [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | NEXUS product integration | Developers |
+| [docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md) | CAT ASTROPHIC integration | Developers |
+| [docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md) | Product layer architecture | Architects |
+| [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md) | Nexus Alpha architecture | Architects |
 
-### Integration Guides
-
-| Document | Purpose |
-|----------|---------|
-| [docs/NEXUS_INTEGRATION.md](docs/NEXUS_INTEGRATION.md) | NEXUS product integration |
-| [docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md) | CAT ASTROPHIC integration |
-| [docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md) | Product layer architecture |
-| [docs/ARCHITECTURE_GUIDE.md](docs/ARCHITECTURE_GUIDE.md) | System architecture overview |
 
 ## 👥 Documentation by Role
 
 ### For Project Managers
 1. [README.md](README.md) - Overview
-2. [CHANGELOG.md](CHANGELOG.md) - Timeline
-3. [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) - Status & results
+2. [CHANGELOG.md](CHANGELOG.md) - Timeline & schema updates
+3. [sql/ALIGNMENT_VERIFICATION.md](sql/ALIGNMENT_VERIFICATION.md) - Supabase verification status
+4. [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) - Status & results
 
 ### For Developers
-1. [docs/SCHEMA_ARCHITECTURE.md](docs/SCHEMA_ARCHITECTURE.md) - Database design
-2. [sql/schemas/schema_complete.sql](sql/schemas/schema_complete.sql) - Schema details
-3. [scripts/README.md](scripts/README.md) - Available tools
+1. **[sql/SUPABASE_QUICK_DEPLOYMENT.md](sql/SUPABASE_QUICK_DEPLOYMENT.md) ⭐ START HERE** - Deployment guide
+2. [sql/schemas/README.md](sql/schemas/README.md) - Schema overview & comparison
+3. [sql/schemas/schema_unified_complete.sql](sql/schemas/schema_unified_complete.sql) - Unified production schema
+4. [sql/README.md](sql/README.md) - SQL directory structure
+5. [scripts/README.md](scripts/README.md) - Available migration tools
 
 ### For Database Administrators
-1. [README.md](README.md) - Quick reference
-2. [sql/schemas/schema_complete.sql](sql/schemas/schema_complete.sql) - Schema
-3. [scripts/README.md](scripts/README.md) - Migration scripts
-4. [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) - Migration details
+1. **[sql/SUPABASE_QUICK_DEPLOYMENT.md](sql/SUPABASE_QUICK_DEPLOYMENT.md) ⭐ START HERE** - Deployment guide
+2. [sql/SUPABASE_COMPATIBILITY_REPORT.md](sql/SUPABASE_COMPATIBILITY_REPORT.md) - Technical compatibility
+3. [sql/schemas/README.md](sql/schemas/README.md) - Schema details & deployment options
+4. [sql/schemas/schema_unified_complete.sql](sql/schemas/schema_unified_complete.sql) - Production schema
+5. [scripts/README.md](scripts/README.md) - Migration scripts
 
 ### For Data Scientists
-1. [docs/SCHEMA_ARCHITECTURE.md](docs/SCHEMA_ARCHITECTURE.md) - Data structure
-2. [sql/queries/](sql/queries/) - Example queries
-3. [docs/NEXUS_INTEGRATION.md](docs/NEXUS_INTEGRATION.md) - Data integration
+1. [sql/schemas/README.md](sql/schemas/README.md) - Data structure overview
+2. [sql/schemas/schema_unified_complete.sql](sql/schemas/schema_unified_complete.sql) - Complete table reference
+3. [sql/queries/](sql/queries/) - Example queries
+4. [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) - Data integration
 
 ## 📋 Key Information
 
+### Schema & Deployment Status ✅
+- **Three production-ready schemas created** - Unified (84 tables), AI-Range (75), Nexus (35)
+- **100% Supabase compatible** - All schemas verified and ready to deploy
+- **Deployment time** - 30 seconds to 2 minutes via SQL Editor
+- **Documentation** - Complete with 5-minute quick start and 472-line technical report
+
 ### Migration Status
-- ✅ All 25 tables migrated
+- ✅ Three production-ready deployment schemas created (Mar 4, 2026)
+- ✅ Historical migration milestone: 25 core tables migrated (Feb 25, 2026)
+- ✅ Current live Supabase footprint verified (Mar 4, 2026): 90 base tables + 6 views
 - ✅ 100,000+ records transferred  
 - ✅ Zero duplicates verified
 - ✅ Data integrity confirmed
@@ -78,7 +188,7 @@ This repository contains comprehensive documentation for the database design, mi
 | `scenario_intents` | 50 | Scenario intent breakdowns |
 | `threat_vectors` | 276 | Security threat definitions |
 | `personas` | 67 | User personas |
-| [See all 25 tables...](docs/MIGRATION_SUMMARY.md#tables-migrated) | - | - |
+| [See migration table summary...](docs/MIGRATION_SUMMARY.md#tables-migrated) | - | - |
 
 ### Key Directories
 
@@ -88,7 +198,8 @@ This repository contains comprehensive documentation for the database design, mi
 ├── DOCUMENTATION.md            # This file
 ├── docs/                       # Technical documentation
 │   ├── MIGRATION_SUMMARY.md    # Migration results
-│   ├── SCHEMA_ARCHITECTURE.md  # Database design
+│   ├── testing/                # Connection testing docs
+│   ├── verification/           # Schema/docs alignment audits
 │   └── [integration docs]
 ├── sql/                        # Database schemas
 │   ├── schemas/                # Schema definitions
@@ -125,6 +236,12 @@ See [CHANGELOG.md](CHANGELOG.md)
 - [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) - Complete migration summary
 - [CHANGELOG.md](CHANGELOG.md) - Detailed change log
 
+### Verification & Testing
+- [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md) - Latest live verification report
+- [docs/verification/SCHEMA_ALIGNMENT_AUDIT.md](docs/verification/SCHEMA_ALIGNMENT_AUDIT.md) - Full alignment audit
+- [docs/testing/CONNECTION_TEST_PLAN.md](docs/testing/CONNECTION_TEST_PLAN.md) - Method-by-method test tracking
+- [docs/testing/CONNECTION_METHODS.md](docs/testing/CONNECTION_METHODS.md) - Detailed connection methods
+
 ### Archived Documentation
 Historical documents preserved in `docs/archive/` for reference:
 - MIGRATION_GUIDE.md
@@ -154,10 +271,11 @@ Status:           Complete ✅
 ## 🆘 Need Help?
 
 1. **Quick question?** Check [README.md](README.md)
-2. **Technical details?** See [docs/SCHEMA_ARCHITECTURE.md](docs/SCHEMA_ARCHITECTURE.md)
+2. **Technical details?** See [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md)
 3. **Migration info?** Review [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md)
 4. **Something changed?** Check [CHANGELOG.md](CHANGELOG.md)
 5. **Scripts help?** Read [scripts/README.md](scripts/README.md)
+6. **Live DB alignment?** Review [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md)
 
 ## 📊 Migration Summary
 
@@ -165,13 +283,13 @@ Status:           Complete ✅
 
 
 |------|---------|-----------|
-| [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) | Main overview | 5 min |
-| [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) | File guide | 5 min |
-| [AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md) | Unified architecture | 10 min |
+| [docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md) | Main overview (archived) | 5 min |
+| [docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md) | File guide (archived) | 5 min |
+| [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md) | Unified architecture context | 10 min |
 | [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | Product architecture & integration | 10 min |
-| [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) | Product layer ER diagram (see index) | 10 min |
-| [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) | Legacy ER diagrams (see index) | 10 min |
-| [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md) | Agent ER diagrams (see index) | 10 min |
+| [docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md) | Product layer ER diagram (see index) | 10 min |
+| [docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md) | Legacy ER diagrams (see index) | 10 min |
+| [docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md) | Agent ER diagrams (see index) | 10 min |
 | [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | **Nexus (Prompt Library)** integration | **10 min** |
 | [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md) | **Nexus Alpha (AI Assurance)** platform | **15 min** |
 | [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | **Nexus Products** relationship & workflow | **10 min** |
@@ -189,15 +307,15 @@ CREATE EXTENSION IF NOT EXISTS "vector";         -- Vector search (pgvector)
 ### Repository Map
 
 - **Consolidated master documentation**: [DOCUMENTATION.md](DOCUMENTATION.md)
-- **Repository overview**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
-- **Architecture**: [AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md)
-- **Documentation index**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
-- **Directory structure**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
+- **Repository overview**: [docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md)
+- **Architecture**: [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md)
+- **Documentation index**: [docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md)
+- **Directory structure**: [docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md)
 - **Product layer**: [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)
 - **Nexus integration**: [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)
 - **Cat-Astrophic integration**: [docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md)
-- **Agent ER diagrams**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
-- **Legacy ER diagrams**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
+- **Agent ER diagrams**: [docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md)
+- **Legacy ER diagrams**: [docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md)
 - **Schema**: [sql/schemas/schema_integrated.sql](sql/schemas/schema_integrated.sql)
 - **Queries**: [sql/queries/queries.sql](sql/queries/queries.sql)
 - **Sample data**: [sql/sample_data/sample_data.sql](sql/sample_data/sample_data.sql)
@@ -1378,14 +1496,14 @@ FOREIGN KEY (product_id) REFERENCES products(id);
 
 ### Related Files
 
-- **[MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)** - Project overview
-- **[AI_RANGE_UNIFIED_ARCHITECTURE.md](AI_RANGE_UNIFIED_ARCHITECTURE.md)** - Unified architecture
+- **[docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md)** - Project overview
+- **[docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md)** - Unified architecture
 - **[docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)** - Product layer design
-- **[MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)** - Product ER diagrams (see index)
-- **[MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)** - Legacy ER diagrams (see index)
-- **[MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)** - Agent ER diagrams (see index)
+- **[docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md)** - Product ER diagrams (see index)
+- **[docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md)** - Legacy ER diagrams (see index)
+- **[docs/archive/MASTER_DOCUMENTATION_INDEX.md](docs/archive/MASTER_DOCUMENTATION_INDEX.md)** - Agent ER diagrams (see index)
 - **[docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md)** - Prompt generation details
-- **[docs/NEXUS_INTEGRATION.md](docs/NEXUS_INTEGRATION.md)** - Nexus prompt ingestion
+- **[docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)** - Nexus prompt ingestion
 - **[sql/queries/queries.sql](sql/queries/queries.sql)** - Query examples
 
 ### PostgreSQL Resources

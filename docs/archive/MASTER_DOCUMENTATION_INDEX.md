@@ -1,7 +1,10 @@
 # Master Documentation Index
 
-**Last Updated**: February 22, 2026  
-**Status**: ✅ Complete  
+**ARCHIVED SNAPSHOT** (Feb 22, 2026): Historical documentation index.  
+For current documentation structure, see root-level `DOCUMENTATION.md` with links to `docs/testing/` and `docs/verification/` folders.
+
+**Last Updated**: February 22, 2026 (Archived Feb 24, 2026)  
+**Status**: ✅ Complete (historical version)  
 **Version**: 2.0 (Unified Platform with Nexus Alpha)
 
 ## 🎯 Quick Navigation

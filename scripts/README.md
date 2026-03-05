@@ -1,6 +1,40 @@
 # Migration & Utility Scripts
 
-Complete documentation for database migration and verification scripts.
+**Directory**: `/scripts`  
+**Purpose**: Migration, verification, and connection testing  
+**Last Updated**: March 4, 2026  
+**Status**: ✅ Production-Ready
+
+---
+
+## ⭐ Quick Start - Choose Your Path
+
+### 🚀 I Want To Deploy
+→ Use production-ready schemas (fastest):
+- [Unified Schema (84 tables)](../sql/schemas/schema_unified_complete.sql) - Complete deployment
+- [AI-Range (75 tables)](../sql/schemas/schema_ai_range_only.sql) - AI-Range only
+- [Nexus (35 tables)](../sql/schemas/schema_nexus_only.sql) - Nexus only
+
+**Deploy in 5 minutes**: [SUPABASE_QUICK_DEPLOYMENT.md](../sql/SUPABASE_QUICK_DEPLOYMENT.md)
+
+### ✅ I Want To Verify Migration Status
+```bash
+python3 check_unmigrated_data.py
+```
+
+### 🔌 I Want To Test Connection
+```bash
+python3 test_supabase_connection.py
+```
+
+### 🔄 I Want To Run Cleanup
+```bash
+python3 remove_llm_invocations_duplicates.py
+```
+
+---
+
+## 📋 Script Overview
 
 ## Overview
 

@@ -1,5 +1,8 @@
 # Archived: Entity Relationship Diagram
 
+**ARCHIVED SNAPSHOT**: Historical ER diagrams.  
+For current schema validation, see `docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md`.
+
 This ER diagram document was archived and consolidated into the canonical ER diagrams and `DOCUMENTATION.md`.
 
 Archived copy (full content preserved): `docs/archive/ER_DIAGRAM.md`

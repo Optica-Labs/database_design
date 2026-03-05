@@ -1,5 +1,8 @@
 # Schema Review Report - schema_complete.sql
 
+**ARCHIVED SNAPSHOT** (Feb 23, 2026): Historical schema review.  
+For current schema verification, see `docs/verification/SCHEMA_ALIGNMENT_AUDIT.md` and `LIVE_SUPABASE_ALIGNMENT_REPORT.md`.
+
 **Date:** February 23, 2026  
 **File:** `sql/schemas/schema_complete.sql`  
 **Status:** ✅ **READY FOR DEPLOYMENT**

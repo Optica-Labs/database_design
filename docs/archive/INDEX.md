@@ -1,6 +1,11 @@
 # Archived: Database Documentation Index
 
-This index was archived. Use `MASTER_DOCUMENTATION_INDEX.md` and `DOCUMENTATION.md` as the canonical navigation and master reference.
+**ARCHIVED SNAPSHOT** (Feb 22, 2026): Historical documentation index.  
+For current documentation with new folder organization, see root-level `DOCUMENTATION.md`.  
+For testing documentation, see `docs/testing/README.md`.  
+For verification reports, see `docs/verification/README.md`.
+
+This index was archived. Use `DOCUMENTATION.md`, `docs/testing/`, and `docs/verification/` for current navigation.
 
 Archived copy (full content preserved): `docs/archive/INDEX.md`
 
