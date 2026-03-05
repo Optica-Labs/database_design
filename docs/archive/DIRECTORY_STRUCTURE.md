@@ -1,10 +1,13 @@
 # Archived: Repository Directory Structure
 
+**ARCHIVED SNAPSHOT** (Feb 24, 2026): Historical structure prior to documentation reorganization.  
+For current structure, see `DOCUMENTATION.md` and updated folder layout in `docs/testing/` and `docs/verification/`.
+
 This file was archived and its essential content has been consolidated into `DOCUMENTATION.md` and `MASTER_DOCUMENTATION_INDEX.md`.
 
 Archived copy (full content preserved): `docs/archive/DIRECTORY_STRUCTURE.md`
 
-## Directory Tree
+## Directory Tree (Historical - Feb 24, 2026)
 
 ```
 database_design/
@@ -15,6 +18,8 @@ database_design/
 ├── DIRECTORY_STRUCTURE.md                      # This file - directory guide
 │
 ├── docs/                                       # 📚 All Documentation Files
+│   ├── testing/                                # 🧪 Connection testing documentation (NEW - Mar 4, 2026)
+│   ├── verification/                           # ✅ Schema alignment verification artifacts (NEW - Mar 4, 2026)
 │   ├── INDEX.md                                # Quick reference guide to all files
 │   │
 │   ├── PRODUCT_LAYER_ARCHITECTURE.md          # Product layer comprehensive guide
@@ -99,12 +104,16 @@ Start here:
 | File | Changes |
 |------|---------|
 | `DOCUMENTATION.md` | Consolidated master documentation for the full repo |
+| `DOCUMENTATION.md` (Mar 4, 2026) | Updated with live alignment verification results and reorganization notes |
 | `README.md` | Points to consolidated documentation |
+| `docs/testing/` (NEW Mar 4, 2026) | Connection testing and deployment documentation |
+| `docs/verification/` (NEW Mar 4, 2026) | Schema alignment and live database verification reports |
 | `docs/INDEX.md` | Updated to match current files |
 | `DIRECTORY_STRUCTURE.md` | Updated structure and file map |
 
 ## File Count
 
+### Historical (Feb 24, 2026)
 ```
 Total Files: 18
   Documentation (*.md): 11
@@ -118,6 +127,28 @@ Breakdown by Directory:
   sql/queries/: 2 files
   sql/views/: 2 files
   sql/sample_data/: 1 file
+```
+
+### Current (Mar 4, 2026+)
+```
+Total Files: 30+
+  Documentation (*.md): 18+
+  SQL Scripts (*.sql): 7
+  Python Scripts (*.py): 10+
+
+Breakdown by Directory:
+  Root: 5 files (README.md, DOCUMENTATION.md, CHANGELOG.md, etc.)
+  docs/: 14+ files
+    ├── testing/: 7 files (CONNECTION_*, TESTING_*)
+    ├── verification/: 7 files (SCHEMA_ALIGNMENT_*, LIVE_SUPABASE_*)
+    └── archive/: 22 historical files (Feb 24, 2026 and earlier)
+  sql/schemas/: 3 files (schema_integrated.sql, supabase/, etc.)
+  sql/migrations/: 1 file
+  sql/queries/: 2 files
+  sql/views/: 2 files
+  sql/sample_data/: 1 file
+  scripts/: 10+ files (verify_live_alignment.py, test_*.py, etc.)
+```
 ```
 
 ## Navigation Tips

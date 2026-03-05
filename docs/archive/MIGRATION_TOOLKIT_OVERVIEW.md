@@ -1,5 +1,8 @@
 # Migration Toolkit - Complete Overview
 
+**ARCHIVED SNAPSHOT** (Feb 23, 2026): Historical toolkit overview.  
+For current verification tools, see `scripts/verify_live_alignment.py` and `docs/testing/TESTING_QUICKSTART.md`.
+
 **Created:** February 23, 2026  
 **Status:** ✅ Ready for Deployment
 

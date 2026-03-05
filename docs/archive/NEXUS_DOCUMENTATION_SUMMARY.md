@@ -1,5 +1,8 @@
 # Archived: Nexus Products Documentation Summary
 
+**ARCHIVED SNAPSHOT**: Historical Nexus documentation summary.  
+For current Nexus information, see `docs/NEXUS_PRODUCTS_INTEGRATION.md`.
+
 This file was archived; core content has been merged into:
 - `docs/NEXUS_ALPHA_ARCHITECTURE.md` (Nexus Alpha canonical spec)
 - `docs/NEXUS_PRODUCTS_INTEGRATION.md` (products comparison)

@@ -1,4 +1,8 @@
 # Migration Transformation Plan
+
+**ARCHIVED SNAPSHOT** (Feb 23, 2026): Historical transformation plan for core 24-table migration.  
+For current schema and transformations, see `docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md` and `sql/schemas/supabase/`.
+
 ## Complete Data Migration from SOURCE to TARGET Supabase
 
 **Date:** 2026-02-23  

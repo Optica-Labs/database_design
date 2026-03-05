@@ -1,5 +1,8 @@
 # Archived: Quick Reference: Nexus Alpha Schema Integration
 
+**ARCHIVED SNAPSHOT**: Historical quick reference for Nexus Alpha.  
+For current Nexus Alpha schema details, see `docs/NEXUS_ALPHA_ARCHITECTURE.md`.
+
 This quick reference was archived. Use the canonical Nexus Alpha specification:
 - `docs/NEXUS_ALPHA_ARCHITECTURE.md`
 

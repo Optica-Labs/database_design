@@ -1,5 +1,8 @@
 # Archived: AI-Range & Nexus Unified Platform - Final Architecture
 
+**ARCHIVED SNAPSHOT**: Historical unified platform overview.  
+For current platform documentation, see root-level `DOCUMENTATION.md` and component-specific docs in `docs/` folder.
+
 This file has been archived and consolidated into the canonical documentation.
 
 See the canonical documents:

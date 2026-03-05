@@ -1,5 +1,8 @@
 # Archived: Product Layer ER Diagram
 
+**ARCHIVED SNAPSHOT**: Historical product layer ER diagram.  
+For current product layer diagram, see `docs/PRODUCT_LAYER_ER_DIAGRAM.md`.
+
 This file was archived and its content consolidated into canonical diagrams and `DOCUMENTATION.md`.
 
 Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ER_DIAGRAM.md`

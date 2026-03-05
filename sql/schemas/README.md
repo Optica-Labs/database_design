@@ -1,114 +1,136 @@
-# Complete Supabase Schema Upload
+# Database Schemas
 
 ## Overview
-This directory contains the complete, unified database schema ready for Supabase deployment.
+This directory contains three complete, production-ready database schemas for different deployment scenarios.
 
-## File Description
+## 🚀 Supabase Compatibility
 
-### `schema_complete.sql` (2520 lines)
-**This is the complete, production-ready schema** that includes:
+✅ **All schemas are fully Supabase-compatible and ready for deployment!**
 
-1. **Product Layer Architecture** - Products (ai-range, nexus) and subscriptions
-2. **Core Entities** - Tenants, AI agents, client models
-3. **Use Cases & Personas** - Cohorts, sub-cohorts, trait catalogs
-4. **Personas & Traits** - Flexible persona attributes with demographic, behavioral, psychographic, technographic, and linguistic traits
-5. **Context & Risk** - Context profiles, risk assessments, threat vectors, harms
-6. **Test Framework** - Test categories, types, scenarios, intents
-7. **Test Execution** - Test sessions, adversarial test cases, executions
-8. **CAT-ASTROPHIC Integration** - Generation runs, conversations, turns, quality metrics, telemetry
-9. **Agent Interaction Tracking** ⭐ NEW - Complete agent workflow tracking:
-   - `agent_interactions` - Core agent participation tracking
-   - `agent_interaction_libraries` - Library access tracking
-   - `agent_interaction_inputs` - Input parameters
-   - `agent_interaction_outputs` - Output results
-   - `agent_interaction_flow` - Data flow between agents
-   - `agent_interaction_decisions` - Decision points
-   - `agent_interaction_metrics` - Performance metrics
-10. **Nexus Prompt Library** - Stage 4 prompts and client submissions
-11. **Model Outputs & Results** - Outputs, responses, safety assessments
-12. **Nexus Alpha Platform** - Risk metrics, robustness analysis, fragility scores, sycophancy detection
-13. **Compliance & Audit** - Alerts, compliance reports, audit logs
-14. **Supporting Infrastructure** - Sources, caching, views
+See [../SUPABASE_COMPATIBILITY_REPORT.md](../SUPABASE_COMPATIBILITY_REPORT.md) for:
+- Detailed compatibility analysis
+- Deployment verification checklist
+- Performance characteristics
+- Recommended optional additions
 
-## How to Upload to Supabase
+### Quick Deployment to Supabase
+1. Go to Supabase Dashboard → SQL Editor
+2. Copy entire schema file content
+3. Paste into editor
+4. Click "Run"
+5. Verify with post-deployment queries (see report)
 
-### Option 1: Direct Upload (Recommended)
-1. Go to your Supabase project dashboard
-2. Navigate to **SQL Editor** in the left sidebar
-3. Click **New Query**
-4. Copy the entire contents of `schema_complete.sql`
-5. Paste into the SQL Editor
-6. Click **Run** or press `Ctrl+Enter` / `Cmd+Enter`
-7. Wait for completion (may take 1-2 minutes)
+---
 
-### Option 2: Python Script Upload
-Use the provided Python script with your .env configuration:
+## Available Schemas
 
-```bash
-python3 scripts/upload_schema_supabase.py
-```
+### 1. schema_unified_complete.sql ⭐ PRIMARY
+**Complete production database with all features from both products**
 
-Make sure your `.env` file contains:
-```
-SUPABASE_HOST=your-project.supabase.co
-SUPABASE_PORT=5432
-SUPABASE_DB=postgres
-SUPABASE_USER=postgres
-SUPABASE_PASSWORD="your-password-here"
-SCHEMA_PATH=sql/schemas/schema_complete.sql
-```
+**Contents:**
+- 84 CREATE TABLE statements
+- All AI-Range tables (personas, scenarios, testing, safety)
+- All Nexus tables (risk analysis, sycophancy detection)
+- All shared infrastructure (products, tenants, models, audit)
+- 40+ performance indexes
+- 100+ foreign key constraints
 
-## What's Included
+**Use Cases:**
+- ✅ Full development environments
+- ✅ Complete testing
+- ✅ Production deployments with both products
+- ✅ Monolithic architecture
 
-### Total Tables: 100+
-- Core product and tenant management
-- AI agents and client models
-- Persona management with flexible traits
-- Comprehensive test framework
-- Agent interaction tracking (NEW)
-- CAT-ASTROPHIC prompt generation
-- Nexus prompt library
-- Nexus Alpha robustness analysis
-- Full audit and compliance
+**Size:** ~49 KB (1,700 lines)
 
-### Views: 15+
-- Cross-product prompt traceability
-- Model performance summaries
-- Risk trends and alerts
-- Agent workflow analysis (NEW)
-- Conversation summaries
+### 2. schema_ai_range_only.sql
+**AI-Range product with all parent/dependency tables**
 
-### Indexes: 200+
-Optimized for:
-- Product and tenant isolation
-- Time-based queries
-- Status filtering
-- Agent workflow lookups
-- Cross-product relationships
+**Contents:**
+- 75 CREATE TABLE statements (67 AI-Range + 8 shared)
+- Complete AI-Range product functionality
+- All shared infrastructure required by AI-Range
 
-## Notes
+**Use Cases:**
+- ✅ Dedicated AI-Range deployments
+- ✅ AI-Range microservice architecture
+- ✅ Standalone AI testing platform
 
-- ✅ PostgreSQL-compatible (Supabase ready)
-- ✅ All foreign key constraints properly defined
-- ✅ Comprehensive indexing for performance
-- ✅ Product-level multi-tenancy
-- ✅ JSONB for flexible metadata
-- ✅ UUID primary keys where appropriate
-- ✅ Timestamp tracking on all tables
+**Size:** ~46 KB (1,200 lines)
+
+### 3. schema_nexus_only.sql
+**Nexus platform with all parent/dependency tables**
+
+**Contents:**
+- 35 CREATE TABLE statements (16 Nexus + 3 prompt + 3 model + 5 catalogs + 8 shared)
+- Complete Nexus analysis pipeline
+- Includes `product_prompt_lineage` for AI-Range traceability
+
+**Use Cases:**
+- ✅ Dedicated Nexus deployments
+- ✅ Nexus microservice architecture
+- ✅ Standalone AI assurance platform
+
+**Size:** ~31 KB (~800 lines)
+
+## Schema Comparison
+
+| Feature | Unified | AI-Range | Nexus |
+|---------|---------|----------|-------|
+| **Tables** | 84 | 75 | 35 |
+| Product Code | both | ai-range | nexus |
+| Personas | ✅ | ✅ | ❌ |
+| Scenarios | ✅ | ✅ | ❌ |
+| Testing Framework | ✅ | ✅ | ❌ |
+| Risk Metrics | ✅ | ❌ | ✅ |
+| Robustness Analysis | ✅ | ❌ | ✅ |
+| Sycophancy Detection | ✅ | ❌ | ✅ |
+| Shared Infrastructure | ✅ | ✅ | ✅ |
+
+## Shared Tables (All Schemas)
+
+Every schema includes these foundational tables:
+- `products` - Product definitions (filtered by product_code)
+- `tenants` - Multi-tenancy support
+- `client_product_subscriptions` - Product access control
+- `ai_agents` - Testing/evaluation agents
+- `client_models` - Client-provided models
+- `client_model_products` - Model-product associations
+- `product_usage` - Usage tracking
+- `audit_logs` - Audit trail
+- Trait catalogs (demographic, behavioral, psychographic, technographic, linguistic)
+
+## Features
+
+- **PostgreSQL 14+** - Full compatibility
+- **Extensions** - uuid-ossp, vector (for embeddings)
+- **Multi-Tenancy** - Built-in tenant isolation
+- **Indexes** - 40+ performance indexes in each schema
+- **Constraints** - 100+ foreign key relationships
+- **JSONB Support** - For flexible metadata storage
+- **UUID Primary Keys** - All tables
+- **Timestamps** - Full audit trail on all tables
 
 ## Verification
 
-After upload, verify the schema:
+After loading schema, verify:
 
 ```sql
 -- Count tables
-SELECT count(*) FROM information_schema.tables 
+SELECT COUNT(*) FROM information_schema.tables 
 WHERE table_schema = 'public';
 
--- Check key tables exist
+-- Check key tables
 SELECT table_name FROM information_schema.tables 
 WHERE table_schema = 'public' 
-AND table_name IN (
+ORDER BY table_name LIMIT 10;
+
+-- Verify extensions
+SELECT * FROM pg_extension WHERE extname IN ('uuid-ossp', 'vector');
+
+-- Check product entries
+SELECT product_code, product_name FROM products;
+```
     'products', 
     'tenants', 
     'personas', 
