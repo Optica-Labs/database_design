@@ -41,10 +41,16 @@ python3 scripts/check_unmigrated_data.py
 
 ### Setup
 ```bash
+# Install dependencies (symlinked to config/requirements.txt)
 pip install -r requirements.txt
+
+# Copy environment template (symlinked to config/.env.example)
 cp .env.example .env
+
 # Edit .env with Supabase credentials
 ```
+
+**Note**: Configuration files are now organized in [`config/`](config/) with symlinks in root for convenience.
 
 ## Quick Links
 
@@ -62,10 +68,13 @@ cp .env.example .env
 
 | Directory | Purpose |
 |-----------|---------|
-| `sql/` | Schema definitions, migrations, and Supabase deployment guides |
-| `sql/schemas/` | Three production-ready deployment schemas (unified, AI-Range, Nexus) |
-| `scripts/` | Migration and verification scripts |
-| `docs/` | Complete documentation |
+| [`config/`](config/) | **Configuration files** - Environment templates, requirements, API reports |
+| [`tests/`](tests/) | **Test scripts** - Connection tests and validation |
+| [`guides/`](guides/) | **Role-specific guides** - Developer, DBA, Data Scientist, Project Manager |
+| [`sql/`](sql/) | Schema definitions, migrations, and Supabase deployment guides |
+| [`sql/schemas/`](sql/schemas/) | Three production-ready deployment schemas (unified, AI-Range, Nexus) |
+| [`scripts/`](scripts/) | Migration and verification scripts |
+| [`docs/`](docs/) | Complete documentation |
 
 ## Key Tables
 
