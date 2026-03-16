@@ -22,6 +22,16 @@
 python3 check_unmigrated_data.py
 ```
 
+### 🧬 I Want Current Live Schema Snapshot
+```bash
+python3 snapshot_live_schema.py
+```
+
+### 📦 I Want Compact Live DDL Export
+```bash
+python3 export_live_schema_ddl.py
+```
+
 ### 🔌 I Want To Test Connection
 ```bash
 python3 test_supabase_connection.py
@@ -71,6 +81,19 @@ These scripts are used for the migration and cleanup operations.
 ### test_supabase_connection.py
 **Purpose**: Verify database connectivity  
 **Usage**: `python3 test_supabase_connection.py`
+
+### snapshot_live_schema.py
+**Purpose**: Export current live Supabase public schema into repository files  
+**Usage**: `python3 snapshot_live_schema.py`  
+**Output**:
+- `docs/verification/LIVE_SCHEMA_SNAPSHOT.json`
+- `docs/verification/LIVE_SCHEMA_SNAPSHOT.md`
+
+### export_live_schema_ddl.py
+**Purpose**: Export compact live DDL SQL (tables + constraints + indexes)  
+**Usage**: `python3 export_live_schema_ddl.py`  
+**Output**:
+- `docs/verification/LIVE_SCHEMA_DDL_COMPACT.sql`
 
 ## Configuration
 

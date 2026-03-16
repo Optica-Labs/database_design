@@ -29,6 +29,8 @@ docs/
 │   ├── README.md                          Verification overview
 │   ├── NAVIGATION_GUIDE.md                How to use verification docs
 │   ├── LIVE_SUPABASE_ALIGNMENT_REPORT.md  Latest live test results
+│   ├── LIVE_SCHEMA_SNAPSHOT.md            Full live schema snapshot (Markdown)
+│   ├── LIVE_SCHEMA_SNAPSHOT.json          Full live schema snapshot (JSON)
 │   ├── SCHEMA_ALIGNMENT_AUDIT.md          Complete schema audit
 │   ├── SCHEMA_ALIGNMENT_ISSUES.md         Issues and priorities
 │   ├── ALIGNMENT_SUMMARY.md               Executive summary
@@ -178,6 +180,16 @@ docs/
 - Recommendations
 - Next steps
 
+#### [verification/LIVE_SCHEMA_SNAPSHOT.md](verification/LIVE_SCHEMA_SNAPSHOT.md)
+**Purpose**: Current live public schema table/column snapshot (human-readable)  
+**Audience**: DBAs, Developers  
+**Time**: 15-30 minutes  
+**Content**:
+- Full table inventory
+- Column types/defaults/nullability
+- Per-table constraints/index counts
+- Live view list
+
 #### [verification/SCHEMA_ALIGNMENT_AUDIT.md](verification/SCHEMA_ALIGNMENT_AUDIT.md)
 **Purpose**: Comprehensive schema alignment audit  
 **Audience**: DBAs, Developers  
@@ -294,12 +306,12 @@ testing/README.md → TESTING_QUICKSTART.md → TESTING_CHECKLIST.md → Results
 
 ## 📊 Content Statistics
 
-- **Total Documents**: 20 (+ 24 archived)
+- **Total Documents**: 22 (+ 24 archived)
 - **Total Pages**: 50+
 - **Lines of Documentation**: 3,000+
 - **Architecture Documents**: 5
 - **Testing Documents**: 4
-- **Verification Documents**: 7
+- **Verification Documents**: 9
 
 ---
 
