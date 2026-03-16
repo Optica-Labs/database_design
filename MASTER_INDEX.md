@@ -65,6 +65,8 @@ database_design/
 │   │   │   ├── README.md                      📋 Verification overview
 │   │   │   ├── NAVIGATION_GUIDE.md            How to navigate
 │   │   │   ├── LIVE_SUPABASE_ALIGNMENT_REPORT.md  Latest results
+│   │   │   ├── LIVE_SCHEMA_SNAPSHOT.md         Full live schema (human-readable)
+│   │   │   ├── LIVE_SCHEMA_SNAPSHOT.json       Full live schema (machine-readable)
 │   │   │   ├── SCHEMA_ALIGNMENT_AUDIT.md      Detailed audit
 │   │   │   ├── ALIGNMENT_SUMMARY.md           Executive summary
 │   │   │   └── AUDIT_COMPLETION_REPORT.md     Status report
@@ -116,7 +118,8 @@ database_design/
 │       ├── remove_*.py                        Cleanup scripts (3)
 │       ├── test_supabase_connection.py        Connection test
 │       ├── upload_to_aurora.sh                Aurora upload
-│       └── verify_live_alignment.py           Live verification
+│       ├── verify_live_alignment.py           Live verification
+│       └── snapshot_live_schema.py            Live schema snapshot
 │
 └── 🔧 CONFIGURATION
     ├── requirements.txt                       Python dependencies
@@ -208,6 +211,7 @@ Verify results
 | [sql/SUPABASE_COMPATIBILITY_REPORT.md](sql/SUPABASE_COMPATIBILITY_REPORT.md) | Technical verification | 472 lines | DBAs |
 | [sql/ALIGNMENT_VERIFICATION.md](sql/ALIGNMENT_VERIFICATION.md) | Verification summary | Executive | Leads |
 | [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md) | Live test results | Detailed | DBAs |
+| [docs/verification/LIVE_SCHEMA_SNAPSHOT.md](docs/verification/LIVE_SCHEMA_SNAPSHOT.md) | Full live schema snapshot | Detailed | DBAs |
 | [docs/verification/SCHEMA_ALIGNMENT_AUDIT.md](docs/verification/SCHEMA_ALIGNMENT_AUDIT.md) | Full audit | Comprehensive | DBAs |
 
 ### Migration & Testing

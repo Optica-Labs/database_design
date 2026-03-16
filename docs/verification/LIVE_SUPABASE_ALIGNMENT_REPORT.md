@@ -1,8 +1,9 @@
 # Live Supabase Alignment Report (Method 1)
 
-Date: March 4, 2026  
+Date: March 16, 2026  
 Environment: Transaction Pooler endpoint via Method 1 (`SUPABASE_*` vars)  
 Verification Script: [scripts/verify_live_alignment.py](scripts/verify_live_alignment.py)
+Snapshot Script: [scripts/snapshot_live_schema.py](scripts/snapshot_live_schema.py)
 
 ## Scope
 
@@ -19,13 +20,17 @@ This verification compares:
 
 ## Live Database Snapshot
 
-- Public relations found: 96
-- Base tables: 90
+- Public relations found: 100
+- Base tables: 94
 - Views: 6
+
+Detailed snapshots generated:
+- [docs/verification/LIVE_SCHEMA_SNAPSHOT.md](docs/verification/LIVE_SCHEMA_SNAPSHOT.md)
+- [docs/verification/LIVE_SCHEMA_SNAPSHOT.json](docs/verification/LIVE_SCHEMA_SNAPSHOT.json)
 
 ## Schema Alignment Result
 
-### ✅ Core supabase modular schema files are aligned
+### ⚠️ Core supabase modular schema files are partially aligned
 
 Expected tables parsed from:
 - [sql/schemas/supabase/01_extensions_and_products.sql](sql/schemas/supabase/01_extensions_and_products.sql)
@@ -43,10 +48,10 @@ Expected table set (8):
 - `llm_invocations`
 
 Verification outcome:
-- Missing from live DB: **0**
-- Present in live DB: **8/8**
+- Missing from live DB: **3** (`conversations`, `generation_runs`, `turns`)
+- Present in live DB: **5/8**
 
-Conclusion: the repo’s current modular Supabase schema is fully present in the live DB.
+Conclusion: the live DB appears to use an evolved naming/modeling layer (e.g., `alpha_conversations`, `alpha_generation_runs`, `alpha_turns`) instead of the exact legacy table names.
 
 ## Documentation Alignment Result
 
@@ -67,7 +72,7 @@ In [DOCUMENTATION.md](DOCUMENTATION.md), claim:
 - “All 25 tables migrated”
 
 Live DB currently has:
-- 90 base tables (plus 6 views)
+- 94 base tables (plus 6 views)
 
 Conclusion: this summary statement is now outdated for the current live environment.
 
@@ -89,8 +94,6 @@ These links do not exist in the current workspace.
 
 ## Recommended Next Updates
 
-1. Update the migration summary wording in [DOCUMENTATION.md](DOCUMENTATION.md) to distinguish:
-   - historical migration milestone (`25` tables at migration time), and
-   - current live footprint (`90` base tables + `6` views)
-2. Fix or remove broken references in [DOCUMENTATION.md](DOCUMENTATION.md)
-3. Keep [scripts/verify_live_alignment.py](scripts/verify_live_alignment.py) as the repeatable verification check before releases
+1. Update the migration summary wording in [DOCUMENTATION.md](DOCUMENTATION.md) to distinguish the historical migration milestone (`25` tables at migration time) from the current live footprint (`94` base tables + `6` views).
+1. Fix or remove broken references in [DOCUMENTATION.md](DOCUMENTATION.md)
+1. Keep [scripts/verify_live_alignment.py](scripts/verify_live_alignment.py) and [scripts/snapshot_live_schema.py](scripts/snapshot_live_schema.py) as repeatable checks before releases

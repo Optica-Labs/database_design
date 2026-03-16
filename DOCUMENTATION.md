@@ -68,12 +68,14 @@
 | [docs/testing/TESTING_CHECKLIST.md](docs/testing/TESTING_CHECKLIST.md) | Test checklist |
 | [docs/testing/TESTING_SETUP_SUMMARY.md](docs/testing/TESTING_SETUP_SUMMARY.md) | Setup guide |
 
-**Verification Documentation** (7 files):
+**Verification Documentation** (9 files):
 | Document | Purpose |
 |----------|---------|
 | [docs/verification/README.md](docs/verification/README.md) | Verification overview |
 | [docs/verification/NAVIGATION_GUIDE.md](docs/verification/NAVIGATION_GUIDE.md) | How to navigate |
 | [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md) | Latest test results |
+| [docs/verification/LIVE_SCHEMA_SNAPSHOT.md](docs/verification/LIVE_SCHEMA_SNAPSHOT.md) | Full live table/column snapshot |
+| [docs/verification/LIVE_SCHEMA_SNAPSHOT.json](docs/verification/LIVE_SCHEMA_SNAPSHOT.json) | Machine-readable live schema |
 | [docs/verification/SCHEMA_ALIGNMENT_AUDIT.md](docs/verification/SCHEMA_ALIGNMENT_AUDIT.md) | Full audit |
 | [docs/verification/SCHEMA_ALIGNMENT_ISSUES.md](docs/verification/SCHEMA_ALIGNMENT_ISSUES.md) | Issues & resolution |
 | [docs/verification/ALIGNMENT_SUMMARY.md](docs/verification/ALIGNMENT_SUMMARY.md) | Executive summary |
@@ -238,6 +240,8 @@ See [CHANGELOG.md](CHANGELOG.md)
 
 ### Verification & Testing
 - [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md) - Latest live verification report
+- [docs/verification/LIVE_SCHEMA_SNAPSHOT.md](docs/verification/LIVE_SCHEMA_SNAPSHOT.md) - Current full live schema snapshot
+- [docs/verification/LIVE_SCHEMA_SNAPSHOT.json](docs/verification/LIVE_SCHEMA_SNAPSHOT.json) - Current full live schema snapshot (JSON)
 - [docs/verification/SCHEMA_ALIGNMENT_AUDIT.md](docs/verification/SCHEMA_ALIGNMENT_AUDIT.md) - Full alignment audit
 - [docs/testing/CONNECTION_TEST_PLAN.md](docs/testing/CONNECTION_TEST_PLAN.md) - Method-by-method test tracking
 - [docs/testing/CONNECTION_METHODS.md](docs/testing/CONNECTION_METHODS.md) - Detailed connection methods
