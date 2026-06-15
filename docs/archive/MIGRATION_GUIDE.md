@@ -90,7 +90,7 @@ The script will:
 
 2. Table Discovery
    ├─ Identify all tables in public schema
-   └─ Identify all tables in nexus_alpha schema
+   └─ Identify all tables in peregrine_alpha schema
 
 3. Data Migration (per table)
    ├─ Fetch all rows from source
@@ -101,7 +101,7 @@ The script will:
 
 4. Sequence Reset
    ├─ Find all sequences in public schema
-   ├─ Find all sequences in nexus_alpha schema
+   ├─ Find all sequences in peregrine_alpha schema
    └─ Set sequence next value = MAX(id) + 1
 
 5. Data Validation
@@ -252,7 +252,7 @@ Edit the migration script to filter tables:
 cursor.execute("""
     SELECT table_name, table_schema
     FROM information_schema.tables
-    WHERE table_schema IN ('public', 'nexus_alpha')
+    WHERE table_schema IN ('public', 'peregrine_alpha')
     AND table_type = 'BASE TABLE'
     AND table_name IN ('personas', 'scenarios', 'generations')  # Only these tables
     ORDER BY table_schema, table_name
@@ -271,7 +271,7 @@ source_conn = psycopg2.connect(source_db_url)
 target_conn = psycopg2.connect(target_db_url)
 
 source_cursor = source_conn.cursor()
-source_cursor.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema IN ('public', 'nexus_alpha')")
+source_cursor.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema IN ('public', 'peregrine_alpha')")
 source_table_count = source_cursor.fetchone()[0]
 
 print(f"Source has {source_table_count} tables")
@@ -288,7 +288,7 @@ After migration completes, verify:
 ```sql
 -- Check table count
 SELECT COUNT(*) FROM information_schema.tables 
-WHERE table_schema IN ('public', 'nexus_alpha');
+WHERE table_schema IN ('public', 'peregrine_alpha');
 
 -- Check specific table
 SELECT COUNT(*) FROM personas;
@@ -348,8 +348,8 @@ AND table_schema = 'public';
 - quality_metrics
 - telemetry
 
-### Nexus Integration
-- nexus_prompt_library
+### Peregrine Integration
+- peregrine_prompt_library
 - client_prompt_submissions
 - product_prompt_lineage
 
@@ -368,15 +368,15 @@ AND table_schema = 'public';
 - compliance_reports
 - audit_logs
 
-### Nexus Alpha (16 tables)
-- nexus_alpha.conversations
-- nexus_alpha.turns
-- nexus_alpha.risk_metrics
-- nexus_alpha.robustness_analysis
-- nexus_alpha.fragility_scores
-- nexus_alpha.sycophancy_analysis
-- nexus_alpha.embeddings
-- nexus_alpha.vectors_2d
+### Peregrine Alpha (16 tables)
+- peregrine_alpha.conversations
+- peregrine_alpha.turns
+- peregrine_alpha.risk_metrics
+- peregrine_alpha.robustness_analysis
+- peregrine_alpha.fragility_scores
+- peregrine_alpha.sycophancy_analysis
+- peregrine_alpha.embeddings
+- peregrine_alpha.vectors_2d
 - + 8 more support tables
 
 ---

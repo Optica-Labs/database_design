@@ -1,0 +1,193 @@
+{
+    "_comment": "Hand-authored grouping of the 94 canonical tables into PM-facing functional areas. Edited by humans; consumed by scripts/generate_db_diagrams.py to render Mermaid. Every canonical table must appear in exactly one domain.",
+    "foundation": "platform_tenancy",
+    "_relationships_comment": "Curated semantic relationships not captured by foreign keys (e.g. staging subsets, payload logging). cardinality: one-to-many | one-to-optional | many-to-one.",
+    "relationships": [
+        {
+            "from": "prompt_generator_responses",
+            "to": "gold_prompt_metadata_staging",
+            "label": "gold subset",
+            "cardinality": "one-to-optional"
+        },
+        {
+            "from": "prompt_generator_responses",
+            "to": "llm_invocations",
+            "label": "logs payloads to",
+            "cardinality": "one-to-many"
+        },
+        {
+            "from": "agent_interactions",
+            "to": "llm_invocations",
+            "label": "logs payloads to",
+            "cardinality": "one-to-many"
+        }
+    ],
+    "domains": [
+        {
+            "id": "platform_tenancy",
+            "label": "Platform & Tenancy",
+            "file": "01_platform_tenancy",
+            "blurb": "The foundation every other area sits on: the customers (tenants), the products they subscribe to, and the AI models they bring for testing. Every record elsewhere is tagged with a product and tenant so data stays separated.",
+            "tables": [
+                "products",
+                "tenants",
+                "client_models",
+                "client_model_products",
+                "client_product_subscriptions",
+                "product_usage",
+                "auth_tenant_mapping",
+                "product_prompt_lineage"
+            ]
+        },
+        {
+            "id": "personas",
+            "label": "Personas & Traits",
+            "file": "02_personas",
+            "blurb": "Synthetic user profiles used to probe an AI model. Each persona is built from reusable trait catalogs (behavioral, demographic, linguistic, psychographic, technographic) and grouped into cohorts and use cases.",
+            "tables": [
+                "personas",
+                "persona_actions",
+                "persona_behavioral_traits",
+                "persona_demographics",
+                "persona_linguistic_traits",
+                "persona_memories",
+                "persona_plans",
+                "persona_psychographic_traits",
+                "persona_reflections",
+                "persona_technographic_traits",
+                "behavioral_traits_catalog",
+                "demographic_traits_catalog",
+                "linguistic_traits_catalog",
+                "psychographic_traits_catalog",
+                "technographic_traits_catalog",
+                "cohorts",
+                "sub_cohorts",
+                "use_cases"
+            ]
+        },
+        {
+            "id": "scenarios",
+            "label": "Scenarios & Prompt Generation",
+            "file": "03_scenarios",
+            "blurb": "The test situations and the prompts that come from them. Scenarios combine personas, intents and threats, then drive prompt generation and the LLM calls that produce candidate prompts.",
+            "tables": [
+                "scenarios",
+                "scenario_intents",
+                "scenario_intent_personas",
+                "scenario_personas",
+                "scenario_scores",
+                "scenario_seeds",
+                "scenario_test_types",
+                "scenario_threats",
+                "prompt_generator_responses",
+                "llm_invocations",
+                "gold_prompt_metadata_staging"
+            ]
+        },
+        {
+            "id": "test_execution",
+            "label": "Test Execution",
+            "file": "04_test_execution",
+            "blurb": "Running tests against a customer's model and recording what happened: test sessions, the individual executions, the model's outputs, and the structured test catalog (categories, types, sets, units, turns).",
+            "tables": [
+                "test_categories",
+                "test_types",
+                "test_sessions",
+                "test_executions",
+                "test_sets",
+                "test_units",
+                "test_turns",
+                "adversarial_test_cases",
+                "ai_test_results",
+                "nyc_test_results",
+                "model_outputs"
+            ]
+        },
+        {
+            "id": "threats_risk",
+            "label": "Threats, Harms & Risk",
+            "file": "05_threats_risk",
+            "blurb": "The library of things that can go wrong and how risky they are: threat vectors and examples, harms, jailbreak attempts, and the risk assessments that weigh them.",
+            "tables": [
+                "threat_vectors",
+                "threat_examples",
+                "harms",
+                "risks",
+                "risk_assessments",
+                "jailbreak_attempts"
+            ]
+        },
+        {
+            "id": "safety_compliance",
+            "label": "Safety & Compliance",
+            "file": "06_safety_compliance",
+            "blurb": "The scoring and reporting layer: safety assessments of model outputs, the alerts and metrics they raise, plus compliance reports and quality metrics for stakeholders and auditors.",
+            "tables": [
+                "safety_assessments",
+                "safety_alerts",
+                "safety_metrics",
+                "safety_scores",
+                "compliance_reports",
+                "quality_metrics"
+            ]
+        },
+        {
+            "id": "agent_lineage",
+            "label": "Agent Interaction Lineage",
+            "file": "07_agent_lineage",
+            "blurb": "A full audit trail of what the autonomous testing agents did: each interaction with its inputs, outputs, decisions, metrics, libraries used, and how interactions flow into one another.",
+            "tables": [
+                "ai_agents",
+                "agent_interactions",
+                "agent_interaction_decisions",
+                "agent_interaction_flow",
+                "agent_interaction_inputs",
+                "agent_interaction_outputs",
+                "agent_interaction_metrics",
+                "agent_interaction_libraries"
+            ]
+        },
+        {
+            "id": "peregrine_analysis",
+            "label": "Peregrine Assurance & Analysis",
+            "file": "08_peregrine_analysis",
+            "blurb": "The Peregrine deep-analysis engine: conversations and turns, generation runs and telemetry, the prompt library, embeddings and dimensionality-reduction models, plus benchmark, consistency, robustness and sycophancy analyses.",
+            "tables": [
+                "peregrine_conversations",
+                "peregrine_turns",
+                "peregrine_generation_runs",
+                "peregrine_telemetry",
+                "peregrine_prompt_library",
+                "peregrine_prompt_submissions",
+                "peregrine_embeddings",
+                "peregrine_pca_models",
+                "peregrine_vectors_2d",
+                "peregrine_benchmark_results",
+                "peregrine_benchmark_runs",
+                "peregrine_consistency_results",
+                "peregrine_audit_logs",
+                "risk_metrics",
+                "robustness_analysis",
+                "sycophancy_events",
+                "analysis_results",
+                "conversation_embeddings",
+                "conversation_metrics",
+                "turn_embeddings",
+                "model_metadata"
+            ]
+        },
+        {
+            "id": "ingestion_reference",
+            "label": "Ingestion & Reference Data",
+            "file": "09_ingestion_reference",
+            "blurb": "Supporting data feeds and shared reference data: external content sources and crawls, raw collected items, deployment-context profiles, and a cache of model responses.",
+            "tables": [
+                "sources",
+                "crawls",
+                "raw_items",
+                "context_profiles",
+                "model_response_cache"
+            ]
+        }
+    ]
+}

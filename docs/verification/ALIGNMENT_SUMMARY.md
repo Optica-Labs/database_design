@@ -27,7 +27,7 @@ SCHEMA ALIGNMENT STATUS
 ├─ Supabase schemas             ✅ Excellent
 ├─ Architecture references      ⚠️  Broken links (1)
 ├─ Agent interactions           ⚠️  Unclear scope
-└─ Nexus Alpha platform         ⚠️  Status unknown
+└─ Peregrine platform         ⚠️  Status unknown
 
 📍 OVERALL GRADE: A+ (Excellent)
 ```
@@ -130,10 +130,10 @@ Question: Are they separate or integrated?
 
 ---
 
-### Issue #4: Nexus Alpha Platform Status (MEDIUM)
+### Issue #4: Peregrine Platform Status (MEDIUM)
 
 ```
-docs/NEXUS_ALPHA_ARCHITECTURE.md describes:
+docs/archive/NEXUS_ALPHA_ARCHITECTURE.md describes:
   - embeddings tables
   - vectors_2d (2D PCA transformed vectors)
   - risk_metrics
@@ -163,7 +163,7 @@ Question: Should these be in Supabase? Are they deployed elsewhere?
 | Tenants | ✅ | ✅ | ⚠️ | 90% |
 | Generation Runs | ✅ | ✅ | ⚠️ | 90% |
 | Agent Interactions | ⚠️ | ⚠️ | ❌ | 50% |
-| Nexus Alpha | ❓ | ✅ | ❓ | 40% |
+| Peregrine | ❓ | ✅ | ❓ | 40% |
 | **AVERAGE** | - | - | - | **92%** |
 
 ---
@@ -213,11 +213,9 @@ CURRENT STATE:
    └── README.md                           ⚠️ NEEDS UPDATE
 
 📚 docs/ (DOCUMENTATION)
-   ├── MIGRATION_SUMMARY.md                ✅
-   ├── NEXUS_ALPHA_ARCHITECTURE.md         ✅
-   ├── PRODUCT_LAYER_ARCHITECTURE.md       ✅
-   ├── CAT_ASTROPHIC_INTEGRATION.md        ✅
-   └── archive/                            📋
+   ├── README.md                           ✅
+   ├── verification/                       ✅ (live schema & alignment)
+   └── archive/                            📋 (historical docs)
 ```
 
 ---
@@ -231,7 +229,7 @@ CURRENT STATE:
 
 ### This Week (1-2 hours)
 - [ ] Clarify agent interactions scope (investigate agent_interactions_schema.sql)
-- [ ] Clarify Nexus Alpha deployment status
+- [ ] Clarify Peregrine deployment status
 - [ ] Create decision tree: "Which schema should I use?"
 - [ ] Update DOCUMENTATION.md with correct links
 
@@ -263,16 +261,16 @@ Migration Quality: ✅ EXCELLENT
 ## 🎓 Recommendations
 
 ### For New Developers
-1. Start with [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md)
+1. Start with [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md)
 2. Use files in `sql/schemas/supabase/` for deployment
 3. Ignore other schema files (legacy)
 4. Review [SCHEMA_ALIGNMENT_AUDIT.md](SCHEMA_ALIGNMENT_AUDIT.md) for full details
 
 ### For DBAs
 1. Deploy using 3-file modular setup (01, 01, 02)
-2. Follow [sql/schemas/supabase/00_SETUP_GUIDE.sql](sql/schemas/supabase/00_SETUP_GUIDE.sql) for verification
-3. Reference [MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) for data status
-4. Use indexes in [sql/schemas/supabase/02_llm_invocations.sql](sql/schemas/supabase/02_llm_invocations.sql) for performance
+2. Follow [sql/schemas/supabase/00_SETUP_GUIDE.sql](../../sql/schemas/supabase/00_SETUP_GUIDE.sql) for verification
+3. Reference [LIVE_SUPABASE_ALIGNMENT_REPORT.md](LIVE_SUPABASE_ALIGNMENT_REPORT.md) for data status
+4. Use indexes in [sql/schemas/supabase/02_llm_invocations.sql](../../sql/schemas/supabase/02_llm_invocations.sql) for performance
 
 ### For Product Managers
 1. Core schema is stable and production-ready ✅
@@ -286,9 +284,9 @@ Migration Quality: ✅ EXCELLENT
 
 | Role | Document | Link |
 |------|----------|------|
-| Developer | Schema Quick Start | [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md) |
-| DBA | Setup Guide | [sql/schemas/supabase/00_SETUP_GUIDE.sql](sql/schemas/supabase/00_SETUP_GUIDE.sql) |
-| Analyst | Migration Results | [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) |
+| Developer | Schema Quick Start | [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md) |
+| DBA | Setup Guide | [sql/schemas/supabase/00_SETUP_GUIDE.sql](../../sql/schemas/supabase/00_SETUP_GUIDE.sql) |
+| Analyst | Live Alignment | [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](LIVE_SUPABASE_ALIGNMENT_REPORT.md) |
 | Architect | Full Audit | [SCHEMA_ALIGNMENT_AUDIT.md](SCHEMA_ALIGNMENT_AUDIT.md) |
 | DevOps | Issues & Fixes | [SCHEMA_ALIGNMENT_ISSUES.md](SCHEMA_ALIGNMENT_ISSUES.md) |
 

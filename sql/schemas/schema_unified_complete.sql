@@ -1,7 +1,7 @@
 -- ============================================================================
 -- COMPLETE UNIFIED DATABASE SCHEMA
 -- ============================================================================
--- This is the complete integrated schema for the AI-Range & Nexus platforms
+-- This is the complete integrated schema for the AI-Range & Peregrine platforms
 -- Contains ALL tables from both products plus shared infrastructure
 --
 -- Target: PostgreSQL 14+
@@ -20,7 +20,7 @@ CREATE EXTENSION IF NOT EXISTS "vector";
 -- Table: products
 CREATE TABLE products (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    product_code TEXT NOT NULL UNIQUE CHECK (product_code IN ('ai-range', 'nexus')),
+    product_code TEXT NOT NULL UNIQUE CHECK (product_code IN ('ai-range', 'peregrine')),
     product_name TEXT NOT NULL,
     description TEXT,
     features JSONB DEFAULT '{}'::jsonb,
@@ -35,7 +35,7 @@ CREATE INDEX idx_products_code_status ON products(product_code, status);
 
 INSERT INTO products (product_code, product_name, description, status) VALUES
 ('ai-range', 'AI Range', 'Comprehensive AI testing and safety assessment platform', 'active'),
-('nexus', 'Nexus', 'Advanced AI persona testing and risk analysis system', 'active');
+('peregrine', 'Peregrine', 'Advanced AI persona testing and risk analysis system', 'active');
 
 -- ============================================================================
 -- PRODUCT USAGE TRACKING
@@ -1003,7 +1003,7 @@ CREATE INDEX idx_client_prompt_submissions_product ON client_prompt_submissions(
 CREATE INDEX idx_client_prompt_submissions_tenant ON client_prompt_submissions(tenant_id);
 CREATE INDEX idx_client_prompt_submissions_status ON client_prompt_submissions(status);
 
-CREATE TABLE nexus_prompt_library (
+CREATE TABLE peregrine_prompt_library (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     product_id UUID NOT NULL REFERENCES products(id),
     tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
@@ -1018,32 +1018,32 @@ CREATE TABLE nexus_prompt_library (
     metadata JSONB DEFAULT '{}'::jsonb,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    CONSTRAINT chk_nexus_prompt_source
+    CONSTRAINT chk_peregrine_prompt_source
         CHECK (
             (source_type = 'cat-astrophic' AND cat_turn_id IS NOT NULL AND client_prompt_id IS NULL)
             OR (source_type = 'client' AND client_prompt_id IS NOT NULL AND cat_turn_id IS NULL)
         )
 );
 
-CREATE INDEX idx_nexus_prompt_library_product ON nexus_prompt_library(product_id);
-CREATE INDEX idx_nexus_prompt_library_tenant ON nexus_prompt_library(tenant_id);
-CREATE INDEX idx_nexus_prompt_library_source ON nexus_prompt_library(source_type);
-CREATE INDEX idx_nexus_prompt_library_status ON nexus_prompt_library(status);
+CREATE INDEX idx_peregrine_prompt_library_product ON peregrine_prompt_library(product_id);
+CREATE INDEX idx_peregrine_prompt_library_tenant ON peregrine_prompt_library(tenant_id);
+CREATE INDEX idx_peregrine_prompt_library_source ON peregrine_prompt_library(source_type);
+CREATE INDEX idx_peregrine_prompt_library_status ON peregrine_prompt_library(status);
 
 CREATE TABLE product_prompt_lineage (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     ai_range_turn_id BIGINT NOT NULL REFERENCES turns(id) ON DELETE CASCADE,
-    nexus_prompt_id UUID NOT NULL REFERENCES nexus_prompt_library(id) ON DELETE CASCADE,
+    peregrine_prompt_id UUID NOT NULL REFERENCES peregrine_prompt_library(id) ON DELETE CASCADE,
     ai_range_product_id UUID NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
-    nexus_product_id UUID NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
+    peregrine_product_id UUID NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
     lineage_type TEXT NOT NULL DEFAULT 'stage4' CHECK (lineage_type IN ('stage4', 'other')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     metadata JSONB DEFAULT '{}'::jsonb,
-    UNIQUE(ai_range_turn_id, nexus_prompt_id)
+    UNIQUE(ai_range_turn_id, peregrine_prompt_id)
 );
 
 CREATE INDEX idx_prompt_lineage_ai_range_turn ON product_prompt_lineage(ai_range_turn_id);
-CREATE INDEX idx_prompt_lineage_nexus_prompt ON product_prompt_lineage(nexus_prompt_id);
+CREATE INDEX idx_prompt_lineage_peregrine_prompt ON product_prompt_lineage(peregrine_prompt_id);
 
 -- ============================================================================
 -- SAFETY ASSESSMENTS

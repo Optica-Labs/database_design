@@ -35,7 +35,7 @@ python3 scripts/migrate_supabase_data.py
 | **Generation Pipeline** | 5 | runs, conversations, turns, metrics |
 | **Agent Interactions** | 7 | interactions, flow, decisions, metrics |
 | **Safety & Compliance** | 4 | assessments, alerts, reports, logs |
-| **Nexus Alpha** | 16 | risk metrics, robustness, fragility, etc |
+| **Peregrine Alpha** | 16 | risk metrics, robustness, fragility, etc |
 | **Other** | 16 | models, agents, traits, threats, etc |
 | **TOTAL** | **91 tables** | All data preserved |
 

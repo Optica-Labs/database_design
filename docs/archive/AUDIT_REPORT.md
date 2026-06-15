@@ -13,9 +13,9 @@
 ## 📊 Schema Statistics
 
 ### Tables
-- **Total Tables**: 91 (58 in public schema + 16 in nexus_alpha schema + 17 junction/support tables)
+- **Total Tables**: 91 (58 in public schema + 16 in peregrine_alpha schema + 17 junction/support tables)
 - **Products Schema**: 2 product definitions
-- **Nexus Alpha Schema**: 16 tables for robustness analysis
+- **Peregrine Alpha Schema**: 16 tables for robustness analysis
 
 ### Constraints & Indexes
 - **Foreign Key Constraints**: 211
@@ -122,9 +122,9 @@ All tables have properly defined primary keys:
    - quality_metrics
    - telemetry
 
-9. **Nexus Prompt Library** (Lines 1450-1600)
+9. **Peregrine Prompt Library** (Lines 1450-1600)
    - client_prompt_submissions
-   - nexus_prompt_library
+   - peregrine_prompt_library
    - product_prompt_lineage
    - Trigger for auto-linking
 
@@ -142,41 +142,41 @@ All tables have properly defined primary keys:
     - scenario_seeds
     - model_response_cache
 
-12. **Nexus Alpha Platform** (Lines 2000-2400)
-    - nexus_alpha.conversations
-    - nexus_alpha.turns
-    - nexus_alpha.embeddings
-    - nexus_alpha.vectors_2d
-    - nexus_alpha.risk_metrics
-    - nexus_alpha.robustness_analysis
-    - nexus_alpha.fragility_scores
-    - nexus_alpha.sycophancy_events
-    - nexus_alpha.sycophancy_analysis
-    - nexus_alpha.pca_models
-    - nexus_alpha.configuration_snapshots
-    - nexus_alpha.api_usage
-    - nexus_alpha.benchmark_tests
-    - nexus_alpha.model_recommendations
-    - nexus_alpha.exports
-    - nexus_alpha.audit_log
+12. **Peregrine Alpha Platform** (Lines 2000-2400)
+    - peregrine_alpha.conversations
+    - peregrine_alpha.turns
+    - peregrine_alpha.embeddings
+    - peregrine_alpha.vectors_2d
+    - peregrine_alpha.risk_metrics
+    - peregrine_alpha.robustness_analysis
+    - peregrine_alpha.fragility_scores
+    - peregrine_alpha.sycophancy_events
+    - peregrine_alpha.sycophancy_analysis
+    - peregrine_alpha.pca_models
+    - peregrine_alpha.configuration_snapshots
+    - peregrine_alpha.api_usage
+    - peregrine_alpha.benchmark_tests
+    - peregrine_alpha.model_recommendations
+    - peregrine_alpha.exports
+    - peregrine_alpha.audit_log
 
 13. **Views** (Lines 2400-2512)
-    - vw_nexus_stage4_prompt_candidates
+    - vw_peregrine_stage4_prompt_candidates
     - vw_cross_product_prompt_trace
     - vw_latest_model_assessments
     - vw_model_safety_summary
     - vw_active_alerts
     - vw_persona_with_traits
-    - nexus_alpha.v_conversation_summary
-    - nexus_alpha.v_risk_trends
-    - nexus_alpha.v_model_performance
+    - peregrine_alpha.v_conversation_summary
+    - peregrine_alpha.v_risk_trends
+    - peregrine_alpha.v_model_performance
 
 ---
 
 ## 🎯 Key Features
 
 ### Multi-Tenancy
-- Product-level isolation (ai-range, nexus)
+- Product-level isolation (ai-range, peregrine)
 - Tenant-level data segregation
 - Subscription management
 
@@ -192,11 +192,11 @@ All tables have properly defined primary keys:
 - Performance metrics
 
 ### Cross-Product Integration
-- CAT-ASTROPHIC Stage 4 prompts → Nexus library
+- CAT-ASTROPHIC Stage 4 prompts → Peregrine library
 - Automatic lineage tracking
 - Unified prompt management
 
-### Robustness Analysis (Nexus Alpha)
+### Robustness Analysis (Peregrine Alpha)
 - Per-turn risk metrics (Stage 1)
 - Per-conversation robustness scores (Stage 2)
 - Per-model fragility scores (Stage 3)
@@ -221,23 +221,23 @@ All tables have properly defined primary keys:
 ```sql
 -- Count tables
 SELECT count(*) FROM information_schema.tables 
-WHERE table_schema IN ('public', 'nexus_alpha');
+WHERE table_schema IN ('public', 'peregrine_alpha');
 -- Expected: 75+
 
 -- Check key tables
 SELECT table_schema, table_name 
 FROM information_schema.tables 
-WHERE table_schema IN ('public', 'nexus_alpha')
+WHERE table_schema IN ('public', 'peregrine_alpha')
 AND table_name IN (
     'products', 'tenants', 'personas', 'scenarios', 
     'agent_interactions', 'generation_runs', 
-    'nexus_prompt_library', 'conversations'
+    'peregrine_prompt_library', 'conversations'
 )
 ORDER BY table_schema, table_name;
 
 -- Verify products are inserted
 SELECT * FROM products;
--- Expected: 2 rows (ai-range, nexus)
+-- Expected: 2 rows (ai-range, peregrine)
 
 -- Check foreign key constraints
 SELECT COUNT(*) FROM information_schema.table_constraints 
@@ -246,7 +246,7 @@ WHERE constraint_type = 'FOREIGN KEY';
 
 -- Check indexes
 SELECT COUNT(*) FROM pg_indexes 
-WHERE schemaname IN ('public', 'nexus_alpha');
+WHERE schemaname IN ('public', 'peregrine_alpha');
 -- Expected: 178+
 ```
 
@@ -263,7 +263,7 @@ WHERE schemaname IN ('public', 'nexus_alpha');
 
 3. **JSONB Usage**: Extensive use of JSONB for flexible metadata - ensure queries use proper indexing
 
-4. **Nexus Alpha Schema**: Uses separate schema namespace for isolation
+4. **Peregrine Alpha Schema**: Uses separate schema namespace for isolation
 
 5. **Product Isolation**: All tables include `product_id` for multi-product support
 
@@ -294,7 +294,7 @@ If you've already deployed `schema_integrated.sql`:
 - [x] Products are pre-populated
 - [x] Multi-tenancy support included
 - [x] Agent interaction tracking included
-- [x] Nexus Alpha platform included
+- [x] Peregrine Alpha platform included
 
 ---
 

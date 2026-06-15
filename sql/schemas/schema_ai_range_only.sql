@@ -13,7 +13,7 @@
 -- - Safety assessments and alerts
 -- - Audit and compliance
 --
--- EXCLUDES: Nexus Alpha specific tables (nexus_alpha schema)
+-- EXCLUDES: Peregrine Alpha specific tables (peregrine_alpha schema)
 --
 -- Target: PostgreSQL 14+
 -- File: schema_ai_range_only.sql

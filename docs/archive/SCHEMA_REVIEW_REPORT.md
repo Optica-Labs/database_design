@@ -52,34 +52,34 @@ Comprehensive audit of the unified database schema reveals **NO CRITICAL ERRORS*
 | SERIAL | 1 |
 
 ### ✅ Schema Namespace
-- `CREATE SCHEMA IF NOT EXISTS nexus_alpha` - ✅ Declared before tables
-- Nexus Alpha tables properly qualified (16 tables) - ✅ Valid
+- `CREATE SCHEMA IF NOT EXISTS peregrine_alpha` - ✅ Declared before tables
+- Peregrine Alpha tables properly qualified (16 tables) - ✅ Valid
 
 ### ✅ Benchmarking Features
 All required benchmarking columns present:
-- `nexus_prompt_library.gold` - ✅ BOOLEAN DEFAULT FALSE
-- `nexus_alpha.risk_metrics.benchmarking` - ✅ BOOLEAN DEFAULT FALSE
-- `nexus_alpha.robustness_analysis.benchmarking` - ✅ BOOLEAN DEFAULT FALSE
-- `nexus_alpha.fragility_scores.benchmarking` - ✅ BOOLEAN DEFAULT FALSE
-- `nexus_alpha.sycophancy_analysis.benchmarking` - ✅ BOOLEAN DEFAULT FALSE
+- `peregrine_prompt_library.gold` - ✅ BOOLEAN DEFAULT FALSE
+- `peregrine_alpha.risk_metrics.benchmarking` - ✅ BOOLEAN DEFAULT FALSE
+- `peregrine_alpha.robustness_analysis.benchmarking` - ✅ BOOLEAN DEFAULT FALSE
+- `peregrine_alpha.fragility_scores.benchmarking` - ✅ BOOLEAN DEFAULT FALSE
+- `peregrine_alpha.sycophancy_analysis.benchmarking` - ✅ BOOLEAN DEFAULT FALSE
 
 ### ✅ Index Validation
 - All 174 indexes reference existing tables
 - All indexed columns exist in their respective tables
 - Duplicate index names issue - ✅ **FIXED**
-  - `idx_conversations_created` → `idx_nexus_conversations_created` (nexus_alpha version)
-  - `idx_turns_conversation` → `idx_nexus_turns_conversation` (nexus_alpha version)
+  - `idx_conversations_created` → `idx_peregrine_conversations_created` (peregrine_alpha version)
+  - `idx_turns_conversation` → `idx_peregrine_turns_conversation` (peregrine_alpha version)
 
 ### ✅ Key Features Verified
-- **INSERT Statements:** 2 (products + nexus)
+- **INSERT Statements:** 2 (products + peregrine)
 - **Product Layer:** products, tenants, subscriptions, product_usage
 - **AI Agents:** ai_agents with BIGSERIAL agent_id, client_models
 - **Personas:** Unified personas table with trait catalogs and relationships
 - **Test Framework:** Scenarios, test cases, execution tracking
 - **Agent Interactions:** Comprehensive tracking with flow, decisions, metrics
 - **Generation Pipeline:** generation_runs → conversations → turns → quality_metrics
-- **Nexus Integration:** Prompt library with gold column, Nexus Alpha robustness tables
-- **Lineage Tracking:** Trigger auto-links Stage 4 prompts to Nexus library
+- **Peregrine Integration:** Prompt library with gold column, Peregrine Alpha robustness tables
+- **Lineage Tracking:** Trigger auto-links Stage 4 prompts to Peregrine library
 
 ---
 
@@ -93,8 +93,8 @@ All required benchmarking columns present:
 2. **File ending** - Ends with comment block (valid, not semicolon-terminated)
 
 ### ✅ Fixed Issues
-1. ✅ Duplicate index names (public vs nexus_alpha schema)
-   - Renamed nexus_alpha indexes with `idx_nexus_` prefix for uniqueness
+1. ✅ Duplicate index names (public vs peregrine_alpha schema)
+   - Renamed peregrine_alpha indexes with `idx_peregrine_` prefix for uniqueness
    - Both `idx_conversations_created` and `idx_turns_conversation` disambiguated
 
 ---
@@ -158,12 +158,12 @@ psql -h <host> -U <user> -d <database> -f sql/schemas/schema_complete.sql
 ```sql
 -- Verify table count
 SELECT COUNT(*) FROM information_schema.tables 
-WHERE table_schema IN ('public', 'nexus_alpha');
+WHERE table_schema IN ('public', 'peregrine_alpha');
 -- Expected: 91
 
 -- Verify indexes created
 SELECT COUNT(*) FROM pg_indexes 
-WHERE schemaname IN ('public', 'nexus_alpha');
+WHERE schemaname IN ('public', 'peregrine_alpha');
 -- Expected: 174
 
 -- Verify products inserted
@@ -171,12 +171,12 @@ SELECT COUNT(*) FROM products;
 -- Expected: 2
 
 -- Check benchmarking columns
-SELECT COUNT(*) FROM nexus_prompt_library WHERE gold IS NOT NULL;
-SELECT COUNT(*) FROM nexus_alpha.risk_metrics WHERE benchmarking IS NOT NULL;
+SELECT COUNT(*) FROM peregrine_prompt_library WHERE gold IS NOT NULL;
+SELECT COUNT(*) FROM peregrine_alpha.risk_metrics WHERE benchmarking IS NOT NULL;
 
 -- Verify schema exists
 SELECT schema_name FROM information_schema.schemata 
-WHERE schema_name = 'nexus_alpha';
+WHERE schema_name = 'peregrine_alpha';
 -- Expected: 1 row
 ```
 
@@ -186,7 +186,7 @@ WHERE schema_name = 'nexus_alpha';
 
 The `schema_complete.sql` file is **production-ready** and can be safely deployed to Supabase. All structural validations pass, and the schema provides comprehensive support for:
 - Multi-tenant AI testing (AI-Range product)
-- Persona-based risk assessment (Nexus product)
+- Persona-based risk assessment (Peregrine product)
 - Adversarial testing & safety evaluation
 - Agent interaction tracking
 - Generation pipeline management

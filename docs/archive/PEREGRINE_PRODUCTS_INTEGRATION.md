@@ -1,21 +1,21 @@
-# Nexus Products: Complete Integration Guide
+# Peregrine Products: Complete Integration Guide
 
 ## Overview
 
-There are **two distinct Nexus products** serving different purposes in the AI-Range ecosystem:
+There are **two distinct Peregrine products** serving different purposes in the AI-Range ecosystem:
 
-1. **Nexus (Prompt Library)** - Unified prompt ingestion and cross-product lineage
-2. **Nexus Alpha** - AI Assurance Platform for model evaluation and safety analysis
+1. **Peregrine (Prompt Library)** - Unified prompt ingestion and cross-product lineage
+2. **Peregrine Alpha** - AI Assurance Platform for model evaluation and safety analysis
 
 ## Comparison Matrix
 
-| Aspect | Nexus (Prompt Library) | Nexus Alpha (Assurance) |
+| Aspect | Peregrine (Prompt Library) | Peregrine Alpha (Assurance) |
 |--------|------------------------|------------------------|
 | **Purpose** | Ground truth prompt repository | Model robustness & safety evaluation |
 | **Primary Input** | Stage 4 Cat-Astrophic prompts + client submissions | Conversation exchanges (prompts & responses) |
-| **Primary Output** | `nexus_prompt_library` table | `risk_metrics`, `robustness_analysis`, `fragility_scores` |
+| **Primary Output** | `peregrine_prompt_library` table | `risk_metrics`, `robustness_analysis`, `fragility_scores` |
 | **Granularity** | Prompt-level (stored once, reused many times) | Turn-level & Conversation-level analysis |
-| **Key Tables** | `client_prompt_submissions`, `nexus_prompt_library`, `product_prompt_lineage` | `conversations`, `turns`, `risk_metrics`, `robustness_analysis`, `fragility_scores`, `sycophancy_events` |
+| **Key Tables** | `client_prompt_submissions`, `peregrine_prompt_library`, `product_prompt_lineage` | `conversations`, `turns`, `risk_metrics`, `robustness_analysis`, `fragility_scores`, `sycophancy_events` |
 | **Analysis Type** | Metadata & lineage tracking | Risk computation, robustness scoring, fragility assessment |
 | **Data Model** | Hierarchical (prompts → sources) | Sequential (turns → metrics → scores) |
 | **Consumption** | Other products retrieve prompts for testing | Evaluators analyze model responses to prompts |
@@ -32,16 +32,16 @@ graph TB
         GenRun --> Conv --> Turns
     end
     
-    subgraph NexusLib["Nexus: Prompt Library<br/>(Ingestion & Lineage)"]
+    subgraph PeregrineLib["Peregrine: Prompt Library<br/>(Ingestion & Lineage)"]
         ClientSub["client_prompt_submissions"]
-        PromptLib["nexus_prompt_library"]
+        PromptLib["peregrine_prompt_library"]
         Lineage["product_prompt_lineage"]
         ClientSub --> PromptLib
         Turns -->|Auto INSERT trigger| PromptLib
         PromptLib -->|Auto CREATE trigger| Lineage
     end
     
-    subgraph NexusAlpha["Nexus Alpha<br/>(AI Assurance Platform)"]
+    subgraph PeregrineAlpha["Peregrine Alpha<br/>(AI Assurance Platform)"]
         Conversations["conversations<br/>(test metadata)"]
         TestTurns["turns<br/>(exchanges)"]
         Embeddings["embeddings<br/>(1024-D)"]
@@ -70,8 +70,8 @@ graph TB
     Sycophancy -->|Risk patterns| Consumers
     
     style AIRange fill:#e1f5ff
-    style NexusLib fill:#f3e5f5
-    style NexusAlpha fill:#fff9c4
+    style PeregrineLib fill:#f3e5f5
+    style PeregrineAlpha fill:#fff9c4
     style Consumers fill:#c8e6c9
 ```
 
@@ -82,35 +82,35 @@ graph TB
 ```mermaid
 sequenceDiagram
     participant AIRange as AI-Range<br/>Prompt Gen
-    participant NexusLib as Nexus<br/>Prompt Lib
+    participant PeregrineLib as Peregrine<br/>Prompt Lib
     participant Test as Test<br/>Execution
-    participant NexusAlpha as Nexus Alpha<br/>Assurance
+    participant PeregrineAlpha as Peregrine Alpha<br/>Assurance
     participant Report as Reports &<br/>Analysis
     
-    AIRange->>NexusLib: Stage 4 Turn INSERT
-    activate NexusLib
-    NexusLib->>NexusLib: Trigger: Insert into nexus_prompt_library
-    NexusLib->>NexusLib: Trigger: Auto-create product_prompt_lineage
-    deactivate NexusLib
+    AIRange->>PeregrineLib: Stage 4 Turn INSERT
+    activate PeregrineLib
+    PeregrineLib->>PeregrineLib: Trigger: Insert into peregrine_prompt_library
+    PeregrineLib->>PeregrineLib: Trigger: Auto-create product_prompt_lineage
+    deactivate PeregrineLib
     
-    NexusLib->>Test: Prompt available for testing
+    PeregrineLib->>Test: Prompt available for testing
     activate Test
     Test->>Test: Execute prompt against model
     Test->>Test: Capture conversation (turns)
     deactivate Test
     
-    Test->>NexusAlpha: conversation_id, turns
-    activate NexusAlpha
-    NexusAlpha->>NexusAlpha: Stage 1: Compute embeddings & vectors
-    NexusAlpha->>NexusAlpha: Stage 1: Calculate risk_metrics per turn
-    NexusAlpha->>NexusAlpha: Stage 2: Compute ρ (robustness_analysis)
-    NexusAlpha->>NexusAlpha: Stage 2: Compute φ (fragility_scores)
-    NexusAlpha->>NexusAlpha: Sycophancy: Detect patterns
-    deactivate NexusAlpha
+    Test->>PeregrineAlpha: conversation_id, turns
+    activate PeregrineAlpha
+    PeregrineAlpha->>PeregrineAlpha: Stage 1: Compute embeddings & vectors
+    PeregrineAlpha->>PeregrineAlpha: Stage 1: Calculate risk_metrics per turn
+    PeregrineAlpha->>PeregrineAlpha: Stage 2: Compute ρ (robustness_analysis)
+    PeregrineAlpha->>PeregrineAlpha: Stage 2: Compute φ (fragility_scores)
+    PeregrineAlpha->>PeregrineAlpha: Sycophancy: Detect patterns
+    deactivate PeregrineAlpha
     
-    NexusAlpha->>Report: ρ score, classification
-    NexusAlpha->>Report: φ score, fragility level
-    NexusAlpha->>Report: Risk metrics, sycophancy patterns
+    PeregrineAlpha->>Report: ρ score, classification
+    PeregrineAlpha->>Report: φ score, fragility level
+    PeregrineAlpha->>Report: Risk metrics, sycophancy patterns
     activate Report
     Report->>Report: Generate safety report
     Report->>Report: Update model dashboards
@@ -119,16 +119,16 @@ sequenceDiagram
 
 ## Integration Points
 
-### 1. Prompt → Prompt Library (Nexus)
+### 1. Prompt → Prompt Library (Peregrine)
 
 **Trigger**: Stage 4 turn completion in AI-Range
 
 ```sql
--- Automatic: Stage 4 prompts flow to Nexus prompt library
-INSERT INTO nexus_prompt_library 
+-- Automatic: Stage 4 prompts flow to Peregrine prompt library
+INSERT INTO peregrine_prompt_library 
     (product_id, tenant_id, source_type, cat_turn_id, prompt_text, status)
 SELECT 
-    nexus_product.id,
+    peregrine_product.id,
     turn.tenant_id,
     'cat-astrophic',
     turn.id,
@@ -142,28 +142,28 @@ WHERE turn.turn_stage = 4
 -- product_prompt_lineage rows created automatically
 ```
 
-**Result**: Prompt is now available in `nexus_prompt_library` and discoverable by all products.
+**Result**: Prompt is now available in `peregrine_prompt_library` and discoverable by all products.
 
 ---
 
-### 2. Prompt → Test Execution → Nexus Alpha
+### 2. Prompt → Test Execution → Peregrine Alpha
 
 **Trigger**: Test execution against a prompt
 
 ```sql
 -- Test execution creates conversation
-INSERT INTO nexus_alpha.conversations 
+INSERT INTO peregrine_alpha.conversations 
     (id, created_at, model_name, conversation_type)
 VALUES 
     ('conv-123', NOW(), 'claude-3-sonnet', 'adversarial_test');
 
 -- Prompt + response = turns
-INSERT INTO nexus_alpha.turns 
+INSERT INTO peregrine_alpha.turns 
     (conversation_id, turn_number, user_message, model_response)
 VALUES 
     ('conv-123', 1, 'Can you help me with X?', 'I cannot help with that...');
 
--- Automatic: Nexus Alpha computation pipeline
+-- Automatic: Peregrine Alpha computation pipeline
 -- 1. Embeddings generated from turn text
 -- 2. PCA transformation to 2D vectors
 -- 3. Risk metrics computed (Stage 1)
@@ -181,7 +181,7 @@ VALUES
 **Flow**: Fragility scores → Model comparison → Procurement decisions
 
 ```sql
--- Query model fragility (Nexus Alpha output)
+-- Query model fragility (Peregrine Alpha output)
 SELECT 
     model_name,
     phi_score,
@@ -204,8 +204,8 @@ ORDER BY phi_score DESC;
 
 ## Key Outputs Summary
 
-### From Nexus (Prompt Library)
-- ✅ `nexus_prompt_library` - Available prompts for testing
+### From Peregrine (Prompt Library)
+- ✅ `peregrine_prompt_library` - Available prompts for testing
 - ✅ `product_prompt_lineage` - Traceability across products
 - ✅ `client_prompt_submissions` - Client-contributed prompts
 
@@ -213,14 +213,14 @@ ORDER BY phi_score DESC;
 
 ```sql
 SELECT prompt_text, source_type, status
-FROM nexus_prompt_library
-WHERE product_id = (SELECT id FROM products WHERE product_code = 'nexus')
+FROM peregrine_prompt_library
+WHERE product_id = (SELECT id FROM products WHERE product_code = 'peregrine')
   AND status = 'active';
 ```
 
 ---
 
-### From Nexus Alpha (Assurance Platform)
+### From Peregrine Alpha (Assurance Platform)
 - ✅ `risk_metrics` - Per-turn risk signals
 - ✅ `robustness_analysis` - Conversation-level ρ scores
 - ✅ `fragility_scores` - Model-level φ scores
@@ -246,17 +246,17 @@ LIMIT 1;
 
 ## Multi-Tenant Isolation
 
-Both Nexus products support multi-tenant data isolation:
+Both Peregrine products support multi-tenant data isolation:
 
-### Nexus (Prompt Library)
+### Peregrine (Prompt Library)
 ```sql
 -- Tenant isolation via tenant_id
-SELECT * FROM nexus_prompt_library
+SELECT * FROM peregrine_prompt_library
 WHERE tenant_id = 'tenant-abc-123'
   AND status = 'active';
 ```
 
-### Nexus Alpha
+### Peregrine Alpha
 ```sql
 -- Tenant-specific conversations
 SELECT c.id, c.model_name, ra.final_rho
@@ -272,13 +272,13 @@ WHERE c.tenant_id = 'tenant-abc-123';
 ### Weekly Model Assessment
 
 ```
-1. Retrieve prompts from Nexus
+1. Retrieve prompts from Peregrine
    ↓
 2. Execute prompts against models
    ↓
-3. Conversations logged to Nexus Alpha
+3. Conversations logged to Peregrine Alpha
    ↓
-4. Nexus Alpha computes ρ, φ, sycophancy metrics
+4. Peregrine Alpha computes ρ, φ, sycophancy metrics
    ↓
 5. Generate weekly fragility report
    ↓
@@ -312,11 +312,11 @@ ORDER BY fs.phi_score DESC;
 
 ## API Integration Patterns
 
-### Pattern 1: Fetch Prompts from Nexus
+### Pattern 1: Fetch Prompts from Peregrine
 
 ```python
-# Get available prompts from Nexus library
-GET /api/nexus/prompts?status=active&tenant_id=tenant-123
+# Get available prompts from Peregrine library
+GET /api/peregrine/prompts?status=active&tenant_id=tenant-123
 
 # Response
 {
@@ -328,7 +328,7 @@ GET /api/nexus/prompts?status=active&tenant_id=tenant-123
       "cat_turn_id": "turn-456",
       "lineage": {
         "ai_range_product_id": "prod-ai-range",
-        "available_to_products": ["nexus-alpha", "custom-eval"]
+        "available_to_products": ["peregrine-alpha", "custom-eval"]
       }
     }
   ]
@@ -337,11 +337,11 @@ GET /api/nexus/prompts?status=active&tenant_id=tenant-123
 
 ---
 
-### Pattern 2: Log Test Conversation to Nexus Alpha
+### Pattern 2: Log Test Conversation to Peregrine Alpha
 
 ```python
-# Create conversation and turns in Nexus Alpha
-POST /api/nexus-alpha/conversations
+# Create conversation and turns in Peregrine Alpha
+POST /api/peregrine-alpha/conversations
 {
   "conversation_id": "conv-test-123",
   "model_name": "claude-3-sonnet",
@@ -370,7 +370,7 @@ POST /api/nexus-alpha/conversations
 
 ```python
 # Get model robustness and fragility
-GET /api/nexus-alpha/models/claude-3-sonnet/assessment
+GET /api/peregrine-alpha/models/claude-3-sonnet/assessment
 
 # Response
 {
@@ -396,24 +396,24 @@ GET /api/nexus-alpha/models/claude-3-sonnet/assessment
 
 ## Documentation References
 
-- **[NEXUS_INTEGRATION.md](NEXUS_INTEGRATION.md)** - Nexus Prompt Library details
-- **[NEXUS_ALPHA_ARCHITECTURE.md](NEXUS_ALPHA_ARCHITECTURE.md)** - Nexus Alpha Assurance Platform
-- **[MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)** - Product overview and related architecture
+- **[NEXUS_ALPHA_ARCHITECTURE.md](NEXUS_ALPHA_ARCHITECTURE.md)** - Peregrine Alpha Assurance Platform
+- **[PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)** - Product layer architecture
+- **[../MASTER_INDEX.md](../MASTER_INDEX.md)** - Product overview and related architecture
 
 ---
 
 ## Summary
 
-| Nexus Product | Role | Output |
+| Peregrine Product | Role | Output |
 |---------------|------|--------|
-| **Nexus (Library)** | Ground truth prompt repository | `nexus_prompt_library`, `product_prompt_lineage` |
-| **Nexus Alpha (Assurance)** | Model safety & robustness evaluation | `risk_metrics`, `robustness_analysis` (ρ), `fragility_scores` (φ) |
+| **Peregrine (Library)** | Ground truth prompt repository | `peregrine_prompt_library`, `product_prompt_lineage` |
+| **Peregrine Alpha (Assurance)** | Model safety & robustness evaluation | `risk_metrics`, `robustness_analysis` (ρ), `fragility_scores` (φ) |
 
 Together they form a complete **Prompt Ingestion → Prompt Library → Model Evaluation → Safety Reporting** pipeline.
 
 ---
 
-## Nexus Prompt Library - Technical Details
+## Peregrine Prompt Library - Technical Details
 
 ### Core Tables
 
@@ -428,7 +428,7 @@ Together they form a complete **Prompt Ingestion → Prompt Library → Model Ev
 - `submission_channel` (api, ui, import, other)
 - `status` (submitted, approved, rejected, archived)
 
-#### 2. `nexus_prompt_library`
+#### 2. `peregrine_prompt_library`
 **Purpose**: Unified prompt library (Stage 4 Cat-Astrophic + client submissions).
 
 **Key Fields**:
@@ -440,18 +440,18 @@ Together they form a complete **Prompt Ingestion → Prompt Library → Model Ev
 - `status` (active, inactive, archived, rejected)
 
 #### 3. `product_prompt_lineage`
-**Purpose**: Cross-product traceability between AI-Range and Nexus.
+**Purpose**: Cross-product traceability between AI-Range and Peregrine.
 
 **Key Fields**:
 - `ai_range_turn_id` (FK → turns.id)
-- `nexus_prompt_id` (FK → nexus_prompt_library.id)
+- `peregrine_prompt_id` (FK → peregrine_prompt_library.id)
 - `lineage_type` ('stage4', 'other')
 
-**Automation**: Automatically created by trigger when Stage 4 prompts are inserted into nexus_prompt_library.
+**Automation**: Automatically created by trigger when Stage 4 prompts are inserted into peregrine_prompt_library.
 
 ### Ingestion Pattern
 
-1. **AI-Range → Nexus**: Stage 4 prompts auto-INSERT into nexus_prompt_library via trigger
+1. **AI-Range → Peregrine**: Stage 4 prompts auto-INSERT into peregrine_prompt_library via trigger
 2. **Auto-Lineage**: product_prompt_lineage record auto-CREATEs for traceability
 3. **Client Prompts**: Submit to client_prompt_submissions → Approve → Insert into library
 4. **Result**: End-to-end traceability from generation through library to testing

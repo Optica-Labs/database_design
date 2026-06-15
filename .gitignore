@@ -34,3 +34,15 @@ obj/
 
 # vscode settings
 .vscode/
+
+# macOS
+.DS_Store
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/

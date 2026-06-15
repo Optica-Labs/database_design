@@ -15,42 +15,42 @@ SELECT
 -- NEXUS PROMPT INTEGRATION QUERIES
 -- ==========================================================================
 
--- 1) View eligible Stage 4 Cat-Astrophic prompts for Nexus
+-- 1) View eligible Stage 4 Cat-Astrophic prompts for Peregrine
 SELECT *
-FROM vw_nexus_stage4_prompt_candidates
+FROM vw_peregrine_stage4_prompt_candidates
 ORDER BY created_at DESC
 LIMIT 50;
 
--- 2) Ingest Stage 4 prompts into Nexus prompt library
-INSERT INTO nexus_prompt_library (product_id, tenant_id, source_type, cat_turn_id, prompt_text, cat_stage, quality_score)
+-- 2) Ingest Stage 4 prompts into Peregrine prompt library
+INSERT INTO peregrine_prompt_library (product_id, tenant_id, source_type, cat_turn_id, prompt_text, cat_stage, quality_score)
 SELECT 
-    (SELECT id FROM products WHERE product_code = 'nexus'),
+    (SELECT id FROM products WHERE product_code = 'peregrine'),
     :tenant_id,
     'cat-astrophic',
     cat_turn_id,
     prompt_text,
     4,
     auto_quality_score
-FROM vw_nexus_stage4_prompt_candidates
+FROM vw_peregrine_stage4_prompt_candidates
 WHERE auto_quality_score >= 0.8
 LIMIT 100;
 
--- 2b) Link AI-Range turns to Nexus prompts (cross-product traceability)
-INSERT INTO product_prompt_lineage (ai_range_turn_id, nexus_prompt_id, ai_range_product_id, nexus_product_id, lineage_type)
+-- 2b) Link AI-Range turns to Peregrine prompts (cross-product traceability)
+INSERT INTO product_prompt_lineage (ai_range_turn_id, peregrine_prompt_id, ai_range_product_id, peregrine_product_id, lineage_type)
 SELECT 
         npl.cat_turn_id,
         npl.id,
         (SELECT id FROM products WHERE product_code = 'ai-range'),
-        (SELECT id FROM products WHERE product_code = 'nexus'),
+        (SELECT id FROM products WHERE product_code = 'peregrine'),
         'stage4'
-FROM nexus_prompt_library npl
+FROM peregrine_prompt_library npl
 WHERE npl.source_type = 'cat-astrophic'
     AND npl.created_at >= NOW() - INTERVAL '1 day';
 
--- 3) Submit a client-provided prompt for Nexus
+-- 3) Submit a client-provided prompt for Peregrine
 INSERT INTO client_prompt_submissions (product_id, tenant_id, model_id, submitted_by, submission_channel, prompt_text, status)
 VALUES (
-    (SELECT id FROM products WHERE product_code = 'nexus'),
+    (SELECT id FROM products WHERE product_code = 'peregrine'),
     :tenant_id,
     :model_id,
     'client_admin',
@@ -59,8 +59,8 @@ VALUES (
     'submitted'
 );
 
--- 4) Promote approved client prompt into Nexus prompt library
-INSERT INTO nexus_prompt_library (product_id, tenant_id, source_type, client_prompt_id, prompt_text)
+-- 4) Promote approved client prompt into Peregrine prompt library
+INSERT INTO peregrine_prompt_library (product_id, tenant_id, source_type, client_prompt_id, prompt_text)
 SELECT 
     cps.product_id,
     cps.tenant_id,
@@ -89,7 +89,7 @@ CROSS JOIN products p
 WHERE t.tenant_name = 'Acme Corp'
   AND p.product_code = 'ai-range';
 
--- Subscribe a client to Nexus product
+-- Subscribe a client to Peregrine product
 INSERT INTO client_product_subscriptions (tenant_id, product_id, subscription_tier, subscription_status, usage_limits, features_enabled)
 SELECT 
     t.id,
@@ -101,7 +101,7 @@ SELECT
 FROM tenants t
 CROSS JOIN products p
 WHERE t.tenant_name = 'Acme Corp'
-  AND p.product_code = 'nexus';
+  AND p.product_code = 'peregrine';
 
 -- Link a client model to both products
 INSERT INTO client_model_products (model_id, product_id, tenant_id, enabled, configuration)
@@ -112,12 +112,12 @@ SELECT
     TRUE,
     CASE 
         WHEN p.product_code = 'ai-range' THEN '{"test_types": ["adversarial", "safety", "compliance"]}'::jsonb
-        WHEN p.product_code = 'nexus' THEN '{"persona_types": ["adversarial", "normal", "edge-case"]}'::jsonb
+        WHEN p.product_code = 'peregrine' THEN '{"persona_types": ["adversarial", "normal", "edge-case"]}'::jsonb
     END
 FROM client_models cm
 CROSS JOIN products p
 WHERE cm.model_name = 'CustomerChatBot'
-  AND p.product_code IN ('ai-range', 'nexus');
+  AND p.product_code IN ('ai-range', 'peregrine');
 
 -- Get all products a client has access to
 SELECT 
@@ -175,7 +175,7 @@ CROSS JOIN products p
 LEFT JOIN client_product_subscriptions cps 
     ON cps.tenant_id = t.id AND cps.product_id = p.id
 WHERE t.tenant_name = 'Acme Corp'
-  AND p.product_code = 'nexus';
+  AND p.product_code = 'peregrine';
 
 -- Get product usage summary by client
 SELECT 
@@ -200,7 +200,7 @@ GROUP BY t.tenant_name, p.product_name, p.product_code,
          cps.usage_limits, cps.features_enabled
 ORDER BY t.tenant_name, p.product_code;
 
--- Get models that use both AI-Range and Nexus
+-- Get models that use both AI-Range and Peregrine
 SELECT 
     t.tenant_name,
     cm.model_name,
@@ -221,7 +221,7 @@ UPDATE client_product_subscriptions
 SET subscription_status = 'suspended',
     updated_at = NOW()
 WHERE tenant_id = (SELECT id FROM tenants WHERE tenant_name = 'Acme Corp')
-  AND product_id = (SELECT id FROM products WHERE product_code = 'nexus');
+  AND product_id = (SELECT id FROM products WHERE product_code = 'peregrine');
 
 -- Disable a model's access to a specific product
 UPDATE client_model_products

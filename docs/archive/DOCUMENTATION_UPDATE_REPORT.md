@@ -146,7 +146,7 @@ All project documentation has been updated to reflect the new three-schema archi
 ### ✅ Schemas Ready
 - [schema_unified_complete.sql](sql/schemas/schema_unified_complete.sql) - 84 tables, production-ready
 - [schema_ai_range_only.sql](sql/schemas/schema_ai_range_only.sql) - 75 tables, production-ready
-- [schema_nexus_only.sql](sql/schemas/schema_nexus_only.sql) - 35 tables, production-ready
+- [schema_peregrine_only.sql](sql/schemas/schema_peregrine_only.sql) - 35 tables, production-ready
 
 ### ✅ Deployment Guides Available
 - [SUPABASE_QUICK_DEPLOYMENT.md](sql/SUPABASE_QUICK_DEPLOYMENT.md) - 5-minute guide

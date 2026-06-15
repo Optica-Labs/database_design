@@ -11,7 +11,7 @@ Archived copy (full content preserved): `docs/archive/DOCUMENTATION_CHEAT_SHEET.
 ## 🎯 I Need to...
 
 ### Query the Database
-**Nexus Alpha (AI Assurance)**
+**Peregrine Alpha (AI Assurance)**
 ```
 ➜ First check: NEXUS_ALPHA_QUICK_REFERENCE.md
 ➜ Field definitions: docs/NEXUS_ALPHA_ARCHITECTURE.md
@@ -47,12 +47,12 @@ Products & multi-tenancy  → docs/PRODUCT_LAYER_ARCHITECTURE.md
 Data relationships        → docs/ER_DIAGRAM.md
 Product layer model       → docs/PRODUCT_LAYER_ER_DIAGRAM.md
 Agent interactions        → docs/AGENT_ER_DIAGRAMS.md
-Nexus vs Nexus Alpha      → docs/NEXUS_PRODUCTS_INTEGRATION.md
+Peregrine vs Peregrine Alpha      → docs/NEXUS_PRODUCTS_INTEGRATION.md
 ```
 
 ### Compare Products
 ```
-AI-Range vs Nexus vs Nexus Alpha
+AI-Range vs Peregrine vs Peregrine Alpha
 → docs/NEXUS_PRODUCTS_INTEGRATION.md
 ```
 
@@ -85,15 +85,15 @@ All capabilities       → README.md
 | NEXUS_ALPHA_QUICK_REFERENCE.md | Common SQL queries and patterns |
 | NEXUS_ALPHA_ARCHITECTURE.md | Complete technical specification (17 tables, 4 stages) |
 | NEXUS_ALPHA_INTEGRATION_REPORT.md | Deployment checklist and integration details |
-| MASTER_DOCUMENTATION_INDEX.md | Navigation guide for Nexus Alpha documentation |
+| MASTER_DOCUMENTATION_INDEX.md | Navigation guide for Peregrine Alpha documentation |
 | NEXUS_ALPHA_INTEGRATION_REPORT.md | Schema overview with examples and performance tips |
 | NEXUS_ALPHA_INTEGRATION_REPORT.md | Delivery metrics and completion status (merged) |
 | NEXUS_ALPHA_INTEGRATION_REPORT.md | ⚠️ DEPRECATED (replaced by canonical integration report) |
 | docs/INDEX.md | Feature index and navigation |
-| docs/NEXUS_ALPHA_ARCHITECTURE.md | Complete field reference for all 17 Nexus Alpha tables |
+| docs/NEXUS_ALPHA_ARCHITECTURE.md | Complete field reference for all 17 Peregrine Alpha tables |
 | docs/NEXUS_PRODUCTS_INTEGRATION.md | Detailed comparison of all three products |
-| docs/NEXUS_PRODUCTS_INTEGRATION.md | Quick reference for Nexus product |
-| docs/NEXUS_DOCUMENTATION_SUMMARY.md | Executive summary of Nexus outputs |
+| docs/NEXUS_PRODUCTS_INTEGRATION.md | Quick reference for Peregrine product |
+| docs/NEXUS_DOCUMENTATION_SUMMARY.md | Executive summary of Peregrine outputs |
 | docs/NEXUS_INTEGRATION.md | ⚠️ DEPRECATED (see NEXUS_PRODUCTS_INTEGRATION) |
 | docs/NEXUS_DOCUMENTATION_SUMMARY.md | Delivery summary |
 | docs/PRODUCT_LAYER_ARCHITECTURE.md | Multi-tenant architecture deep-dive |
@@ -101,7 +101,7 @@ All capabilities       → README.md
 | docs/PRODUCT_LAYER_ER_DIAGRAM.md | Product layer ER diagram |
 | docs/AGENT_ER_DIAGRAMS.md | Agent interaction models |
 | docs/CAT_ASTROPHIC_INTEGRATION.md | Catastrophic/PromptGoblin integration |
-| AI-Range & Nexus Unified Platform .md | Platform overview with Mermaid diagrams |
+| AI-Range & Peregrine Unified Platform .md | Platform overview with Mermaid diagrams |
 | sql/schemas/schema_integrated.sql | PostgreSQL schema (2,316 lines, production) |
 
 ---
@@ -145,8 +145,8 @@ All capabilities       → README.md
 | Topic | Primary | Secondary | Reference |
 |-------|---------|-----------|-----------|
 | **Schema** | schema_integrated.sql | NEXUS_ALPHA_INTEGRATION_REPORT.md | docs/ER_DIAGRAM.md |
-| **Nexus Alpha** | NEXUS_ALPHA_QUICK_REFERENCE.md | docs/NEXUS_ALPHA_ARCHITECTURE.md | NEXUS_ALPHA_INTEGRATION_REPORT.md |
-| **Nexus Product** | docs/NEXUS_PRODUCTS_INTEGRATION.md | docs/NEXUS_PRODUCTS_INTEGRATION.md | docs/NEXUS_INTEGRATION.md |
+| **Peregrine Alpha** | NEXUS_ALPHA_QUICK_REFERENCE.md | docs/NEXUS_ALPHA_ARCHITECTURE.md | NEXUS_ALPHA_INTEGRATION_REPORT.md |
+| **Peregrine Product** | docs/NEXUS_PRODUCTS_INTEGRATION.md | docs/NEXUS_PRODUCTS_INTEGRATION.md | docs/NEXUS_INTEGRATION.md |
 | **Architecture** | docs/PRODUCT_LAYER_ARCHITECTURE.md | docs/PRODUCT_LAYER_ER_DIAGRAM.md | docs/AGENT_ER_DIAGRAMS.md |
 | **Metrics** | docs/NEXUS_ALPHA_ARCHITECTURE.md | NEXUS_ALPHA_QUICK_REFERENCE.md | - |
 | **Queries** | NEXUS_ALPHA_QUICK_REFERENCE.md | docs/NEXUS_ALPHA_ARCHITECTURE.md | DOCUMENTATION.md |
@@ -184,7 +184,7 @@ All capabilities       → README.md
 - **MASTER_DOCUMENTATION_INDEX.md** - Unified navigation by role and topic
 - **NEXUS_ALPHA_QUICK_REFERENCE.md** - One-page SQL reference
 - **NEXUS_ALPHA_INTEGRATION_REPORT.md** - Complete deployment guide
--- **MASTER_DOCUMENTATION_INDEX.md** - Nexus Alpha-specific navigation
+-- **MASTER_DOCUMENTATION_INDEX.md** - Peregrine Alpha-specific navigation
 - **NEXUS_ALPHA_INTEGRATION_REPORT.md** - Schema overview and examples
 
 ---

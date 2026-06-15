@@ -32,7 +32,7 @@ database_design/
 │   ├── docs/PRODUCT_LAYER_ARCHITECTURE.md    System architecture
 │   ├── docs/MIGRATION_SUMMARY.md              Migration completion
 │   ├── docs/CAT_ASTROPHIC_INTEGRATION.md      CAT-A product
-│   ├── docs/NEXUS_ALPHA_ARCHITECTURE.md       Nexus AI platform
+│   ├── docs/NEXUS_ALPHA_ARCHITECTURE.md       Peregrine AI platform
 │   ├── docs/NEXUS_PRODUCTS_INTEGRATION.md     Cross-product integration
 │   │
 │   ├── docs/testing/
@@ -63,7 +63,7 @@ database_design/
 │   │   ├── README.md                          📋 Schema selection
 │   │   ├── schema_unified_complete.sql        🟢 Full (84 tables)
 │   │   ├── schema_ai_range_only.sql           🟢 AI-Range (75 tables)
-│   │   ├── schema_nexus_only.sql              🟢 Nexus (35 tables)
+│   │   ├── schema_peregrine_only.sql              🟢 Peregrine (35 tables)
 │   │   ├── AUDIT_REPORT.md                    Audit results
 │   │   │
 │   │   ├── supabase/
@@ -85,7 +85,7 @@ database_design/
 │   │   └── cat_astrophic_queries.sql          CAT-A queries
 │   │
 │   ├── sql/views/
-│   │   ├── nexus_views.sql                    Nexus views
+│   │   ├── peregrine_views.sql                    Peregrine views
 │   │   └── cat_astrophic_views.sql            CAT-A views
 │   │
 │   └── sql/sample_data/
@@ -191,7 +191,7 @@ database_design/
 ### Schemas Available
 - ✅ **Unified** (84 tables) - Full monolithic deployment
 - ✅ **AI-Range** (75 tables) - Product-specific deployment
-- ✅ **Nexus** (35 tables) - Product-specific deployment
+- ✅ **Peregrine** (35 tables) - Product-specific deployment
 
 ### Deployment Options
 - ✅ Supabase (primary, recommended)
@@ -269,7 +269,7 @@ database_design/
 ### Schemas
 - **Full Schema**: [sql/schemas/schema_unified_complete.sql](sql/schemas/schema_unified_complete.sql)
 - **AI-Range**: [sql/schemas/schema_ai_range_only.sql](sql/schemas/schema_ai_range_only.sql)
-- **Nexus**: [sql/schemas/schema_nexus_only.sql](sql/schemas/schema_nexus_only.sql)
+- **Peregrine**: [sql/schemas/schema_peregrine_only.sql](sql/schemas/schema_peregrine_only.sql)
 - **Schema Guide**: [sql/schemas/README.md](sql/schemas/README.md)
 
 ### Scripts

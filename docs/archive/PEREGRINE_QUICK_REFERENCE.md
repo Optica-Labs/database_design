@@ -1,9 +1,9 @@
-# Archived: Quick Reference: Nexus Alpha Schema Integration
+# Archived: Quick Reference: Peregrine Alpha Schema Integration
 
-**ARCHIVED SNAPSHOT**: Historical quick reference for Nexus Alpha.  
-For current Nexus Alpha schema details, see `docs/NEXUS_ALPHA_ARCHITECTURE.md`.
+**ARCHIVED SNAPSHOT**: Historical quick reference for Peregrine Alpha.  
+For current Peregrine Alpha schema details, see `docs/NEXUS_ALPHA_ARCHITECTURE.md`.
 
-This quick reference was archived. Use the canonical Nexus Alpha specification:
+This quick reference was archived. Use the canonical Peregrine Alpha specification:
 - `docs/NEXUS_ALPHA_ARCHITECTURE.md`
 
 See also:
@@ -13,7 +13,7 @@ See also:
 Archived copy (full content preserved): `docs/archive/NEXUS_ALPHA_QUICK_REFERENCE.md`
 
 ```
-nexus_alpha
+peregrine_alpha
 ├── Core Data
 │   ├── conversations (UUID)
 │   └── turns (BIGSERIAL)
@@ -44,7 +44,7 @@ nexus_alpha
 ### Get all conversations for a model
 ```sql
 SELECT id, created_at, total_turns, status 
-FROM nexus_alpha.conversations 
+FROM peregrine_alpha.conversations 
 WHERE model_name = 'claude-3-opus' 
   AND tenant_id = :tenant_id
 ORDER BY created_at DESC;
@@ -53,8 +53,8 @@ ORDER BY created_at DESC;
 ### Get robustness classification for a conversation
 ```sql
 SELECT c.id, c.model_name, ra.classification, ra.final_rho 
-FROM nexus_alpha.conversations c
-JOIN nexus_alpha.robustness_analysis ra ON c.id = ra.conversation_id
+FROM peregrine_alpha.conversations c
+JOIN peregrine_alpha.robustness_analysis ra ON c.id = ra.conversation_id
 WHERE c.id = :conversation_id;
 ```
 
@@ -62,8 +62,8 @@ WHERE c.id = :conversation_id;
 ```sql
 SELECT t.turn_number, t.user_message, rm.risk_severity_user, 
        rm.risk_severity_model, rm.alert_triggered
-FROM nexus_alpha.turns t
-JOIN nexus_alpha.risk_metrics rm ON t.id = rm.turn_id
+FROM peregrine_alpha.turns t
+JOIN peregrine_alpha.risk_metrics rm ON t.id = rm.turn_id
 WHERE rm.conversation_id = :conversation_id 
   AND rm.alert_triggered = TRUE
 ORDER BY t.turn_number;
@@ -73,7 +73,7 @@ ORDER BY t.turn_number;
 ```sql
 SELECT model_name, phi_score, fragility_level, 
        mean_rho, conversations_analyzed
-FROM nexus_alpha.fragility_scores 
+FROM peregrine_alpha.fragility_scores 
 WHERE tenant_id = :tenant_id
 ORDER BY phi_score DESC;
 ```
@@ -82,9 +82,9 @@ ORDER BY phi_score DESC;
 ```sql
 SELECT c.id, COUNT(se.id) as sycophancy_count, 
        sa.overall_classification, sa.confidence_score
-FROM nexus_alpha.conversations c
-LEFT JOIN nexus_alpha.sycophancy_events se ON c.id = se.conversation_id
-LEFT JOIN nexus_alpha.sycophancy_analysis sa ON c.id = sa.conversation_id
+FROM peregrine_alpha.conversations c
+LEFT JOIN peregrine_alpha.sycophancy_events se ON c.id = se.conversation_id
+LEFT JOIN peregrine_alpha.sycophancy_analysis sa ON c.id = sa.conversation_id
 WHERE c.tenant_id = :tenant_id
 GROUP BY c.id, sa.overall_classification, sa.confidence_score
 HAVING COUNT(se.id) > 0;
@@ -93,12 +93,12 @@ HAVING COUNT(se.id) > 0;
 ## Table Relationships
 
 ```
-products (product_id, product_code='nexus-alpha')
+products (product_id, product_code='peregrine-alpha')
     ↓
 client_product_subscriptions (product_id, tenant_id)
     ↓
 ┌─────────────────────────────────────┐
-│  nexus_alpha.conversations          │  (parent)
+│  peregrine_alpha.conversations          │  (parent)
 │  - product_id (FK)                  │
 │  - tenant_id (FK)                   │
 │  - model_name                       │
@@ -150,9 +150,9 @@ client_product_subscriptions (product_id, tenant_id)
 SELECT fs.model_name, fs.fragility_level, fs.phi_score,
        COUNT(DISTINCT c.id) as conversations,
        COUNT(se.id) as sycophancy_events
-FROM nexus_alpha.fragility_scores fs
-LEFT JOIN nexus_alpha.conversations c ON c.model_name = fs.model_name
-LEFT JOIN nexus_alpha.sycophancy_events se ON c.id = se.conversation_id
+FROM peregrine_alpha.fragility_scores fs
+LEFT JOIN peregrine_alpha.conversations c ON c.model_name = fs.model_name
+LEFT JOIN peregrine_alpha.sycophancy_events se ON c.id = se.conversation_id
 WHERE fs.product_id = :product_id
 GROUP BY fs.model_name, fs.fragility_level, fs.phi_score;
 ```
@@ -163,9 +163,9 @@ GROUP BY fs.model_name, fs.fragility_level, fs.phi_score;
 SELECT t.turn_number, t.user_message[:100] as prompt_preview,
        rm.risk_severity_user, rm.risk_severity_model,
        se.is_sycophantic, se.severity
-FROM nexus_alpha.turns t
-LEFT JOIN nexus_alpha.risk_metrics rm ON t.id = rm.turn_id
-LEFT JOIN nexus_alpha.sycophancy_events se ON t.id = se.turn_id
+FROM peregrine_alpha.turns t
+LEFT JOIN peregrine_alpha.risk_metrics rm ON t.id = rm.turn_id
+LEFT JOIN peregrine_alpha.sycophancy_events se ON t.id = se.turn_id
 WHERE t.conversation_id = :conversation_id
 ORDER BY t.turn_number;
 ```
@@ -182,12 +182,12 @@ ORDER BY t.turn_number;
 
 ### With AI-Range Product
 - AI-Range generates adversarial test cases
-- Nexus Alpha evaluates model responses to these cases
+- Peregrine Alpha evaluates model responses to these cases
 - Results feed back to improve test case generation
 
-### With Nexus Prompt Library
-- Nexus maintains conversation lineage and prompts
-- Nexus Alpha analyzes robustness of responses to library prompts
+### With Peregrine Prompt Library
+- Peregrine maintains conversation lineage and prompts
+- Peregrine Alpha analyzes robustness of responses to library prompts
 - Both products share conversations and use cases
 
 ### With Unified Platform

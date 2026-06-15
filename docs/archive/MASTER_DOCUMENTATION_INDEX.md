@@ -5,7 +5,7 @@ For current documentation structure, see root-level `DOCUMENTATION.md` with link
 
 **Last Updated**: February 22, 2026 (Archived Feb 24, 2026)  
 **Status**: ✅ Complete (historical version)  
-**Version**: 2.0 (Unified Platform with Nexus Alpha)
+**Version**: 2.0 (Unified Platform with Peregrine Alpha)
 
 ## 🎯 Quick Navigation
 
@@ -23,7 +23,7 @@ For current documentation structure, see root-level `DOCUMENTATION.md` with link
 - [NEXUS_ALPHA_INTEGRATION_REPORT.md](NEXUS_ALPHA_INTEGRATION_REPORT.md) - Deployment details
 
 ### Understanding the Products?
-- [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) - Nexus vs Nexus Alpha
+- [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) - Peregrine vs Peregrine Alpha
 - [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) - Multi-product architecture and integration
 
 ---
@@ -46,17 +46,17 @@ For current documentation structure, see root-level `DOCUMENTATION.md` with link
 | [sql/schemas/schema_integrated.sql](sql/schemas/schema_integrated.sql) | Main PostgreSQL schema (2,316 lines) | DBAs, backend engineers |
 | [NEXUS_ALPHA_INTEGRATION_REPORT.md](NEXUS_ALPHA_INTEGRATION_REPORT.md) | Schema overview with examples | DBAs, engineers |
 
-#### Nexus Alpha Documentation
+#### Peregrine Alpha Documentation
 | File | Purpose | Audience | Size |
 |------|---------|----------|------|
 | [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md) | Complete technical reference (17 tables, 4 analysis stages) | Engineers, data scientists | 340 KB |
 | [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md) | Common queries & field reference | Developers |
 | [NEXUS_ALPHA_INTEGRATION_REPORT.md](NEXUS_ALPHA_INTEGRATION_REPORT.md) | Deployment & integration details | DBAs, ops |
 
-#### Nexus Product Documentation
+#### Peregrine Product Documentation
 | File | Purpose | Audience |
 |------|---------|----------|
-| [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | Nexus vs Nexus Alpha comparison + prompt integration | Product managers, architects, engineers |
+| [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | Peregrine vs Peregrine Alpha comparison + prompt integration | Product managers, architects, engineers |
 | [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md) | Executive summary and delivery status | Stakeholders |
 
 ---
@@ -80,7 +80,7 @@ For current documentation structure, see root-level `DOCUMENTATION.md` with link
 #### Platform Overview
 | File | Purpose |
 |------|---------|
-| [AI-Range & Nexus Unified Platform .md](AI-Range%20&%20Nexus%20Unified%20Platform%20.md) | Platform overview with Mermaid diagrams |
+| [AI-Range & Peregrine Unified Platform .md](AI-Range%20&%20Peregrine%20Unified%20Platform%20.md) | Platform overview with Mermaid diagrams |
 
 ---
 
@@ -142,11 +142,11 @@ For current documentation structure, see root-level `DOCUMENTATION.md` with link
 ### By Topic
 | Topic | Files | Key Documents |
 |-------|-------|---|
-| Nexus Alpha | 4 | ARCHITECTURE, QUICK_REFERENCE, REPORT, INDEX |
-| Nexus Products | 5 | INTEGRATION, QUICK_START, DOCUMENTATION_SUMMARY, README, ARCHITECTURE |
+| Peregrine Alpha | 4 | ARCHITECTURE, QUICK_REFERENCE, REPORT, INDEX |
+| Peregrine Products | 5 | INTEGRATION, QUICK_START, DOCUMENTATION_SUMMARY, README, ARCHITECTURE |
 | Schema & Database | 3 | schema_integrated.sql, NEXUS_ALPHA_INTEGRATION_REPORT, ER_DIAGRAM |
 | Architecture | 4 | PRODUCT_LAYER_ARCHITECTURE, AGENT_ER_DIAGRAMS, PRODUCT_LAYER_ER_DIAGRAM, CAT_ASTROPHIC_INTEGRATION |
-| Platform Overview | 4 | README, DOCUMENTATION, INDEX, AI-Range & Nexus Platform |
+| Platform Overview | 4 | README, DOCUMENTATION, INDEX, AI-Range & Peregrine Platform |
 | Metadata | 3 | CHANGELOG, DIRECTORY_STRUCTURE, MASTER_DOCUMENTATION_INDEX |
 
 ---
@@ -155,7 +155,7 @@ For current documentation structure, see root-level `DOCUMENTATION.md` with link
 
 ### I need to...
 
-#### Query the Nexus Alpha database
+#### Query the Peregrine Alpha database
 → Start with [NEXUS_ALPHA_QUICK_REFERENCE.md](NEXUS_ALPHA_QUICK_REFERENCE.md)  
 → Reference [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md) for field definitions
 
@@ -167,7 +167,7 @@ For current documentation structure, see root-level `DOCUMENTATION.md` with link
 → Follow [NEXUS_ALPHA_INTEGRATION_REPORT.md](NEXUS_ALPHA_INTEGRATION_REPORT.md#deployment-checklist)  
 → Review [NEXUS_ALPHA_INTEGRATION_REPORT.md](NEXUS_ALPHA_INTEGRATION_REPORT.md)
 
-#### Compare Nexus vs Nexus Alpha products
+#### Compare Peregrine vs Peregrine Alpha products
 → Read [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)
 
 #### Understand the multi-tenant architecture
@@ -197,7 +197,7 @@ For current documentation structure, see root-level `DOCUMENTATION.md` with link
 | MASTER_DOCUMENTATION_INDEX.md | Navigation | This file | ✅ Current |
 | NEXUS_ALPHA_QUICK_REFERENCE.md | Developer | Quick SQL queries | ✅ Current |
 | NEXUS_ALPHA_INTEGRATION_REPORT.md | Ops | Deployment details | ✅ Current |
-| MASTER_DOCUMENTATION_INDEX.md | Navigation | Nexus Alpha docs index (central index) | ✅ Current |
+| MASTER_DOCUMENTATION_INDEX.md | Navigation | Peregrine Alpha docs index (central index) | ✅ Current |
 | NEXUS_ALPHA_INTEGRATION_REPORT.md | Reference | Schema overview | ✅ Current |
 | NEXUS_ALPHA_INTEGRATION_REPORT.md | Metrics | Delivery summary (merged) | ✅ Current |
 | NEXUS_ALPHA_INTEGRATION_REPORT.md | Deprecated | Replaced older integration doc (canonical) | ⚠️ Old |
@@ -213,7 +213,7 @@ For current documentation structure, see root-level `DOCUMENTATION.md` with link
 | MASTER_DOCUMENTATION_INDEX.md | Diagram | Product layer model (see index) | ✅ Current |
 | MASTER_DOCUMENTATION_INDEX.md | Diagram | Agent interactions (see index) | ✅ Current |
 | docs/CAT_ASTROPHIC_INTEGRATION.md | Reference | Catastrophic testing | ✅ Current |
-| AI-Range & Nexus Unified Platform .md | Overview | Platform diagrams | ✅ Current |
+| AI-Range & Peregrine Unified Platform .md | Overview | Platform diagrams | ✅ Current |
 | sql/schemas/schema_integrated.sql | DDL | PostgreSQL schema | ✅ Production |
 
 ---
@@ -268,13 +268,13 @@ Mark as deprecated with reference to replacement:
 
 ## 🔗 Cross-Reference Map
 
-### Nexus Alpha (AI Assurance Platform)
+### Peregrine Alpha (AI Assurance Platform)
 - **Core Reference**: [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md)
 - **Quick Queries**: [NEXUS_ALPHA_QUICK_REFERENCE.md](NEXUS_ALPHA_QUICK_REFERENCE.md)
 - **Integration**: [NEXUS_ALPHA_INTEGRATION_REPORT.md](NEXUS_ALPHA_INTEGRATION_REPORT.md)
 - **Index**: [MASTER_DOCUMENTATION_INDEX.md](MASTER_DOCUMENTATION_INDEX.md)
 
-### Nexus Products (Unified Platform)
+### Peregrine Products (Unified Platform)
 - **Comparison**: [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)
 - **Quick Start**: [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)
 - **Architecture**: [docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)
@@ -308,5 +308,5 @@ Mark as deprecated with reference to replacement:
 ---
 
 **Last Updated**: February 22, 2026  
-**Version**: 2.0 (Unified Platform with Nexus Alpha)  
+**Version**: 2.0 (Unified Platform with Peregrine Alpha)  
 **Status**: ✅ Complete

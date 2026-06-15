@@ -9,7 +9,7 @@ Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ER_DIAGRAM.m
     
     PRODUCT_USAGE {
         bigint id PK
-        uuid product_id FK "ai-range-UUID or nexus-UUID"
+        uuid product_id FK "ai-range-UUID or peregrine-UUID"
         uuid tenant_id FK
         text usage_type "test_execution, persona_creation, scenario_run, etc"
         jsonb usage_metadata
@@ -48,9 +48,9 @@ Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ER_DIAGRAM.m
 
 ## Key Relationships
 
-1. **PRODUCTS**: Defines AI-Range (unified testing, personas, risk analysis) and Nexus (prompt ingestion) products
+1. **PRODUCTS**: Defines AI-Range (unified testing, personas, risk analysis) and Peregrine (prompt ingestion) products
 2. **PRODUCTS → PRODUCT_USAGE**: Tracks each use of a product by a tenant
-3. **TENANTS**: Client organizations using AI-Range and Nexus
+3. **TENANTS**: Client organizations using AI-Range and Peregrine
 4. **TENANTS → PRODUCT_USAGE**: Each tenant usage event is recorded
 5. **TENANTS → CLIENT_MODELS**: Clients own AI models that need testing
 
@@ -58,7 +58,7 @@ Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ER_DIAGRAM.m
 
 ```
 ┌──────────────────────────────────────────────────┐
-│ PRODUCTS (AI-Range, Nexus)                       │
+│ PRODUCTS (AI-Range, Peregrine)                       │
 │ - Unified testing platform                      │
 │ - Persona testing                               │
 │ - Risk analysis                                 │
@@ -68,7 +68,7 @@ Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ER_DIAGRAM.m
 ┌──────────────────────────────────────────────────┐
 │ PRODUCT_USAGE (Usage Events)                    │
 │ - Each product use recorded                     │
-│ - FK: product_id (ai-range or nexus)           │
+│ - FK: product_id (ai-range or peregrine)           │
 │ - FK: tenant_id                                 │
 │ - Usage type (test, persona, scenario, etc)    │
 └──────────────┬───────────────────────────────────┘
@@ -98,7 +98,7 @@ Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ER_DIAGRAM.m
 ## Product Codes
 
 - **ai-range**: Comprehensive AI testing, persona testing, and risk analysis
-- **nexus**: Prompt ingestion + library for persona/scenario testing
+- **peregrine**: Prompt ingestion + library for persona/scenario testing
 
 ## Data Model Notes
 
@@ -106,11 +106,11 @@ Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ER_DIAGRAM.m
 - Versioning support (version column)
 - Timestamp tracking (created_at, updated_at)
 - Status management (active, inactive, retired)
-- Two products: AI-Range (primary) and Nexus (prompt ingestion + library)
+- Two products: AI-Range (primary) and Peregrine (prompt ingestion + library)
 
 ### Product Usage Table
 - **Tracks every use of a product by a tenant**
-- `product_id` (FK) - Points to AI-Range or Nexus product UUID
+- `product_id` (FK) - Points to AI-Range or Peregrine product UUID
 - `tenant_id` (FK) - Which tenant used the product
 - `usage_type` (varchar) - Type of usage event (test_execution, persona_creation, scenario_run, prompt_generation, safety_assessment, compliance_report, etc.)
 - `usage_metadata` (JSONB) - Additional context (test_id, persona_id, execution_time, etc.)

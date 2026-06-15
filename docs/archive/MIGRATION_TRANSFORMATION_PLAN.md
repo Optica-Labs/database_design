@@ -70,8 +70,8 @@ products = [
     },
     {
         'id': NEXUS_PRODUCT_ID,
-        'product_code': 'nexus',
-        'product_name': 'Nexus',
+        'product_code': 'peregrine',
+        'product_name': 'Peregrine',
         'description': 'Migrated from legacy database',
         'status': 'active'
     }
@@ -118,7 +118,7 @@ print("\n" + "="*60)
 print("MIGRATION DEFAULTS READY")
 print("="*60)
 print(f"AI Range Product ID: {AI_RANGE_PRODUCT_ID}")
-print(f"Nexus Product ID: {NEXUS_PRODUCT_ID}")
+print(f"Peregrine Product ID: {NEXUS_PRODUCT_ID}")
 print(f"Default Tenant ID: {DEFAULT_TENANT_ID}")
 ```
 
@@ -673,7 +673,7 @@ SET metadata = jsonb_set(
     '{migration}', 
     '{"completed": true, "date": "2026-02-23", "source": "legacy_supabase"}'::jsonb
 )
-WHERE product_code IN ('ai-range', 'nexus');
+WHERE product_code IN ('ai-range', 'peregrine');
 
 -- Add migration timestamp to migrated records
 UPDATE personas 

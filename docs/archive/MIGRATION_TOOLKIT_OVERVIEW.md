@@ -82,7 +82,7 @@ SOURCE DB (Original)          TARGET DB (New)
 ## 📊 Data Coverage (91 Tables)
 
 ### Product & Tenant Management
-- products (2 rows: ai-range, nexus)
+- products (2 rows: ai-range, peregrine)
 - tenants
 - subscriptions
 - product_usage
@@ -123,12 +123,12 @@ SOURCE DB (Original)          TARGET DB (New)
 - agent_interaction_decisions
 - agent_interaction_metrics
 
-### Nexus Integration
-- nexus_prompt_library (with gold column)
+### Peregrine Integration
+- peregrine_prompt_library (with gold column)
 - client_prompt_submissions
 - product_prompt_lineage
 
-### Nexus Alpha (Robustness Analysis)
+### Peregrine Alpha (Robustness Analysis)
 - risk_metrics (with benchmarking)
 - robustness_analysis (with benchmarking)
 - fragility_scores (with benchmarking)
@@ -224,7 +224,7 @@ And `migration_report.json` should show:
 -- Count all tables
 SELECT COUNT(*) as table_count 
 FROM information_schema.tables 
-WHERE table_schema IN ('public', 'nexus_alpha');
+WHERE table_schema IN ('public', 'peregrine_alpha');
 -- Expected: 91
 
 -- Check key tables have data

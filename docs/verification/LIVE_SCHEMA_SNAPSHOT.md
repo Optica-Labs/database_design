@@ -264,8 +264,8 @@ Columns: 26 | Constraints: 6 | Indexes: 9
 | 6 | fragility_classification | text | YES |  |
 | 7 | total_conversations | integer | YES |  |
 | 8 | fragile_conversations | integer | YES |  |
-| 9 | nexus_score_n | double precision | YES |  |
-| 10 | nexus_tier | text | YES |  |
+| 9 | peregrine_score_n | double precision | YES |  |
+| 10 | peregrine_tier | text | YES |  |
 | 11 | total_prompts | integer | YES |  |
 | 12 | avg_risk_score | double precision | YES |  |
 | 13 | avg_robustness_rho | double precision | YES |  |
@@ -379,7 +379,7 @@ Columns: 17 | Constraints: 7 | Indexes: 6
 |---:|---|---|:---:|---|
 | 1 | id | bigint | NO | nextval('pca_models_id_seq'::regclass) |
 | 2 | product_id | uuid | NO | '5a1961c3-848c-4cdb-adb6-7d66891bf5f1'::uuid |
-| 3 | pca_name | text | NO | 'nexus_pca_default'::text |
+| 3 | pca_name | text | NO | 'peregrine_pca_default'::text |
 | 4 | components_count | integer | NO | 2 |
 | 5 | explained_variance_ratio | jsonb | YES |  |
 | 6 | mean_vector | jsonb | YES |  |
@@ -1109,9 +1109,9 @@ Columns: 8 | Constraints: 12 | Indexes: 5
 |---:|---|---|:---:|---|
 | 1 | id | uuid | NO | gen_random_uuid() |
 | 2 | ai_range_turn_id | bigint | NO |  |
-| 3 | nexus_prompt_id | uuid | NO |  |
+| 3 | peregrine_prompt_id | uuid | NO |  |
 | 4 | ai_range_product_id | uuid | NO |  |
-| 5 | nexus_product_id | uuid | NO |  |
+| 5 | peregrine_product_id | uuid | NO |  |
 | 6 | lineage_type | text | NO | 'stage4'::text |
 | 7 | created_at | timestamp with time zone | YES | now() |
 | 8 | metadata | jsonb | YES | '{}'::jsonb |

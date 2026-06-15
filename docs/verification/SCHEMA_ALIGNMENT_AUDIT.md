@@ -62,7 +62,7 @@ The Supabase schema files are **well-documented and aligned** with current docum
 | Column | Type | Documentation | Status |
 |--------|------|-----------------|--------|
 | id | UUID | ✅ Documented | Current |
-| product_code | TEXT | ✅ 'ai-range', 'nexus' | Current |
+| product_code | TEXT | ✅ 'ai-range', 'peregrine' | Current |
 | product_name | TEXT | ✅ Documented | Current |
 | description | TEXT | ✅ Documented | Current |
 | features | JSONB | ✅ Documented | Current |
@@ -188,7 +188,7 @@ conversations (1) ─┬─> (many) turns
 turns (1) ←──→ (1) llm_invocations  [BIDIRECTIONAL]
 ```
 
-**Documentation**: Clearly illustrated in [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md#-table-relationships)
+**Documentation**: Clearly illustrated in [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md#-table-relationships)
 
 **Schema**: Implemented correctly in `01_extensions_and_products.sql` and `02_llm_invocations.sql`
 
@@ -202,19 +202,19 @@ turns (1) ←──→ (1) llm_invocations  [BIDIRECTIONAL]
 
 | Document | Coverage | Status |
 |-----------|----------|--------|
-| [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md) | Core schema overview | ✅ Comprehensive |
-| [sql/schemas/supabase/00_SETUP_GUIDE.sql](sql/schemas/supabase/00_SETUP_GUIDE.sql) | Verification queries | ✅ Complete |
-| [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) | Data migration results | ✅ Verified results |
-| [README.md](README.md) | Quick reference | ✅ Updated |
-| [CHANGELOG.md](CHANGELOG.md) | History | ✅ Current |
+| [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md) | Core schema overview | ✅ Comprehensive |
+| [sql/schemas/supabase/00_SETUP_GUIDE.sql](../../sql/schemas/supabase/00_SETUP_GUIDE.sql) | Verification queries | ✅ Complete |
+| [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](LIVE_SUPABASE_ALIGNMENT_REPORT.md) | Live alignment results | ✅ Verified results |
+| [README.md](../../README.md) | Quick reference | ✅ Updated |
+| [CHANGELOG.md](../../CHANGELOG.md) | History | ✅ Current |
 
 ### ⚠️ NEEDS CLARIFICATION
 
 | Document | Issue | Recommendation |
 |-----------|-------|-----------------|
-| [DOCUMENTATION.md](DOCUMENTATION.md) | References `docs/SCHEMA_ARCHITECTURE.md` (doesn't exist) | Update references |
-| [sql/schemas/README.md](sql/schemas/README.md) | Mixes `schema_complete.sql` (legacy) with Supabase setup | Clarify scope |
-| [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md) | References separate Nexus Alpha tables not in current Supabase setup | Clarify relationship |
+| [DOCUMENTATION.md](../../DOCUMENTATION.md) | References `docs/SCHEMA_ARCHITECTURE.md` (doesn't exist) | Update references |
+| [sql/schemas/README.md](../../sql/schemas/README.md) | Mixes `schema_complete.sql` (legacy) with Supabase setup | Clarify scope |
+| [docs/archive/NEXUS_ALPHA_ARCHITECTURE.md](../archive/NEXUS_ALPHA_ARCHITECTURE.md) | References separate Peregrine tables not in current Supabase setup | Clarify relationship |
 
 ---
 
@@ -234,40 +234,40 @@ turns (1) ←──→ (1) llm_invocations  [BIDIRECTIONAL]
 **Recommendation**: 
 1. Clearly mark `schema_complete.sql` as "archived/legacy"
 2. Make `sql/schemas/supabase/` the canonical Supabase setup
-3. Update [sql/schemas/README.md](sql/schemas/README.md) to explain versioning
+3. Update [sql/schemas/README.md](../../sql/schemas/README.md) to explain versioning
 
 ---
 
 ### Issue #2: Missing Referenced Schema ⚠️
 **Severity**: Low  
-**Location**: [DOCUMENTATION.md](DOCUMENTATION.md#primary-documents)
+**Location**: [DOCUMENTATION.md](../../DOCUMENTATION.md#primary-documents)
 
 **Problem**: References `docs/SCHEMA_ARCHITECTURE.md` which doesn't exist
 
 **Recommendation**: Update link or create the document
 
 **Files Affected**:
-- [DOCUMENTATION.md](DOCUMENTATION.md) line 25
-- [README.md](README.md) line 44
+- [DOCUMENTATION.md](../../DOCUMENTATION.md) line 25
+- [README.md](../../README.md) line 44
 
 ---
 
-### Issue #3: Nexus Alpha Platform Status 📋
+### Issue #3: Peregrine Platform Status 📋
 **Severity**: Low  
 **Location**: Multiple documentation files
 
 **State**: 
-- `docs/NEXUS_ALPHA_ARCHITECTURE.md` describes detailed Nexus Alpha schema
+- `docs/NEXUS_ALPHA_ARCHITECTURE.md` describes detailed Peregrine schema
 - Current Supabase setup doesn't include these tables
-- Unclear if Nexus Alpha is integrated or separate
+- Unclear if Peregrine is integrated or separate
 
-**Recommendation**: Clarify integration status or create separate Nexus Alpha migration guide
+**Recommendation**: Clarify integration status or create separate Peregrine migration guide
 
 ---
 
 ### Issue #4: Agent Interactions Not in Supabase ⚠️
 **Severity**: Medium  
-**Location**: [sql/schemas/README.md](sql/schemas/README.md#file-description)
+**Location**: [sql/schemas/README.md](../../sql/schemas/README.md#file-description)
 
 **Issue**: 
 - `schema_complete.sql` includes Agent Interaction Tracking (9 tables)
@@ -293,7 +293,7 @@ turns (1) ←──→ (1) llm_invocations  [BIDIRECTIONAL]
 | SQL syntax valid | ✅ PASS | PostgreSQL 14+ compatible |
 | Comments present | ✅ PASS | All major tables have comments |
 | Triggers defined | ✅ PASS | Conversation turn_count auto-updates |
-| Product codes match | ✅ PASS | 'ai-range' and 'nexus' |
+| Product codes match | ✅ PASS | 'ai-range' and 'peregrine' |
 
 ---
 
@@ -301,18 +301,18 @@ turns (1) ←──→ (1) llm_invocations  [BIDIRECTIONAL]
 
 ### Priority 1: Critical (Do Immediately)
 1. ✅ **Clarify schema versioning** - Supabase modular vs. legacy
-   - Update [sql/schemas/README.md](sql/schemas/README.md) with clear versioning
+   - Update [sql/schemas/README.md](../../sql/schemas/README.md) with clear versioning
    - Mark legacy files as archived
    - Add deployment flowchart
 
 ### Priority 2: Important (Do This Sprint)
 2. ⚠️ **Fix broken documentation references**
-   - Update [DOCUMENTATION.md](DOCUMENTATION.md) - link to existing docs only
-   - Update [README.md](README.md) - correct schema references
+   - Update [DOCUMENTATION.md](../../DOCUMENTATION.md) - link to existing docs only
+   - Update [README.md](../../README.md) - correct schema references
 
-3. ⚠️ **Clarify Nexus Alpha integration**
-   - Document whether Nexus Alpha tables should be in Supabase
-   - If yes: Create `03_nexus_alpha.sql` for modular setup
+3. ⚠️ **Clarify Peregrine integration**
+   - Document whether Peregrine tables should be in Supabase
+   - If yes: Create `03_peregrine_alpha.sql` for modular setup
    - If no: Move to separate schema documentation
 
 4. ⚠️ **Define Agent Interactions location**
@@ -340,7 +340,7 @@ turns (1) ←──→ (1) llm_invocations  [BIDIRECTIONAL]
 | Tenants | ✅ Defined | ✅ Documented | ✅ 100% |
 | Subscriptions | ✅ Defined | ⚠️ Minimal | ⚠️ 70% |
 | Agent Tracking | ⚠️ Partial | ⚠️ Unclear | ⚠️ 50% |
-| Nexus Alpha | ⚠️ Separate | ⚠️ Outdated | ⚠️ 40% |
+| Peregrine | ⚠️ Separate | ⚠️ Outdated | ⚠️ 40% |
 
 ---
 
@@ -365,7 +365,7 @@ turns (1) ←──→ (1) llm_invocations  [BIDIRECTIONAL]
 **Areas for Improvement**:
 1. Scope clarification between modular and legacy schemas
 2. Fix broken documentation references
-3. Clarify integration status of Nexus Alpha
+3. Clarify integration status of Peregrine
 4. Define agent tracking implementation
 
 ---
@@ -373,12 +373,12 @@ turns (1) ←──→ (1) llm_invocations  [BIDIRECTIONAL]
 ## 10. ACTION ITEMS
 
 ### Immediate Actions
-- [ ] Update [sql/schemas/README.md](sql/schemas/README.md) to clarify versioning
-- [ ] Fix references in [DOCUMENTATION.md](DOCUMENTATION.md)
+- [ ] Update [sql/schemas/README.md](../../sql/schemas/README.md) to clarify versioning
+- [ ] Fix references in [DOCUMENTATION.md](../../DOCUMENTATION.md)
 - [ ] Add schema deployment decision tree
 
 ### This Week
-- [ ] Verify Nexus Alpha implementation status
+- [ ] Verify Peregrine implementation status
 - [ ] Clarify agent interactions scope
 - [ ] Create missing documentation if needed
 
@@ -409,13 +409,13 @@ sql/schemas/supabase/
 
 ### Legacy Schema Files (Reference Only)
 ```
-sql/schemas/
+sql/schemas/archive/
   ├── schema_complete.sql                   # 91+ tables (archived)
   ├── schema_integrated.sql                 # 60+ tables (archived)
   └── [other legacy files]
 ```
 
 ### Key Documentation
-- **Quick Start**: [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md)
-- **Setup Steps**: [sql/schemas/supabase/00_SETUP_GUIDE.sql](sql/schemas/supabase/00_SETUP_GUIDE.sql)
-- **Migration Status**: [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md)
+- **Quick Start**: [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md)
+- **Setup Steps**: [sql/schemas/supabase/00_SETUP_GUIDE.sql](../../sql/schemas/supabase/00_SETUP_GUIDE.sql)
+- **Migration Status**: [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](LIVE_SUPABASE_ALIGNMENT_REPORT.md)

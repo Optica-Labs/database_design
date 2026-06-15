@@ -4,7 +4,7 @@ This file was archived and consolidated into the canonical documentation set.
 
 See canonical files:
 - `DOCUMENTATION.md`
-- `MASTER_DOCUMENTATION_INDEX.md`
+- `MASTER_INDEX.md`
 - `docs/NEXUS_PRODUCTS_INTEGRATION.md`
 
 Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ARCHITECTURE.md`
@@ -14,7 +14,7 @@ Archived copy (full content preserved): `docs/archive/PRODUCT_LAYER_ARCHITECTURE
 ### Two-Tier Structure
 
 ```
-Products (AI-Range, Nexus)    ↓ (tracked via product_usage)
+Products (AI-Range, Peregrine)    ↓ (tracked via product_usage)
 Product Usage Events (Audit Trail)    ↓
 Tenants (Client Organizations)
     ↓
@@ -91,8 +91,8 @@ The platform currently supports two products:
 - `prompt_generator_responses` - Generated prompts for testing
 - `prompt_response_metadata` - Prompt execution metadata
 
-### 2. **Nexus** (Prompt Integration Product)
-- **Product Code**: `nexus`
+### 2. **Peregrine** (Prompt Integration Product)
+- **Product Code**: `peregrine`
 - **Status**: Active
 - **Focus**: Curated prompt ingestion for persona/scenario testing
 - **Sources**:
@@ -106,7 +106,7 @@ The platform currently supports two products:
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                    PRODUCTS (Top Tier)                        │
-│              AI-Range | Nexus (Prompt Library)                │
+│              AI-Range | Peregrine (Prompt Library)                │
 └──────────────────────────────────────────────────────────────┘
                           │
 ┌──────────────────────────────────────────────────────────────┐
@@ -121,7 +121,7 @@ The platform currently supports two products:
 ```
 │                                                               │
 │  ┌──────────┐                              ┌──────────┐      │
-│  │ AI-Range │                              │  Nexus   │      │
+│  │ AI-Range │                              │  Peregrine   │      │
 │  └────┬─────┘                              └────┬─────┘      │
 │       └────────────────┬─────────────────────────┘           │
 └───────────────────────┼──────────────────────────────────────┘
@@ -161,7 +161,7 @@ Defines the available products in the platform.
 ```sql
 CREATE TABLE products (
     id UUID PRIMARY KEY,
-    product_code TEXT UNIQUE,           -- 'ai-range' or 'nexus'
+    product_code TEXT UNIQUE,           -- 'ai-range' or 'peregrine'
     product_name TEXT,
     description TEXT,
     features JSONB,                     -- Product-specific features
@@ -174,7 +174,7 @@ CREATE TABLE products (
 ```
 
 **Key Fields:**
-- `product_code`: Unique identifier ('ai-range', 'nexus')
+- `product_code`: Unique identifier ('ai-range', 'peregrine')
 - `features`: JSON object describing available features
 - `status`: Product lifecycle status
 
@@ -203,7 +203,7 @@ CREATE TABLE client_product_subscriptions (
 - **Subscription Management**: Track active, trial, and expired subscriptions
 - **Usage Controls**: Define limits and quotas per subscription
 - **Feature Flags**: Enable/disable specific features per client
-- **Multi-Product Support**: Clients can subscribe to both AI-Range and Nexus
+- **Multi-Product Support**: Clients can subscribe to both AI-Range and Peregrine
 
 ### 3. `client_model_products`
 
@@ -224,7 +224,7 @@ CREATE TABLE client_model_products (
 
 **Purpose:**
 - Links a specific AI model to one or more products
-- Allows models to be tested with AI-Range, Nexus, or both
+- Allows models to be tested with AI-Range, Peregrine, or both
 - Stores product-specific configuration per model
 
 ## Use Cases
@@ -232,7 +232,7 @@ CREATE TABLE client_model_products (
 ### Use Case 1: Client Onboarding
 
 1. **Create Tenant**: New client is registered in `tenants` table
-2. **Subscribe to Products**: Create entries in `client_product_subscriptions` for AI-Range and/or Nexus
+2. **Subscribe to Products**: Create entries in `client_product_subscriptions` for AI-Range and/or Peregrine
 3. **Register Model**: Client's AI model added to `client_models`
 4. **Link to Products**: Create entries in `client_model_products` to enable testing
 
@@ -241,7 +241,7 @@ CREATE TABLE client_model_products (
 INSERT INTO client_product_subscriptions (tenant_id, product_id, subscription_tier, subscription_status)
 VALUES 
   ('tenant-uuid', (SELECT id FROM products WHERE product_code = 'ai-range'), 'enterprise', 'active'),
-  ('tenant-uuid', (SELECT id FROM products WHERE product_code = 'nexus'), 'premium', 'active');
+  ('tenant-uuid', (SELECT id FROM products WHERE product_code = 'peregrine'), 'premium', 'active');
 ```
 
 ### Use Case 2: Unified AI-Range Testing Flow
@@ -361,7 +361,7 @@ SELECT EXISTS (
     FROM client_product_subscriptions cps
     JOIN products p ON cps.product_id = p.id
     WHERE cps.tenant_id = 'tenant-uuid'
-      AND p.product_code = 'nexus'
+      AND p.product_code = 'peregrine'
       AND cps.subscription_status = 'active'
       AND (cps.end_date IS NULL OR cps.end_date > NOW())
 ) AS has_access;
