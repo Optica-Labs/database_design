@@ -2001,14 +2001,14 @@
           "position": 8
         },
         {
-          "name": "nexus_score_n",
+          "name": "peregrine_score_n",
           "data_type": "double precision",
           "is_nullable": true,
           "default": null,
           "position": 9
         },
         {
-          "name": "nexus_tier",
+          "name": "peregrine_tier",
           "data_type": "text",
           "is_nullable": true,
           "default": null,
@@ -2175,8 +2175,8 @@
           "definition": "CREATE INDEX idx_benchmark_runs_model ON public.alpha_benchmark_runs USING btree (model_key)"
         },
         {
-          "name": "idx_benchmark_runs_nexus",
-          "definition": "CREATE INDEX idx_benchmark_runs_nexus ON public.alpha_benchmark_runs USING btree (nexus_score_n DESC)"
+          "name": "idx_benchmark_runs_peregrine",
+          "definition": "CREATE INDEX idx_benchmark_runs_peregrine ON public.alpha_benchmark_runs USING btree (peregrine_score_n DESC)"
         },
         {
           "name": "idx_benchmark_runs_phi",
@@ -2917,7 +2917,7 @@
           "name": "pca_name",
           "data_type": "text",
           "is_nullable": false,
-          "default": "'nexus_pca_default'::text",
+          "default": "'peregrine_pca_default'::text",
           "position": 3
         },
         {
@@ -3222,35 +3222,35 @@
           "type": "CHECK"
         },
         {
-          "name": "chk_nexus_prompt_source",
+          "name": "chk_peregrine_prompt_source",
           "type": "CHECK"
         },
         {
-          "name": "nexus_prompt_library_source_type_check",
+          "name": "peregrine_prompt_library_source_type_check",
           "type": "CHECK"
         },
         {
-          "name": "nexus_prompt_library_status_check",
+          "name": "peregrine_prompt_library_status_check",
           "type": "CHECK"
         },
         {
-          "name": "fk_nexus_prompt_library_product",
+          "name": "fk_peregrine_prompt_library_product",
           "type": "FOREIGN KEY"
         },
         {
-          "name": "nexus_prompt_library_client_prompt_id_fkey",
+          "name": "peregrine_prompt_library_client_prompt_id_fkey",
           "type": "FOREIGN KEY"
         },
         {
-          "name": "nexus_prompt_library_product_id_fkey",
+          "name": "peregrine_prompt_library_product_id_fkey",
           "type": "FOREIGN KEY"
         },
         {
-          "name": "nexus_prompt_library_tenant_id_fkey",
+          "name": "peregrine_prompt_library_tenant_id_fkey",
           "type": "FOREIGN KEY"
         },
         {
-          "name": "nexus_prompt_library_pkey",
+          "name": "peregrine_prompt_library_pkey",
           "type": "PRIMARY KEY"
         }
       ],
@@ -3260,36 +3260,36 @@
           "definition": "CREATE INDEX idx_alpha_prompt_library_active ON public.alpha_prompt_library USING btree (id) WHERE (archived = false)"
         },
         {
-          "name": "idx_nexus_prompt_library_cat_turn",
-          "definition": "CREATE INDEX idx_nexus_prompt_library_cat_turn ON public.alpha_prompt_library USING btree (cat_turn_id)"
+          "name": "idx_peregrine_prompt_library_cat_turn",
+          "definition": "CREATE INDEX idx_peregrine_prompt_library_cat_turn ON public.alpha_prompt_library USING btree (cat_turn_id)"
         },
         {
-          "name": "idx_nexus_prompt_library_gold",
-          "definition": "CREATE INDEX idx_nexus_prompt_library_gold ON public.alpha_prompt_library USING btree (gold)"
+          "name": "idx_peregrine_prompt_library_gold",
+          "definition": "CREATE INDEX idx_peregrine_prompt_library_gold ON public.alpha_prompt_library USING btree (gold)"
         },
         {
-          "name": "idx_nexus_prompt_library_hash",
-          "definition": "CREATE INDEX idx_nexus_prompt_library_hash ON public.alpha_prompt_library USING btree (prompt_hash)"
+          "name": "idx_peregrine_prompt_library_hash",
+          "definition": "CREATE INDEX idx_peregrine_prompt_library_hash ON public.alpha_prompt_library USING btree (prompt_hash)"
         },
         {
-          "name": "idx_nexus_prompt_library_product",
-          "definition": "CREATE INDEX idx_nexus_prompt_library_product ON public.alpha_prompt_library USING btree (product_id)"
+          "name": "idx_peregrine_prompt_library_product",
+          "definition": "CREATE INDEX idx_peregrine_prompt_library_product ON public.alpha_prompt_library USING btree (product_id)"
         },
         {
-          "name": "idx_nexus_prompt_library_source",
-          "definition": "CREATE INDEX idx_nexus_prompt_library_source ON public.alpha_prompt_library USING btree (source_type)"
+          "name": "idx_peregrine_prompt_library_source",
+          "definition": "CREATE INDEX idx_peregrine_prompt_library_source ON public.alpha_prompt_library USING btree (source_type)"
         },
         {
-          "name": "idx_nexus_prompt_library_status",
-          "definition": "CREATE INDEX idx_nexus_prompt_library_status ON public.alpha_prompt_library USING btree (status)"
+          "name": "idx_peregrine_prompt_library_status",
+          "definition": "CREATE INDEX idx_peregrine_prompt_library_status ON public.alpha_prompt_library USING btree (status)"
         },
         {
-          "name": "idx_nexus_prompt_library_tenant",
-          "definition": "CREATE INDEX idx_nexus_prompt_library_tenant ON public.alpha_prompt_library USING btree (tenant_id)"
+          "name": "idx_peregrine_prompt_library_tenant",
+          "definition": "CREATE INDEX idx_peregrine_prompt_library_tenant ON public.alpha_prompt_library USING btree (tenant_id)"
         },
         {
-          "name": "nexus_prompt_library_pkey",
-          "definition": "CREATE UNIQUE INDEX nexus_prompt_library_pkey ON public.alpha_prompt_library USING btree (id)"
+          "name": "peregrine_prompt_library_pkey",
+          "definition": "CREATE UNIQUE INDEX peregrine_prompt_library_pkey ON public.alpha_prompt_library USING btree (id)"
         }
       ]
     },
@@ -8152,7 +8152,7 @@
           "position": 2
         },
         {
-          "name": "nexus_prompt_id",
+          "name": "peregrine_prompt_id",
           "data_type": "uuid",
           "is_nullable": false,
           "default": null,
@@ -8166,7 +8166,7 @@
           "position": 4
         },
         {
-          "name": "nexus_product_id",
+          "name": "peregrine_product_id",
           "data_type": "uuid",
           "is_nullable": false,
           "default": null,
@@ -8228,11 +8228,11 @@
           "type": "FOREIGN KEY"
         },
         {
-          "name": "product_prompt_lineage_nexus_product_id_fkey",
+          "name": "product_prompt_lineage_peregrine_product_id_fkey",
           "type": "FOREIGN KEY"
         },
         {
-          "name": "product_prompt_lineage_nexus_prompt_id_fkey",
+          "name": "product_prompt_lineage_peregrine_prompt_id_fkey",
           "type": "FOREIGN KEY"
         },
         {
@@ -8240,7 +8240,7 @@
           "type": "PRIMARY KEY"
         },
         {
-          "name": "product_prompt_lineage_ai_range_turn_id_nexus_prompt_id_key",
+          "name": "product_prompt_lineage_ai_range_turn_id_peregrine_prompt_id_key",
           "type": "UNIQUE"
         }
       ],
@@ -8250,16 +8250,16 @@
           "definition": "CREATE INDEX idx_prompt_lineage_ai_range_turn ON public.product_prompt_lineage USING btree (ai_range_turn_id)"
         },
         {
-          "name": "idx_prompt_lineage_nexus_prompt",
-          "definition": "CREATE INDEX idx_prompt_lineage_nexus_prompt ON public.product_prompt_lineage USING btree (nexus_prompt_id)"
+          "name": "idx_prompt_lineage_peregrine_prompt",
+          "definition": "CREATE INDEX idx_prompt_lineage_peregrine_prompt ON public.product_prompt_lineage USING btree (peregrine_prompt_id)"
         },
         {
           "name": "idx_prompt_lineage_products",
-          "definition": "CREATE INDEX idx_prompt_lineage_products ON public.product_prompt_lineage USING btree (ai_range_product_id, nexus_product_id)"
+          "definition": "CREATE INDEX idx_prompt_lineage_products ON public.product_prompt_lineage USING btree (ai_range_product_id, peregrine_product_id)"
         },
         {
-          "name": "product_prompt_lineage_ai_range_turn_id_nexus_prompt_id_key",
-          "definition": "CREATE UNIQUE INDEX product_prompt_lineage_ai_range_turn_id_nexus_prompt_id_key ON public.product_prompt_lineage USING btree (ai_range_turn_id, nexus_prompt_id)"
+          "name": "product_prompt_lineage_ai_range_turn_id_peregrine_prompt_id_key",
+          "definition": "CREATE UNIQUE INDEX product_prompt_lineage_ai_range_turn_id_peregrine_prompt_id_key ON public.product_prompt_lineage USING btree (ai_range_turn_id, peregrine_prompt_id)"
         },
         {
           "name": "product_prompt_lineage_pkey",

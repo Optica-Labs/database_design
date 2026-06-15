@@ -11,7 +11,7 @@
 
 **Impact**: Users sent to non-existent documentation
 
-**Location**: [DOCUMENTATION.md](DOCUMENTATION.md#primary-documents)
+**Location**: [DOCUMENTATION.md](../../DOCUMENTATION.md#primary-documents)
 
 **Problem**:
 ```markdown
@@ -22,11 +22,9 @@
 **Current State**:
 ```
 docs/
-├── MIGRATION_SUMMARY.md
-├── NEXUS_ALPHA_ARCHITECTURE.md
-├── NEXUS_PRODUCTS_INTEGRATION.md
-├── PRODUCT_LAYER_ARCHITECTURE.md
-└── CAT_ASTROPHIC_INTEGRATION.md
+├── README.md
+├── verification/   (live schema & alignment)
+└── archive/        (historical migration/integration/architecture docs)
 ```
 
 **Fix Options**:
@@ -40,7 +38,7 @@ docs/
 
 **Impact**: Developers don't know which schema to use
 
-**Location**: [sql/schemas/README.md](sql/schemas/README.md)
+**Location**: [sql/schemas/README.md](../../sql/schemas/README.md)
 
 **Problem**:
 ```markdown
@@ -66,7 +64,7 @@ docs/
 
 **Confusion**: Which one do users deploy?
 
-**Fix**: Restructure [sql/schemas/README.md](sql/schemas/README.md) with:
+**Fix**: Restructure [sql/schemas/README.md](../../sql/schemas/README.md) with:
 ```
 ## Active Schema (Supabase - Use This)
 Location: sql/schemas/supabase/
@@ -87,7 +85,7 @@ Files: schema_complete.sql, schema_integrated.sql
 
 **Confusion Points**:
 
-1. [sql/schemas/README.md](sql/schemas/README.md) says:
+1. [sql/schemas/README.md](../../sql/schemas/README.md) says:
 ```markdown
 9. **Agent Interaction Tracking** ⭐ NEW - Complete agent workflow tracking:
    - `agent_interactions` - Core agent participation tracking
@@ -112,17 +110,17 @@ Files: schema_complete.sql, schema_integrated.sql
 
 ---
 
-### ⚠️ Issue #4: Nexus Alpha Platform Status Unclear
+### ⚠️ Issue #4: Peregrine Platform Status Unclear
 
-**Impact**: Developers don't know if Nexus Alpha is deployed
+**Impact**: Developers don't know if Peregrine is deployed
 
-**Location**: [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md)
+**Location**: [docs/archive/NEXUS_ALPHA_ARCHITECTURE.md](../archive/NEXUS_ALPHA_ARCHITECTURE.md)
 
 **Problem**:
 ```markdown
-# Nexus Alpha: AI Assurance Platform
+# Peregrine: AI Assurance Platform
 
-This document describes comprehensive Nexus Alpha schema with:
+This document describes comprehensive Peregrine schema with:
 - embeddings tables
 - vectors_2d tables
 - risk_metrics
@@ -133,25 +131,25 @@ This document describes comprehensive Nexus Alpha schema with:
 
 **But**: These tables don't appear in current Supabase modular setup!
 
-**Question**: Is Nexus Alpha:
+**Question**: Is Peregrine:
 1. A separate deployment? (different database)
 2. To be added later?
 3. Already in `schema_complete.sql`?
 
 **Fix**: 
-- [ ] Clarify Nexus Alpha deployment status in documentation
+- [ ] Clarify Peregrine deployment status in documentation
 - [ ] If separate: Create `docs/NEXUS_ALPHA_DEPLOYMENT.md`
 - [ ] Update table dependencies documentation
 
 ---
 
-### ⚠️ Issue #5: Missing Nexus Integration Documentation
+### ⚠️ Issue #5: Missing Peregrine Integration Documentation
 
-**Location**: [DOCUMENTATION.md](DOCUMENTATION.md#integration-guides)
+**Location**: [DOCUMENTATION.md](../../DOCUMENTATION.md#integration-guides)
 
 **References**: `docs/NEXUS_INTEGRATION.md` (doesn't exist!)
 
-**Should be**: `docs/NEXUS_PRODUCTS_INTEGRATION.md` or similar
+**Should be**: `docs/archive/NEXUS_PRODUCTS_INTEGRATION.md` or similar
 
 **Fix**: Update reference or rename file
 
@@ -161,15 +159,15 @@ This document describes comprehensive Nexus Alpha schema with:
 
 ### Phase 1: Documentation Fixes (1 hour)
 
-- [ ] Fix broken link in [DOCUMENTATION.md](DOCUMENTATION.md) (line ~25)
+- [ ] Fix broken link in [DOCUMENTATION.md](../../DOCUMENTATION.md) (line ~25)
   - Change: `docs/SCHEMA_ARCHITECTURE.md` → `sql/schemas/supabase/README.md`
   
-- [ ] Update [sql/schemas/README.md](sql/schemas/README.md)
+- [ ] Update [sql/schemas/README.md](../../sql/schemas/README.md)
   - Add section header: "## ⚠️ IMPORTANT: Schema Versions"
   - Clarify which schema is active
   - Move legacy files to "Archive" section
 
-- [ ] Update [README.md](README.md)
+- [ ] Update [README.md](../../README.md)
   - Point to Supabase schema in `sql/schemas/supabase/`
   - Add decision: "Which schema should I use?"
 
@@ -179,9 +177,9 @@ This document describes comprehensive Nexus Alpha schema with:
   - Check: Is `agent_interactions_schema.sql` needed for Supabase?
   - Decision: Include in `03_agent_interactions.sql` or remove?
   
-- [ ] Verify Nexus Alpha implementation
-  - Check: Should Nexus Alpha tables be in Supabase?
-  - Decision: Create `03_nexus_alpha.sql` or separate guide?
+- [ ] Verify Peregrine implementation
+  - Check: Should Peregrine tables be in Supabase?
+  - Decision: Create `03_peregrine_alpha.sql` or separate guide?
 
 ### Phase 3: Documentation Updates (1-2 hours)
 
@@ -198,7 +196,7 @@ This document describes comprehensive Nexus Alpha schema with:
 | Broken `SCHEMA_ARCHITECTURE.md` link | 🔴 High | DOCUMENTATION.md | Ready | 5 min |
 | Schema version confusion | 🟠 Medium | sql/schemas/README.md | Ready | 30 min |
 | Agent interactions unclear | 🟠 Medium | Multiple files | Investigation | 1 hour |
-| Nexus Alpha status unclear | 🟠 Medium | docs/NEXUS_ALPHA_ARCHITECTURE.md | Investigation | 1 hour |
+| Peregrine status unclear | 🟠 Medium | docs/archive/NEXUS_ALPHA_ARCHITECTURE.md | Investigation | 1 hour |
 | Missing NEXUS_INTEGRATION doc | 🟡 Low | DOCUMENTATION.md | Ready | 5 min |
 
 ---
@@ -206,23 +204,23 @@ This document describes comprehensive Nexus Alpha schema with:
 ## Total Estimated Fix Time: 3-4 hours
 
 ### Immediate Actions (Next 15 minutes)
-1. Update link in [DOCUMENTATION.md](DOCUMENTATION.md)
-2. Add version clarification to [sql/schemas/README.md](sql/schemas/README.md)
+1. Update link in [DOCUMENTATION.md](../../DOCUMENTATION.md)
+2. Add version clarification to [sql/schemas/README.md](../../sql/schemas/README.md)
 3. Create simple decision tree for users
 
 ### This Week
 4. Verify agent interactions scope
-5. Verify Nexus Alpha deployment status
+5. Verify Peregrine deployment status
 6. Create missing documentation
 
 ---
 
 ## Files Recommended for Update
 
-1. **[sql/schemas/README.md](sql/schemas/README.md)** - Add versioning clarity
-2. **[DOCUMENTATION.md](DOCUMENTATION.md)** - Fix broken links
-3. **[README.md](README.md)** - Point to correct schema
-4. **[sql/schemas/supabase/README.md](sql/schemas/supabase/README.md)** - Already good! ✅
+1. **[sql/schemas/README.md](../../sql/schemas/README.md)** - Add versioning clarity
+2. **[DOCUMENTATION.md](../../DOCUMENTATION.md)** - Fix broken links
+3. **[README.md](../../README.md)** - Point to correct schema
+4. **[sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md)** - Already good! ✅
 
 ---
 
@@ -232,7 +230,7 @@ After fixes, developers should be able to:
 - ✅ Know which schema files to use (Supabase modular setup)
 - ✅ Understand why multiple schema versions exist
 - ✅ Find all required documentation without broken links
-- ✅ Know status of agent interactions and Nexus Alpha
+- ✅ Know status of agent interactions and Peregrine
 - ✅ Deploy schema with confidence
 
 ---

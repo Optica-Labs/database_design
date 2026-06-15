@@ -82,7 +82,7 @@ These tables exist in TARGET schema but not in SOURCE database:
 - `quality_metrics` ❌
 - `telemetry` ❌
 - `client_prompt_submissions` ❌
-- `nexus_prompt_library` ❌
+- `peregrine_prompt_library` ❌
 - `product_prompt_lineage` ❌
 - `safety_assessments` ❌
 - `safety_metrics` ❌
@@ -328,7 +328,7 @@ id, product_id (FK), session_id, tenant_id, persona_id, scenario_id, model_id,
 ```sql
 INSERT INTO products (id, product_code, product_name, description, status) VALUES
 ('00000000-0000-0000-0000-000000000001', 'ai-range', 'AI Range', 'Migrated from legacy', 'active'),
-('00000000-0000-0000-0000-000000000002', 'nexus', 'Nexus', 'Migrated from legacy', 'active')
+('00000000-0000-0000-0000-000000000002', 'peregrine', 'Peregrine', 'Migrated from legacy', 'active')
 ON CONFLICT (product_code) DO NOTHING;
 ```
 
@@ -435,7 +435,7 @@ def fetch_and_transform(table_name):
 
 1. **Choose default product strategy:**
    - Use single 'ai-range' product for all legacy data?
-   - Or map by table/feature to 'ai-range' vs 'nexus'?
+   - Or map by table/feature to 'ai-range' vs 'peregrine'?
 
 2. **Handle tenant_id casting:**
    - Check if SOURCE `tenant_id` values are valid UUIDs

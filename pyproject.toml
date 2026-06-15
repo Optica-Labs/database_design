@@ -1,0 +1,27 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = [
+    "scripts/peregrine.py",
+    "scripts/generate_canonical_schema.py",
+    "scripts/verify_canonical_schema.py",
+    "scripts/generate_variants.py",
+    "scripts/generate_db_diagrams.py",
+]

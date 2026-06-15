@@ -43,38 +43,29 @@
 
 ### Check Migration Status
 ```
-👉 See: docs/MIGRATION_SUMMARY.md
-   - 25 tables migrated ✅
-   - 100,000+ records transferred ✅
-   - 0 duplicates verified ✅
-   - 27 orphaned refs handled ✅
+👉 See: docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md
+   - Current live tables & views ✅
+   - Live alignment status ✅
+   - Historical migration detail in CHANGELOG.md ✅
 ```
 
 ### Understand Product Architecture
 ```
-👉 See: docs/PRODUCT_LAYER_ARCHITECTURE.md
-   - AI-Range vs Nexus products
-   - Persona system details
-   - Test framework structure
-   - Threat vectors & assessment
+👉 See: docs/verification/LIVE_SCHEMA_SNAPSHOT.md (current structure)
+   - Deployable schemas: sql/schemas/
+   - Historical: docs/archive/PRODUCT_LAYER_ARCHITECTURE.md
 ```
 
-### Learn About Nexus Alpha Platform
+### Learn About Peregrine Platform
 ```
-👉 See: docs/NEXUS_ALPHA_ARCHITECTURE.md
-   - Risk metrics from embeddings
-   - Robustness analysis (ρ)
-   - Fragility assessment (φ)
-   - Sycophancy detection
+👉 See: docs/verification/LIVE_SCHEMA_SNAPSHOT.md (current structure)
+   - Historical: docs/archive/NEXUS_ALPHA_ARCHITECTURE.md
 ```
 
 ### Find CAT-ASTROPHIC Integration
 ```
-👉 See: docs/CAT_ASTROPHIC_INTEGRATION.md
-   - Prompt generation details
-   - Conversation structure
-   - Turn management
-   - Quality metrics
+👉 See: docs/verification/LIVE_SCHEMA_SNAPSHOT.md (current structure)
+   - Historical: docs/archive/CAT_ASTROPHIC_INTEGRATION.md
 ```
 
 ### See Recent Changes
@@ -88,7 +79,7 @@
 
 ### Understand Migration Process
 ```
-👉 See: docs/MIGRATION_SUMMARY.md (Phase details)
+👉 See: docs/archive/MIGRATION_SUMMARY.md (historical)
    - Phase 1: Schema Creation
    - Phase 2: Data Migration
    - Phase 3: Deduplication
@@ -141,11 +132,9 @@ sql/schemas/supabase/
 ### Documentation Files
 ```
 docs/
-├── MIGRATION_SUMMARY.md            📍 Migration results & verification
-├── NEXUS_ALPHA_ARCHITECTURE.md     📍 Risk analysis platform details
-├── PRODUCT_LAYER_ARCHITECTURE.md   📍 Products: AI-Range vs Nexus
-├── CAT_ASTROPHIC_INTEGRATION.md    📍 Conversation & generation system
-└── NEXUS_PRODUCTS_INTEGRATION.md   📍 Nexus product details
+├── README.md                       📍 Docs directory index
+├── verification/                   📍 Live schema & alignment (ground truth)
+└── archive/                        📍 Historical migration/integration/architecture
 ```
 
 ### Root Documentation
@@ -160,14 +149,15 @@ docs/
 
 ### Legacy/Reference Files (Don't Use for Deployment)
 ```
-sql/schemas/
+sql/schemas/archive/
 ├── schema_complete.sql             📋 91 tables (archived version)
 ├── schema_integrated.sql           📋 60 tables (earlier version)
 ├── agent_interactions_schema.sql   📋 Agent tracking subset
 ├── llm_invocations_schema.sql     📋 LLM tracking subset
-├── schema.sql                      📋 Original SQL Server schema
-├── README.md                       ⚠️ Update pending (version clarification)
-└── AUDIT_REPORT.md                📋 Schema audit results
+└── schema.sql                      📋 Original SQL Server schema
+
+docs/archive/
+└── AUDIT_REPORT.md                📋 Schema audit results (archived)
 ```
 
 ### Scripts & Tools
@@ -185,7 +175,7 @@ scripts/
 ## 🎯 By Role
 
 ### 👨‍💻 Software Developer
-**Start Here**: [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md)
+**Start Here**: [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md)
 
 **Then**: 
 1. Review table relationships
@@ -198,12 +188,12 @@ scripts/
 ---
 
 ### 🗄️ Database Administrator
-**Start Here**: [sql/schemas/supabase/00_SETUP_GUIDE.sql](sql/schemas/supabase/00_SETUP_GUIDE.sql)
+**Start Here**: [sql/schemas/supabase/00_SETUP_GUIDE.sql](../../sql/schemas/supabase/00_SETUP_GUIDE.sql)
 
 **Then**:
 1. Execute the 3 setup files in order
 2. Run verification queries
-3. Check [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) for data status
+3. Check [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](LIVE_SUPABASE_ALIGNMENT_REPORT.md) for data status
 4. Monitor performance with provided indexes
 
 **Reference**: [SCHEMA_ALIGNMENT_AUDIT.md](SCHEMA_ALIGNMENT_AUDIT.md) - technical details
@@ -211,24 +201,24 @@ scripts/
 ---
 
 ### 📊 Data Analyst
-**Start Here**: [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md)
+**Start Here**: [docs/verification/LIVE_SCHEMA_SNAPSHOT.md](LIVE_SCHEMA_SNAPSHOT.md)
 
 **Then**:
 1. Understand what data exists and where
-2. Check example queries in [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md)
+2. Check example queries in [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md)
 3. Review table relationships for joins
 4. Plan your analysis queries
 
-**Reference**: [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md#-example-queries) - query examples
+**Reference**: [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md#-example-queries) - query examples
 
 ---
 
 ### 🏢 Project Manager
-**Start Here**: [README.md](README.md)
+**Start Here**: [README.md](../../README.md)
 
 **Then**:
-1. Check [CHANGELOG.md](CHANGELOG.md) for timeline
-2. Review [docs/MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) for status
+1. Check [CHANGELOG.md](../../CHANGELOG.md) for timeline
+2. Review [docs/verification/LIVE_SUPABASE_ALIGNMENT_REPORT.md](LIVE_SUPABASE_ALIGNMENT_REPORT.md) for status
 3. See [ALIGNMENT_SUMMARY.md](ALIGNMENT_SUMMARY.md) for quality grade (A+)
 
 **Key Stats**:
@@ -249,20 +239,20 @@ scripts/
 4. Review identified gaps
 
 **Also See**:
-- [docs/PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md) - product structure
-- [docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md) - analytics platform
-- [docs/CAT_ASTROPHIC_INTEGRATION.md](docs/CAT_ASTROPHIC_INTEGRATION.md) - generation system
+- [docs/verification/LIVE_SCHEMA_SNAPSHOT.md](LIVE_SCHEMA_SNAPSHOT.md) - current live structure
+- [sql/schemas/README.md](../../sql/schemas/README.md) - deployable schemas
+- [docs/archive/](../archive/) - historical architecture docs
 
 ---
 
 ### 🔍 DevOps/Deployment Engineer
-**Start Here**: [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md)
+**Start Here**: [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md)
 
 **Steps**:
 1. Deploy 3 SQL files in order
-2. Run verification queries from [00_SETUP_GUIDE.sql](sql/schemas/supabase/00_SETUP_GUIDE.sql)
-3. Check scripts in [scripts/README.md](scripts/README.md) for data migration
-4. Verify with [check_unmigrated_data.py](scripts/check_unmigrated_data.py)
+2. Run verification queries from [00_SETUP_GUIDE.sql](../../sql/schemas/supabase/00_SETUP_GUIDE.sql)
+3. Check scripts in [scripts/README.md](../../scripts/README.md) for data migration
+4. Verify with [check_unmigrated_data.py](../../scripts/check_unmigrated_data.py)
 
 **Troubleshooting**: See [SCHEMA_ALIGNMENT_ISSUES.md](SCHEMA_ALIGNMENT_ISSUES.md) if issues arise
 
@@ -283,13 +273,13 @@ scripts/
 ```
 1. ALIGNMENT_SUMMARY.md                    (quick overview)
 2. sql/schemas/supabase/README.md          (structure details)
-3. docs/MIGRATION_SUMMARY.md               (what data exists)
+3. docs/verification/LIVE_SCHEMA_SNAPSHOT.md (current live schema)
 4. sql/queries/queries.sql                 (example queries)
 ```
 
 ### "I need to migrate data"
 ```
-1. docs/MIGRATION_SUMMARY.md               (completed migration)
+1. CHANGELOG.md                            (completed migration history)
 2. scripts/README.md                       (migration tools)
 3. scripts/check_unmigrated_data.py        (verify status)
 4. scripts/migrate_*.py                    (if needed)
@@ -305,10 +295,9 @@ scripts/
 
 ### "I need product architecture details"
 ```
-1. docs/PRODUCT_LAYER_ARCHITECTURE.md      (AI-Range vs Nexus)
-2. docs/NEXUS_PRODUCTS_INTEGRATION.md      (Nexus product)
-3. docs/CAT_ASTROPHIC_INTEGRATION.md       (Conversation system)
-4. docs/NEXUS_ALPHA_ARCHITECTURE.md        (Analytics platform)
+1. docs/verification/LIVE_SCHEMA_SNAPSHOT.md   (current live schema)
+2. sql/schemas/README.md                       (deployable schemas)
+3. docs/archive/                               (historical architecture docs)
 ```
 
 ---
@@ -317,35 +306,35 @@ scripts/
 
 | Need | Go To | Purpose |
 |------|-------|---------|
-| Setup guide | [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md) | Step-by-step schema setup |
-| Verify queries | [00_SETUP_GUIDE.sql](sql/schemas/supabase/00_SETUP_GUIDE.sql) | Confirm successful deployment |
-| Example queries | [README.md](sql/schemas/supabase/README.md#-example-queries) | Learn how to query data |
-| Migration status | [MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) | See what data was migrated |
-| Architecture | [PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md) | Understand system design |
+| Setup guide | [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md) | Step-by-step schema setup |
+| Verify queries | [00_SETUP_GUIDE.sql](../../sql/schemas/supabase/00_SETUP_GUIDE.sql) | Confirm successful deployment |
+| Example queries | [README.md](../../sql/schemas/supabase/README.md#-example-queries) | Learn how to query data |
+| Migration status | [LIVE_SUPABASE_ALIGNMENT_REPORT.md](LIVE_SUPABASE_ALIGNMENT_REPORT.md) | See current live data |
+| Architecture | [LIVE_SCHEMA_SNAPSHOT.md](LIVE_SCHEMA_SNAPSHOT.md) | Understand current schema |
 | Issues | [SCHEMA_ALIGNMENT_ISSUES.md](SCHEMA_ALIGNMENT_ISSUES.md) | Find and prioritize fixes |
 | Full audit | [SCHEMA_ALIGNMENT_AUDIT.md](SCHEMA_ALIGNMENT_AUDIT.md) | Comprehensive analysis |
-| Changes | [CHANGELOG.md](CHANGELOG.md) | See what changed |
+| Changes | [CHANGELOG.md](../../CHANGELOG.md) | See what changed |
 
 ---
 
 ## ✨ Recommended Reading Order (First Time)
 
-1. **Start (5 min)**: [README.md](README.md)
+1. **Start (5 min)**: [README.md](../../README.md)
    - Overview and quick start
 
-2. **Setup (10 min)**: [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md)
+2. **Setup (10 min)**: [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md)
    - Understand what you're deploying
 
 3. **Summary (5 min)**: [ALIGNMENT_SUMMARY.md](ALIGNMENT_SUMMARY.md)
    - Know the current state
 
-4. **Deploy (30 min)**: Execute SQL files from [sql/schemas/supabase/](sql/schemas/supabase/)
+4. **Deploy (30 min)**: Execute SQL files from [sql/schemas/supabase/](../../sql/schemas/supabase/)
    - Set up your database
 
-5. **Verify (10 min)**: Run queries from [00_SETUP_GUIDE.sql](sql/schemas/supabase/00_SETUP_GUIDE.sql)
+5. **Verify (10 min)**: Run queries from [00_SETUP_GUIDE.sql](../../sql/schemas/supabase/00_SETUP_GUIDE.sql)
    - Confirm successful setup
 
-6. **Learn (20 min)**: Review examples in [sql/schemas/supabase/README.md](sql/schemas/supabase/README.md#-example-queries)
+6. **Learn (20 min)**: Review examples in [sql/schemas/supabase/README.md](../../sql/schemas/supabase/README.md#-example-queries)
    - Write your first queries
 
 7. **Deep Dive (Optional)**: [SCHEMA_ALIGNMENT_AUDIT.md](SCHEMA_ALIGNMENT_AUDIT.md)

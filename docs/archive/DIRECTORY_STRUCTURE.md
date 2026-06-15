@@ -26,9 +26,9 @@ database_design/
 │   ├── PRODUCT_LAYER_ER_DIAGRAM.md            # Product layer ER diagram
 │   │
 │   ├── CAT_ASTROPHIC_INTEGRATION.md           # Cat-Astrophic tables integration
-│   ├── NEXUS_INTEGRATION.md                   # Nexus (Prompt Library) integration
-│   ├── NEXUS_ALPHA_ARCHITECTURE.md            # Nexus Alpha (AI Assurance Platform)
-│   ├── NEXUS_PRODUCTS_INTEGRATION.md          # Nexus products relationship & workflow
+│   ├── NEXUS_INTEGRATION.md                   # Peregrine (Prompt Library) integration
+│   ├── NEXUS_ALPHA_ARCHITECTURE.md            # Peregrine Alpha (AI Assurance Platform)
+│   ├── NEXUS_PRODUCTS_INTEGRATION.md          # Peregrine products relationship & workflow
 │   ├── AGENT_ER_DIAGRAMS.md                   # Agent-specific ER diagrams
 │   └── ER_DIAGRAM.md                          # Original ER diagrams (reference)
 │
@@ -47,9 +47,9 @@ database_design/
     │
     ├── views/                                  # Database Views
     │   ├── cat_astrophic_views.sql            # Integrated views for analysis
-    │   └── nexus_views.sql                    # Nexus prompt ingestion views
+    │   └── peregrine_views.sql                    # Peregrine prompt ingestion views
     │   ├── cat_astrophic_views.sql            # Integrated views for analysis
-    │   └── nexus_views.sql                    # Nexus prompt ingestion views
+    │   └── peregrine_views.sql                    # Peregrine prompt ingestion views
     └── sample_data/                            # Sample Data
         └── sample_data.sql                    # Sample data for testing
 ```

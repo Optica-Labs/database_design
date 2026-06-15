@@ -8,8 +8,8 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- Create nexus_alpha schema
-CREATE SCHEMA IF NOT EXISTS nexus_alpha;
+-- Create peregrine_alpha schema
+CREATE SCHEMA IF NOT EXISTS peregrine_alpha;
 
 -- ============================================================================
 -- PRODUCT LAYER
@@ -17,7 +17,7 @@ CREATE SCHEMA IF NOT EXISTS nexus_alpha;
 
 CREATE TABLE IF NOT EXISTS products (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    product_code TEXT NOT NULL UNIQUE CHECK (product_code IN ('ai-range', 'nexus')),
+    product_code TEXT NOT NULL UNIQUE CHECK (product_code IN ('ai-range', 'peregrine')),
     product_name TEXT NOT NULL,
     description TEXT,
     features JSONB DEFAULT '{}'::jsonb,
@@ -33,7 +33,7 @@ CREATE INDEX IF NOT EXISTS idx_products_code_status ON products(product_code, st
 -- Insert default products
 INSERT INTO products (product_code, product_name, description, status) VALUES
 ('ai-range', 'AI Range', 'Comprehensive AI testing and safety assessment platform', 'active'),
-('nexus', 'Nexus', 'Advanced AI persona testing and risk analysis system', 'active')
+('peregrine', 'Peregrine', 'Advanced AI persona testing and risk analysis system', 'active')
 ON CONFLICT (product_code) DO NOTHING;
 
 -- ============================================================================

@@ -1,132 +1,22 @@
-# Migration & Utility Scripts
+# Scripts Reference
 
-**Directory**: `/scripts`  
-**Purpose**: Migration, verification, and connection testing  
-**Last Updated**: March 4, 2026  
-**Status**: ✅ Production-Ready
+## Canonical Generation And Verification
 
----
+- `scripts/generate_canonical_schema.py`
+- `scripts/generate_variants.py`
+- `scripts/generate_peregrine_snapshot.py`
+- `scripts/verify_canonical_schema.py`
 
-## ⭐ Quick Start - Choose Your Path
-
-### 🚀 I Want To Deploy
-→ Use production-ready schemas (fastest):
-- [Unified Schema (84 tables)](../sql/schemas/schema_unified_complete.sql) - Complete deployment
-- [AI-Range (75 tables)](../sql/schemas/schema_ai_range_only.sql) - AI-Range only
-- [Nexus (35 tables)](../sql/schemas/schema_nexus_only.sql) - Nexus only
-
-**Deploy in 5 minutes**: [SUPABASE_QUICK_DEPLOYMENT.md](../sql/SUPABASE_QUICK_DEPLOYMENT.md)
-
-### ✅ I Want To Verify Migration Status
-```bash
-python3 check_unmigrated_data.py
-```
-
-### 🧬 I Want Current Live Schema Snapshot
-```bash
-python3 snapshot_live_schema.py
-```
-
-### 📦 I Want Compact Live DDL Export
-```bash
-python3 export_live_schema_ddl.py
-```
-
-### 🔌 I Want To Test Connection
-```bash
-python3 test_supabase_connection.py
-```
-
-### 🔄 I Want To Run Cleanup
-```bash
-python3 remove_llm_invocations_duplicates.py
-```
-
----
-
-## 📋 Script Overview
-
-## Overview
-
-Scripts organized by purpose:
-- **Production Scripts**: Ready for production use
-- **Verification Scripts**: Data quality & integrity checks
-- **Utility Scripts**: Helper tools
-- **Archive**: Historical/testing scripts
-
-## Production Scripts
-
-These scripts are used for the migration and cleanup operations.
-
-### check_unmigrated_data.py
-**Purpose**: Verify migration status across all tables  
-**Usage**: `python3 check_unmigrated_data.py`  
-**Output**: Table-by-table migration status report
-
-### migrate_missing_scenario_intents.py
-**Purpose**: Migrate remaining scenario_intents  
-**Usage**: `python3 migrate_missing_scenario_intents.py`  
-**Status**: Handles orphaned scenario_id references
-
-### remove_ai_personas_from_pgr.py
-**Purpose**: Remove synthetic ai_personas records  
-**Removed**: 12,841 synthetic records
-
-### remove_llm_invocations_duplicates.py
-**Purpose**: Remove duplicates from llm_invocations  
-**Removed**: 9,000 duplicate records
-
-## Verification Scripts
-
-### test_supabase_connection.py
-**Purpose**: Verify database connectivity  
-**Usage**: `python3 test_supabase_connection.py`
-
-### snapshot_live_schema.py
-**Purpose**: Export current live Supabase public schema into repository files  
-**Usage**: `python3 snapshot_live_schema.py`  
-**Output**:
-- `docs/verification/LIVE_SCHEMA_SNAPSHOT.json`
-- `docs/verification/LIVE_SCHEMA_SNAPSHOT.md`
-
-### export_live_schema_ddl.py
-**Purpose**: Export compact live DDL SQL (tables + constraints + indexes)  
-**Usage**: `python3 export_live_schema_ddl.py`  
-**Output**:
-- `docs/verification/LIVE_SCHEMA_DDL_COMPACT.sql`
-
-## Configuration
-
-All scripts require `.env`:
-```
-SOURCE_SUPABASE_SERVICE_KEY=...
-TARGET_SUPABASE_SERVICE_KEY=...
-```
-
-See `.env.example` for template.
-
-## Quick Start
+## Run Sequence
 
 ```bash
-# 1. Verify connection
-python3 test_supabase_connection.py
-
-# 2. Check migration status
-python3 check_unmigrated_data.py
-
-# 3. Migrate remaining records (if needed)
-python3 migrate_missing_scenario_intents.py
+python3 scripts/generate_canonical_schema.py
+python3 scripts/generate_variants.py
+python3 scripts/generate_peregrine_snapshot.py
+python3 scripts/verify_canonical_schema.py
 ```
 
-## Archive Scripts
+## Deployment Entry
 
-Historical scripts used during development:
-- Analysis scripts (check_*, analyze_*)
-- Debug scripts (debug_*, compare_*)
-- Migration scripts (migrate_*)
-- Utility scripts (create_*, setup_*, upload_*)
-
----
-
-**Status**: ✅ Production Ready  
-**Last Updated**: February 25, 2026
+- `sql/create.sql`
+- `sql/create/README.md`

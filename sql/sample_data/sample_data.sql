@@ -6,7 +6,7 @@
 -- ============================================================================
 
 -- ============================================================================
--- 1. INSERT PRODUCTS (AI-Range and Nexus)
+-- 1. INSERT PRODUCTS (AI-Range and Peregrine)
 -- ============================================================================
 
 -- Note: Products are already inserted via schema, but including here for completeness
@@ -21,8 +21,8 @@ VALUES
         'active'
     ),
     (
-        'nexus',
-        'Nexus',
+        'peregrine',
+        'Peregrine',
         'Advanced AI persona testing and risk analysis system with scenario generation and behavioral analysis',
         '{"persona_generation": true, "risk_analysis": true, "scenario_testing": true, "behavioral_analysis": true, "vector_search": true}'::jsonb,
         'premium',
@@ -61,13 +61,13 @@ SELECT
     CASE 
         WHEN p.product_code = 'ai-range' THEN 
             '{"api_calls_per_day": 10000, "test_sessions_per_month": 100, "concurrent_tests": 10, "models_limit": 20}'::jsonb
-        WHEN p.product_code = 'nexus' THEN 
+        WHEN p.product_code = 'peregrine' THEN 
             '{"api_calls_per_day": 8000, "persona_tests_per_month": 80, "concurrent_tests": 8, "personas_limit": 50}'::jsonb
     END,
     CASE 
         WHEN p.product_code = 'ai-range' THEN 
             '{"adversarial_testing": true, "compliance_reports": true, "custom_scenarios": true, "priority_support": true}'::jsonb
-        WHEN p.product_code = 'nexus' THEN 
+        WHEN p.product_code = 'peregrine' THEN 
             '{"persona_generation": true, "risk_analysis": true, "scenario_testing": true, "vector_search": true}'::jsonb
     END
 FROM tenants t
@@ -100,20 +100,20 @@ SELECT
     CASE 
         WHEN p.product_code = 'ai-range' THEN 
             '{"api_calls_per_day": 15000, "test_sessions_per_month": 150, "concurrent_tests": 15, "models_limit": 30}'::jsonb
-        WHEN p.product_code = 'nexus' THEN 
+        WHEN p.product_code = 'peregrine' THEN 
             '{"api_calls_per_day": 12000, "persona_tests_per_month": 120, "concurrent_tests": 12, "personas_limit": 100}'::jsonb
     END,
     CASE 
         WHEN p.product_code = 'ai-range' THEN 
             '{"adversarial_testing": true, "compliance_reports": true, "custom_scenarios": true, "priority_support": true, "hipaa_compliance": true}'::jsonb
-        WHEN p.product_code = 'nexus' THEN 
+        WHEN p.product_code = 'peregrine' THEN 
             '{"persona_generation": true, "risk_analysis": true, "scenario_testing": true, "vector_search": true, "healthcare_personas": true}'::jsonb
     END
 FROM tenants t
 CROSS JOIN products p
 WHERE t.tenant_name = 'Global Healthcare Solutions';
 
--- EduTech Platform - Nexus only (Trial)
+-- EduTech Platform - Peregrine only (Trial)
 INSERT INTO client_product_subscriptions (tenant_id, product_id, subscription_tier, subscription_status, start_date, end_date, usage_limits, features_enabled)
 SELECT 
     t.id,
@@ -127,7 +127,7 @@ SELECT
 FROM tenants t
 CROSS JOIN products p
 WHERE t.tenant_name = 'EduTech Platform'
-  AND p.product_code = 'nexus';
+  AND p.product_code = 'peregrine';
 
 -- ============================================================================
 -- 4. INSERT CLIENT MODELS
@@ -216,7 +216,7 @@ SELECT
     CASE 
         WHEN p.product_code = 'ai-range' THEN 
             '{"test_types": ["adversarial", "safety", "compliance"], "priority": "high"}'::jsonb
-        WHEN p.product_code = 'nexus' THEN 
+        WHEN p.product_code = 'peregrine' THEN 
             '{"persona_types": ["adversarial", "normal", "edge-case"], "scenario_categories": ["customer_support", "technical_inquiry"]}'::jsonb
     END
 FROM client_models cm
@@ -247,14 +247,14 @@ SELECT
     CASE 
         WHEN p.product_code = 'ai-range' THEN 
             '{"test_types": ["adversarial", "safety", "hipaa_compliance", "data_privacy"], "priority": "critical"}'::jsonb
-        WHEN p.product_code = 'nexus' THEN 
+        WHEN p.product_code = 'peregrine' THEN 
             '{"persona_types": ["patient", "doctor", "adversarial"], "scenario_categories": ["diagnosis_inquiry", "medication_questions", "emergency"]}'::jsonb
     END
 FROM client_models cm
 CROSS JOIN products p
 WHERE cm.model_name = 'MedicalAssistant-AI';
 
--- EduTech Platform - Model uses Nexus only
+-- EduTech Platform - Model uses Peregrine only
 INSERT INTO client_model_products (model_id, product_id, tenant_id, enabled, configuration)
 SELECT 
     cm.model_id,
@@ -265,7 +265,7 @@ SELECT
 FROM client_models cm
 CROSS JOIN products p
 WHERE cm.model_name = 'TutorBot-Student'
-  AND p.product_code = 'nexus';
+  AND p.product_code = 'peregrine';
 
 -- ============================================================================
 -- 6. INSERT TEST CATEGORIES (AI-Range Product)
@@ -647,7 +647,7 @@ PRINT 'Inserting product usage records...';
 
 -- Get the product IDs (they should exist from the initial products insert)
 WITH product_ids AS (
-    SELECT id, product_code FROM products WHERE product_code IN ('ai-range', 'nexus')
+    SELECT id, product_code FROM products WHERE product_code IN ('ai-range', 'peregrine')
 ),
 tenant_ids AS (
     SELECT id, tenant_name FROM tenants LIMIT 2

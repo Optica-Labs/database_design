@@ -1,10 +1,10 @@
-# Archived: Nexus Products Documentation Summary
+# Archived: Peregrine Products Documentation Summary
 
-**ARCHIVED SNAPSHOT**: Historical Nexus documentation summary.  
-For current Nexus information, see `docs/NEXUS_PRODUCTS_INTEGRATION.md`.
+**ARCHIVED SNAPSHOT**: Historical Peregrine documentation summary.  
+For current Peregrine information, see `docs/NEXUS_PRODUCTS_INTEGRATION.md`.
 
 This file was archived; core content has been merged into:
-- `docs/NEXUS_ALPHA_ARCHITECTURE.md` (Nexus Alpha canonical spec)
+- `docs/NEXUS_ALPHA_ARCHITECTURE.md` (Peregrine Alpha canonical spec)
 - `docs/NEXUS_PRODUCTS_INTEGRATION.md` (products comparison)
 - `DOCUMENTATION.md` (master reference)
 
@@ -13,7 +13,7 @@ Archived copy (full content preserved): `docs/archive/NEXUS_DOCUMENTATION_SUMMAR
 ### 📄 New Documentation Files
 
 1. **[docs/NEXUS_ALPHA_ARCHITECTURE.md](docs/NEXUS_ALPHA_ARCHITECTURE.md)** (Comprehensive)
-   - Complete Nexus Alpha schema documentation
+   - Complete Peregrine Alpha schema documentation
    - 4-stage analysis pipeline explanation
    - All output tables with field descriptions
    - 8 query examples for accessing outputs
@@ -21,7 +21,7 @@ Archived copy (full content preserved): `docs/archive/NEXUS_DOCUMENTATION_SUMMAR
    - Integration with unified platform
 
 2. **[docs/NEXUS_PRODUCTS_INTEGRATION.md](docs/NEXUS_PRODUCTS_INTEGRATION.md)** (Strategic)
-   - Comparison matrix between Nexus and Nexus Alpha
+   - Comparison matrix between Peregrine and Peregrine Alpha
    - System architecture diagram
    - End-to-end data flow
    - Integration points and patterns
@@ -30,24 +30,24 @@ Archived copy (full content preserved): `docs/archive/NEXUS_DOCUMENTATION_SUMMAR
 
 ---
 
-## The Two Nexus Products Explained
+## The Two Peregrine Products Explained
 
-### Nexus: Prompt Library
+### Peregrine: Prompt Library
 **Purpose**: Ground truth repository of prompts for testing
 
 | Aspect | Details |
 |--------|---------|
 | **Input** | Stage 4 Cat-Astrophic prompts + Client submissions |
-| **Output** | `nexus_prompt_library` (available prompts) |
+| **Output** | `peregrine_prompt_library` (available prompts) |
 | **Storage** | Prompt-level (stored once, reused) |
 | **Key Function** | Ingestion & cross-product lineage |
-| **Tables** | `client_prompt_submissions`, `nexus_prompt_library`, `product_prompt_lineage` |
+| **Tables** | `client_prompt_submissions`, `peregrine_prompt_library`, `product_prompt_lineage` |
 
 **Use Case**: "Which prompts are available for testing?"
 
 ---
 
-### Nexus Alpha: AI Assurance Platform
+### Peregrine Alpha: AI Assurance Platform
 **Purpose**: Model robustness & safety evaluation
 
 | Aspect | Details |
@@ -69,7 +69,7 @@ AI-Range (Generates prompts)
          ↓
     Stage 4 Turns
          ↓
-    Nexus Library (Ingestion)
+    Peregrine Library (Ingestion)
          ↓
     Available Prompts
          ↓
@@ -77,7 +77,7 @@ AI-Range (Generates prompts)
          ↓
     Conversations + Turns
          ↓
-    Nexus Alpha (Analysis)
+    Peregrine Alpha (Analysis)
          ↓
     ρ, φ, Risk Metrics, Sycophancy
          ↓
@@ -88,7 +88,7 @@ AI-Range (Generates prompts)
 
 ## Key Outputs
 
-### From Nexus Alpha
+### From Peregrine Alpha
 
 #### Stage 1: Risk Metrics (`risk_metrics`)
 Per-turn risk signals showing user escalation and model safety degradation.
@@ -247,7 +247,7 @@ ORDER BY fs.phi_score DESC;
 
 ## Integration with Unified Platform
 
-Nexus Alpha outputs feed back into AI-Range for:
+Peregrine Alpha outputs feed back into AI-Range for:
 
 1. **Prompt Effectiveness** - Which prompts best reveal model vulnerabilities
 2. **Model Selection** - Which models are production-ready
@@ -269,8 +269,8 @@ Nexus Alpha outputs feed back into AI-Range for:
 ## Delivery Summary ✅
 
 ### Documentation Completed
-- ✅ Complete Nexus Alpha technical reference (17 tables, 4 analysis stages)
-- ✅ Nexus vs Nexus Alpha comparison and integration guide
+- ✅ Complete Peregrine Alpha technical reference (17 tables, 4 analysis stages)
+- ✅ Peregrine vs Peregrine Alpha comparison and integration guide
 - ✅ 8+ SQL query examples with use cases
 - ✅ Data flow architecture diagrams (Mermaid)
 - ✅ Integration patterns documented
@@ -300,7 +300,7 @@ All documentation files:
 
 ## Next Steps (Optional)
 
-1. Create SQL query file for Nexus Alpha (sql/queries/nexus_alpha_queries.sql)
-2. Create sample data loading script (sql/sample_data/nexus_alpha_sample.sql)
-3. Create migration scripts from MySQL source (sql/migrations/nexus_alpha_migration.sql)
+1. Create SQL query file for Peregrine Alpha (sql/queries/peregrine_alpha_queries.sql)
+2. Create sample data loading script (sql/sample_data/peregrine_alpha_sample.sql)
+3. Create migration scripts from MySQL source (sql/migrations/peregrine_alpha_migration.sql)
 4. Set up production deployment and monitoring

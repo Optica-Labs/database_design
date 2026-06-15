@@ -1,4 +1,4 @@
-# Archived: AI-Range & Nexus Unified Platform - Final Architecture
+# Archived: AI-Range & Peregrine Unified Platform - Final Architecture
 
 **ARCHIVED SNAPSHOT**: Historical unified platform overview.  
 For current platform documentation, see root-level `DOCUMENTATION.md` and component-specific docs in `docs/` folder.
@@ -10,14 +10,14 @@ See the canonical documents:
 - `MASTER_DOCUMENTATION_INDEX.md` (navigation)
 - `docs/NEXUS_PRODUCTS_INTEGRATION.md` (product comparison)
 
-Archived copy (full content preserved): `docs/archive/AI-Range & Nexus Unified Platform .md`
+Archived copy (full content preserved): `docs/archive/AI-Range & Peregrine Unified Platform .md`
 
 ## Complete List of Tables with product_id
 
-All operational tables now include `product_id UUID NOT NULL REFERENCES products(id)` linking to AI-Range or Nexus. The database currently contains **75 tables** implementing the unified platform architecture:
+All operational tables now include `product_id UUID NOT NULL REFERENCES products(id)` linking to AI-Range or Peregrine. The database currently contains **75 tables** implementing the unified platform architecture:
 
 ### Product & Tenant Management (4 tables)
-1. ✅ `products` - Platform products (AI-Range, Nexus)
+1. ✅ `products` - Platform products (AI-Range, Peregrine)
 2. ✅ `product_usage` - Product usage tracking for billing and analytics
 3. ✅ `tenants` - Client organizations
 4. ✅ `client_product_subscriptions` - Product subscription management
@@ -110,9 +110,9 @@ All operational tables now include `product_id UUID NOT NULL REFERENCES products
 67. ✅ `compliance_reports` - Compliance assessment reports
 68. ✅ `audit_logs` - System audit trail
 
-### Nexus Ground Truth (3 tables)
+### Peregrine Ground Truth (3 tables)
 69. ✅ `client_prompt_submissions` - Client-provided prompts
-70. ✅ `nexus_prompt_library` - Unified prompt library (Stage 4 + client)
+70. ✅ `peregrine_prompt_library` - Unified prompt library (Stage 4 + client)
 71. ✅ `product_prompt_lineage` - Cross-product lineage (auto-maintained)
 
 ### Data Sources & Utilities (4 tables)
@@ -134,7 +134,7 @@ graph TB
         prompts["Prompt Generation<br/>Adversarial Prompts"]
     end
     
-    subgraph nexus["🟪 NEXUS PRODUCT"]
+    subgraph peregrine["🟪 NEXUS PRODUCT"]
         library["Prompt Library<br/>Ground Truth"]
         lineage["Product Lineage<br/>Cross-Product Traceability"]
     end
@@ -153,14 +153,14 @@ graph TB
     prompts -->|Auto INSERT trigger| library
     library --> lineage
     lineage -->|Links to| airange
-    lineage -->|Links to| nexus
+    lineage -->|Links to| peregrine
     
     products -.->|product_id| airange
     tenants -.->|tenant_id| airange
-    subscriptions -.->|manages access| nexus
+    subscriptions -.->|manages access| peregrine
     
     style airange fill:#e1f5ff
-    style nexus fill:#f3e5f5
+    style peregrine fill:#f3e5f5
     style infra fill:#f5f5f5
     style library fill:#fff9c4
     style lineage fill:#c8e6c9
@@ -206,7 +206,7 @@ flowchart TD
     
     CatAstro --> Evaluation
     Evaluation --> Analysis
-    Analysis --> Output["Final Prompts<br/>Ready for Nexus"]
+    Analysis --> Output["Final Prompts<br/>Ready for Peregrine"]
     
     style Commander fill:#ff6b6b
     style Evaluation fill:#4ecdc4
@@ -327,7 +327,7 @@ flowchart TD
     Quality["Quality Metrics<br/>Diversity & Fit"]
     
     PromptCreate["Prompts Created"]
-    NexusLink["Auto-linked to Nexus<br/>via Lineage Trigger"]
+    PeregrineLink["Auto-linked to Peregrine<br/>via Lineage Trigger"]
     
     Complete["Test Complete"]
     
@@ -340,12 +340,12 @@ flowchart TD
     AgentExec --> Safety
     Safety --> Quality
     Quality --> PromptCreate
-    PromptCreate --> NexusLink
-    NexusLink --> Complete
+    PromptCreate --> PeregrineLink
+    PeregrineLink --> Complete
     
     style TestStart fill:#90EE90
     style Complete fill:#FFB6C6
-    style NexusLink fill:#FFD700
+    style PeregrineLink fill:#FFD700
     style Safety fill:#FF6B6B
 ```
 ### 4. **Integrated Workflows**
@@ -369,9 +369,9 @@ flowchart TD
 - Consistent trait-based classification enabling persona grouping and analysis
 
 ### 3. **Complete Product Integration**
-- All operational tables linked via `product_id` to either AI-Range or Nexus
+- All operational tables linked via `product_id` to either AI-Range or Peregrine
 - AI-Range: Unified platform for testing, safety, personas, scenarios, and prompt generation
-- Nexus: Ground truth prompt library with automatic cross-product lineage
+- Peregrine: Ground truth prompt library with automatic cross-product lineage
 - Simplified subscription and access control via `client_product_subscriptions`
 
 ## Cat-Astrophic Prompt Generation System Integration
@@ -400,7 +400,7 @@ sequenceDiagram
     participant User as User/Tenant
     participant AiRange as AI-Range Platform
     participant Agent as AI Agents
-    participant Nexus as Nexus Library
+    participant Peregrine as Peregrine Library
     participant DB as Database
     
     User->>AiRange: Create Generation Run
@@ -414,12 +414,12 @@ sequenceDiagram
     deactivate Agent
     
     Agent->>DB: Insert turns with prompts (Stage 4)
-    DB->>Nexus: Trigger: Auto-ingest Stage 4 prompts
+    DB->>Peregrine: Trigger: Auto-ingest Stage 4 prompts
     
-    activate Nexus
-    Nexus->>DB: Insert nexus_prompt_library records
-    Nexus->>DB: Trigger: Create product_prompt_lineage entries
-    deactivate Nexus
+    activate Peregrine
+    Peregrine->>DB: Insert peregrine_prompt_library records
+    Peregrine->>DB: Trigger: Create product_prompt_lineage entries
+    deactivate Peregrine
     
     DB->>AiRange: Lineage created for all products
     AiRange->>User: Generation complete with lineage
@@ -520,7 +520,7 @@ Complete tracking of all agent interactions, workflows, data flows, and decision
 │  Analysis Agent                         │      └─ outputs: quality metrics
 └──────────────────────────────────────────┘
        ▼
-  Final Prompt Ready for Nexus Integration
+  Final Prompt Ready for Peregrine Integration
 ```
 
 ### Integration Example
@@ -648,24 +648,24 @@ WHERE ai.status = 'failed'
 ORDER BY ai.created_at DESC;
 ```
 
-## Nexus Ground Truth Integration
+## Peregrine Ground Truth Integration
 
-The Nexus product has been fully integrated as the **unified prompt library and ground truth** for all prompts across the platform. Nexus ingests completed Stage 4 Cat-Astrophic prompts and client-provided prompts, making them discoverable and reusable across all products.
+The Peregrine product has been fully integrated as the **unified prompt library and ground truth** for all prompts across the platform. Peregrine ingests completed Stage 4 Cat-Astrophic prompts and client-provided prompts, making them discoverable and reusable across all products.
 
 ### Core Tables
 
 | Table | Purpose |
 |-------|---------|
 | `client_prompt_submissions` | Client-provided prompts with review pipeline and approval workflow |
-| `nexus_prompt_library` | Unified prompt library combining Stage 4 Cat-Astrophic prompts and approved client submissions |
+| `peregrine_prompt_library` | Unified prompt library combining Stage 4 Cat-Astrophic prompts and approved client submissions |
 | `product_prompt_lineage` | Automatic cross-product traceability linking prompts to all consuming products |
 
 ### Key Features
 
-- **Automatic Ingestion**: Stage 4 prompts from AI-Range automatically populate Nexus library via INSERT trigger
+- **Automatic Ingestion**: Stage 4 prompts from AI-Range automatically populate Peregrine library via INSERT trigger
 - **Client Integration**: Client-provided prompts enter via submission pipeline with approval workflow
 - **Cross-Product Traceability**: All prompts automatically linked to consuming products via `product_prompt_lineage` table
-- **Trigger-Based Automation**: `trg_link_nexus_prompt_lineage()` function maintains lineage on insert (zero-touch maintenance)
+- **Trigger-Based Automation**: `trg_link_peregrine_prompt_lineage()` function maintains lineage on insert (zero-touch maintenance)
 - **Bidirectional Queries**: Views enable tracing prompts forward (library → products) and backward (product → source)
 - **Multi-Tenant Isolation**: All tables include `tenant_id` and `product_id` for complete data isolation
 
@@ -674,13 +674,13 @@ The Nexus product has been fully integrated as the **unified prompt library and 
 ```
 AI-Range Stage 4 Turn
        │
-       ├─ INSERT into nexus_prompt_library
+       ├─ INSERT into peregrine_prompt_library
        │
-       └─ TRIGGER: trg_link_nexus_prompt_lineage()
+       └─ TRIGGER: trg_link_peregrine_prompt_lineage()
               │
               └─ Auto-CREATE product_prompt_lineage entry
                      │
-                     ├─ Links Turn → Nexus Prompt
+                     ├─ Links Turn → Peregrine Prompt
                      ├─ Marks source as 'cat-astrophic'
                      └─ Enables ALL products to discover & use this prompt
 ```
@@ -689,12 +689,12 @@ AI-Range Stage 4 Turn
 
 ```sql
 -- Stage 4 prompt automatically triggers lineage creation
-INSERT INTO nexus_prompt_library (
+INSERT INTO peregrine_prompt_library (
     product_id, tenant_id, source_type, cat_turn_id, 
     prompt_text, metadata, status
 )
 SELECT 
-    nexus_prod.id,
+    peregrine_prod.id,
     t.id,
     'cat-astrophic',
     tur.id,
@@ -708,14 +708,14 @@ SELECT
 FROM turns tur
 JOIN conversations c ON tur.conversation_id = c.id
 JOIN generation_runs gr ON c.generation_run_id = gr.id
-JOIN products nexus_prod ON nexus_prod.product_code = 'nexus'
+JOIN products peregrine_prod ON peregrine_prod.product_code = 'peregrine'
 JOIN tenants t ON t.id = tur.tenant_id
 WHERE tur.turn_stage = 4
   AND tur.product_id = (SELECT id FROM products WHERE product_code = 'ai-range');
 
 -- The trigger automatically creates lineage - NO ADDITIONAL STEP NEEDED
--- SELECT * FROM product_prompt_lineage WHERE nexus_prompt_id = (last_inserted_id)
--- Shows automatic record linking the Nexus prompt to all products
+-- SELECT * FROM product_prompt_lineage WHERE peregrine_prompt_id = (last_inserted_id)
+-- Shows automatic record linking the Peregrine prompt to all products
 ```
 
 ### Query Examples
@@ -723,8 +723,8 @@ WHERE tur.turn_stage = 4
 **Find all prompts available to a product:**
 ```sql
 SELECT np.prompt_text, np.metadata, ppl.product_id
-FROM nexus_prompt_library np
-JOIN product_prompt_lineage ppl ON ppl.nexus_prompt_id = np.id
+FROM peregrine_prompt_library np
+JOIN product_prompt_lineage ppl ON ppl.peregrine_prompt_id = np.id
 WHERE ppl.product_id = (SELECT id FROM products WHERE product_code = 'your-product')
   AND np.status = 'active'
 ORDER BY np.created_at DESC;
@@ -736,8 +736,8 @@ SELECT
     np.prompt_text,
     p.product_name,
     ppl.created_at as linked_at
-FROM nexus_prompt_library np
-JOIN product_prompt_lineage ppl ON ppl.nexus_prompt_id = np.id
+FROM peregrine_prompt_library np
+JOIN product_prompt_lineage ppl ON ppl.peregrine_prompt_id = np.id
 JOIN products p ON ppl.product_id = p.id
 WHERE np.id = 'prompt-uuid-here'
 ORDER BY p.product_name;
@@ -768,17 +768,17 @@ ORDER BY p.product_name;
 - ✅ [PRODUCT_LAYER_ARCHITECTURE.md](docs/PRODUCT_LAYER_ARCHITECTURE.md) - Product architecture details
 - ✅ [INDEX.md](docs/INDEX.md) - Complete table index and cross-references
 
-## Nexus Product Integration
+## Peregrine Product Integration
 
 **Current Status**: Active (prompt ingestion + library)
 
 **Core Tables**:
 - `client_prompt_submissions` - Client-provided prompts with approval workflow
-- `nexus_prompt_library` - Unified prompt library
+- `peregrine_prompt_library` - Unified prompt library
 - `product_prompt_lineage` - Automatic cross-product traceability
 
 **Automated Ingestion**:
-- Completed, successful Stage 4 Cat-Astrophic prompts automatically populate Nexus
+- Completed, successful Stage 4 Cat-Astrophic prompts automatically populate Peregrine
 - Client-provided prompt submissions enter through review pipeline
 - Trigger-based lineage maintains cross-product references
 
@@ -790,7 +790,7 @@ ORDER BY p.product_name;
 4. ✅ **Prompt Generation** - 6 tables for Cat-Astrophic prompt generation with full traceability
 5. ✅ **Agent Workflow Tracking** - 7 tables capturing complete agent interactions and data flows
 6. ✅ **Library Access Auditing** - Visibility into persona, scenario, test case, threat, and risk usage by agents
-7. ✅ **Nexus Ground Truth** - Prompt library with automatic cross-product lineage
+7. ✅ **Peregrine Ground Truth** - Prompt library with automatic cross-product lineage
 8. ✅ **Multi-Tenant Support** - Complete tenant isolation with product-based access control
 
 ## Architecture Summary
@@ -803,4 +803,4 @@ AI-Range provides a comprehensive, unified platform for AI testing, safety asses
 - Decision points and branch logic in the workflow
 - Performance and quality metrics for each interaction
 
-The integration with Nexus creates a complete ground truth system for prompt management and cross-product lineage tracking, while the agent interaction system ensures complete transparency and auditability of all prompt generation processes.
+The integration with Peregrine creates a complete ground truth system for prompt management and cross-product lineage tracking, while the agent interaction system ensures complete transparency and auditability of all prompt generation processes.

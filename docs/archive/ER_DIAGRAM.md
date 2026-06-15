@@ -305,16 +305,16 @@ model_outputs
 - Filtered indexes for active records
 - Consider columnstore for large fact tables
 
-## Nexus Ground Truth Integration (NEW)
+## Peregrine Ground Truth Integration (NEW)
 
-The integrated schema now includes **Nexus ground truth** for unified prompt management:
+The integrated schema now includes **Peregrine ground truth** for unified prompt management:
 
 ```
 ┌─────────────────────────────┐
 │  NEXUS_PROMPT_LIBRARY       │
 │─────────────────────────────│
 │ id (PK)                     │
-│ product_id (FK → nexus)     │
+│ product_id (FK → peregrine)     │
 │ tenant_id (FK)              │
 │ source_type (cat-astro|cli) │
 │ cat_turn_id (FK) or         │
@@ -330,9 +330,9 @@ The integrated schema now includes **Nexus ground truth** for unified prompt man
 │────────────────────────────────────│
 │ id (PK)                            │
 │ ai_range_turn_id (FK)              │
-│ nexus_prompt_id (FK)               │
+│ peregrine_prompt_id (FK)               │
 │ ai_range_product_id (FK)           │
-│ nexus_product_id (FK)              │
+│ peregrine_product_id (FK)              │
 │ lineage_type (stage4|other)        │
 │ created_at (auto-maintained)       │
 └────────────────────────────────────┘
@@ -340,14 +340,14 @@ The integrated schema now includes **Nexus ground truth** for unified prompt man
          │ allows bidirectional tracing
          ├──────────────┬───────────────┐
          ▼              ▼               ▼
-   AI-Range       Nexus Library   Cross-Product
+   AI-Range       Peregrine Library   Cross-Product
    Turn           Entry            Visibility
 ```
 
 ### Automatic Lineage
 
-When a Stage 4 prompt is ingested into Nexus:
-1. Insert row in `nexus_prompt_library` with `source_type = 'cat-astrophic'`
+When a Stage 4 prompt is ingested into Peregrine:
+1. Insert row in `peregrine_prompt_library` with `source_type = 'cat-astrophic'`
 2. Trigger automatically creates `product_prompt_lineage` entry
 3. Both products now have bidirectional visibility
 

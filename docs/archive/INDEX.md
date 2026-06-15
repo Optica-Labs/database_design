@@ -13,7 +13,7 @@ Archived copy (full content preserved): `docs/archive/INDEX.md`
 
 This directory contains:
 - Integrated database schema combining adversarial AI safety testing with persona-based risk assessment
-- Unified product layer architecture (AI-Range + Nexus)
+- Unified product layer architecture (AI-Range + Peregrine)
 - Multi-tenancy support and subscription management
 - Cat-Astrophic (PromptGoblin v2) prompt generation system
 - Comprehensive threat and risk framework
@@ -39,7 +39,7 @@ The database is organized into **two interconnected layers**:
 | **[../DOCUMENTATION.md](../DOCUMENTATION.md)** | **⭐ Consolidated master doc** | You want the full repo documentation in one place |
 | **[PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)** | **⭐ Product layer guide** | You need to understand the multi-product architecture |
 | **[CAT_ASTROPHIC_INTEGRATION.md](CAT_ASTROPHIC_INTEGRATION.md)** | **⭐ Cat-Astrophic integration** | You want details on PromptGoblin v2 tables |
-| **[NEXUS_INTEGRATION.md](NEXUS_INTEGRATION.md)** | **⭐ Nexus integration** | You need Nexus prompt ingestion and library details |
+| **[NEXUS_INTEGRATION.md](NEXUS_INTEGRATION.md)** | **⭐ Peregrine integration** | You need Peregrine prompt ingestion and library details |
 | **[AGENT_ER_DIAGRAMS.md](AGENT_ER_DIAGRAMS.md)** | Agent ER diagrams | You need per-agent table maps |
 | **[../AI_RANGE_UNIFIED_ARCHITECTURE.md](../AI_RANGE_UNIFIED_ARCHITECTURE.md)** | Unified architecture | You need the overall system architecture |
 | **[../sql/schemas/schema_integrated.sql](../sql/schemas/schema_integrated.sql)** | Complete schema | You're deploying the database |
@@ -51,7 +51,7 @@ The database is organized into **two interconnected layers**:
 | **[../DOCUMENTATION.md](../DOCUMENTATION.md)** | **⭐ Consolidated master doc** | Full repository documentation |
 | **[PRODUCT_LAYER_ARCHITECTURE.md](PRODUCT_LAYER_ARCHITECTURE.md)** | **⭐ Product layer docs** | Understanding how products, clients, and models connect |
 | **[CAT_ASTROPHIC_INTEGRATION.md](CAT_ASTROPHIC_INTEGRATION.md)** | **⭐ Cat-Astrophic integration** | Detailed PromptGoblin v2 table definitions and queries |
-| **[NEXUS_INTEGRATION.md](NEXUS_INTEGRATION.md)** | **⭐ Nexus integration** | Nexus prompt ingestion and library tables |
+| **[NEXUS_INTEGRATION.md](NEXUS_INTEGRATION.md)** | **⭐ Peregrine integration** | Peregrine prompt ingestion and library tables |
 | **[AGENT_ER_DIAGRAMS.md](AGENT_ER_DIAGRAMS.md)** | Agent ER diagrams | Agent-specific ER maps |
 | **[ER_DIAGRAM.md](ER_DIAGRAM.md)** | Original ER diagrams | Reference for legacy system |
 | **[PRODUCT_LAYER_ER_DIAGRAM.md](PRODUCT_LAYER_ER_DIAGRAM.md)** | Product layer diagram | Visualizing product architecture |
@@ -66,8 +66,8 @@ The database is organized into **two interconnected layers**:
 | **[../sql/queries/queries.sql](../sql/queries/queries.sql)** | Example queries | Learning the schema |
 | **[../sql/queries/cat_astrophic_queries.sql](../sql/queries/cat_astrophic_queries.sql)** | **⭐ Cat-Astrophic queries** | Query examples for PromptGoblin v2 tables |
 | **[../sql/views/cat_astrophic_views.sql](../sql/views/cat_astrophic_views.sql)** | **⭐ Cat-Astrophic views** | Pre-built views for common analyses |
-| **[../sql/views/nexus_views.sql](../sql/views/nexus_views.sql)** | **⭐ Nexus views** | Pre-built views for Nexus prompt ingestion |
-| **[../sql/views/nexus_views.sql](../sql/views/nexus_views.sql)** | **⭐ Nexus views** | Pre-built views for Nexus prompt ingestion |
+| **[../sql/views/peregrine_views.sql](../sql/views/peregrine_views.sql)** | **⭐ Peregrine views** | Pre-built views for Peregrine prompt ingestion |
+| **[../sql/views/peregrine_views.sql](../sql/views/peregrine_views.sql)** | **⭐ Peregrine views** | Pre-built views for Peregrine prompt ingestion |
 | **[../sql/sample_data/sample_data.sql](../sql/sample_data/sample_data.sql)** | Sample data | Testing the schema |
 
 ### 📊 Diagrams

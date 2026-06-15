@@ -12,7 +12,7 @@ This folder contains schema and documentation alignment artifacts.
 - [SCHEMA_ALIGNMENT_ISSUES.md](SCHEMA_ALIGNMENT_ISSUES.md): Identified issues and priorities.
 - [ALIGNMENT_SUMMARY.md](ALIGNMENT_SUMMARY.md): Executive summary.
 - [NAVIGATION_GUIDE.md](NAVIGATION_GUIDE.md): Reading/navigation guide.
-- [AUDIT_COMPLETION_REPORT.md](AUDIT_COMPLETION_REPORT.md): Completion report.
+- [AUDIT_COMPLETION_REPORT.md](../archive/AUDIT_COMPLETION_REPORT.md): Completion report (archived).
 
 ## Repeatable live check
 

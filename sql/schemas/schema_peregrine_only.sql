@@ -1,16 +1,16 @@
 -- ============================================================================
 -- NEXUS PRODUCT SCHEMA (WITH ALL PARENT/SHARED TABLES)
 -- ============================================================================
--- This schema contains ALL Nexus (AI Assurance Platform) specific tables PLUS 
--- all parent/shared tables that Nexus depends on. This is a complete deployable 
--- schema for Nexus.
+-- This schema contains ALL Peregrine (AI Assurance Platform) specific tables PLUS 
+-- all parent/shared tables that Peregrine depends on. This is a complete deployable 
+-- schema for Peregrine.
 --
 -- Includes:
--- - Product metadata (products table with nexus entry)
+-- - Product metadata (products table with peregrine entry)
 -- - Tenant & subscription management
 -- - AI agents and models
--- - Nexus prompt library with client submissions
--- - Nexus Alpha analysis (risk metrics, robustness analysis, fragility scores, sycophancy detection)
+-- - Peregrine prompt library with client submissions
+-- - Peregrine Alpha analysis (risk metrics, robustness analysis, fragility scores, sycophancy detection)
 -- - Embeddings and vector analysis
 -- - PCA models and configuration snapshots
 -- - API usage tracking and benchmark tests
@@ -20,7 +20,7 @@
 -- NOTE: Includes product_prompt_lineage for traceability to AI-Range Stage 4 prompts
 --
 -- Target: PostgreSQL 14+
--- File: schema_nexus_only.sql
+-- File: schema_peregrine_only.sql
 -- Generated: March 4, 2026
 -- ============================================================================
 
@@ -29,12 +29,12 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "vector";
 
 -- ============================================================================
--- PRODUCT LAYER (Shared - but filtered to nexus)
+-- PRODUCT LAYER (Shared - but filtered to peregrine)
 -- ============================================================================
 
 CREATE TABLE products (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    product_code TEXT NOT NULL UNIQUE CHECK (product_code IN ('nexus')),
+    product_code TEXT NOT NULL UNIQUE CHECK (product_code IN ('peregrine')),
     product_name TEXT NOT NULL,
     description TEXT,
     features JSONB DEFAULT '{}'::jsonb,
@@ -48,7 +48,7 @@ CREATE TABLE products (
 CREATE INDEX idx_products_code_status ON products(product_code, status);
 
 INSERT INTO products (product_code, product_name, description, status) VALUES
-('nexus', 'Nexus', 'AI Assurance and Analysis Platform for model risk assessment', 'active');
+('peregrine', 'Peregrine', 'AI Assurance and Analysis Platform for model risk assessment', 'active');
 
 -- ============================================================================
 -- PRODUCT USAGE TRACKING
@@ -221,10 +221,10 @@ CREATE TABLE linguistic_traits_catalog (
 );
 
 -- ============================================================================
--- NEXUS PROMPT LIBRARY (Nexus specific)
+-- NEXUS PROMPT LIBRARY (Peregrine specific)
 -- ============================================================================
 
-CREATE TABLE nexus_prompt_library (
+CREATE TABLE peregrine_prompt_library (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     prompt_name TEXT NOT NULL,
@@ -251,13 +251,13 @@ CREATE TABLE nexus_prompt_library (
     archived_at TIMESTAMP WITH TIME ZONE
 );
 
-CREATE INDEX idx_nexus_prompt_library_product ON nexus_prompt_library(product_id);
-CREATE INDEX idx_nexus_prompt_library_category ON nexus_prompt_library(category);
-CREATE INDEX idx_nexus_prompt_library_stage ON nexus_prompt_library(stage);
-CREATE INDEX idx_nexus_prompt_library_status ON nexus_prompt_library(status);
+CREATE INDEX idx_peregrine_prompt_library_product ON peregrine_prompt_library(product_id);
+CREATE INDEX idx_peregrine_prompt_library_category ON peregrine_prompt_library(category);
+CREATE INDEX idx_peregrine_prompt_library_stage ON peregrine_prompt_library(stage);
+CREATE INDEX idx_peregrine_prompt_library_status ON peregrine_prompt_library(status);
 
 -- ============================================================================
--- CLIENT PROMPT SUBMISSIONS (Nexus specific)
+-- CLIENT PROMPT SUBMISSIONS (Peregrine specific)
 -- ============================================================================
 
 CREATE TABLE client_prompt_submissions (
@@ -290,13 +290,13 @@ CREATE INDEX idx_client_submissions_status ON client_prompt_submissions(submissi
 CREATE INDEX idx_client_submissions_risk ON client_prompt_submissions(risk_level);
 
 -- ============================================================================
--- PRODUCT PROMPT LINEAGE (Links AI-Range Stage 4 to Nexus)
+-- PRODUCT PROMPT LINEAGE (Links AI-Range Stage 4 to Peregrine)
 -- ============================================================================
 
 CREATE TABLE product_prompt_lineage (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     product_id UUID NOT NULL REFERENCES products(id),
-    nexus_prompt_id BIGINT REFERENCES nexus_prompt_library(id),
+    peregrine_prompt_id BIGINT REFERENCES peregrine_prompt_library(id),
     ai_range_turn_id VARCHAR(100),
     ai_range_conversation_id VARCHAR(100),
     ai_range_session_id TEXT,
@@ -307,14 +307,14 @@ CREATE TABLE product_prompt_lineage (
 );
 
 CREATE INDEX idx_product_lineage_product ON product_prompt_lineage(product_id);
-CREATE INDEX idx_product_lineage_nexus ON product_prompt_lineage(nexus_prompt_id);
+CREATE INDEX idx_product_lineage_peregrine ON product_prompt_lineage(peregrine_prompt_id);
 CREATE INDEX idx_product_lineage_ai_range ON product_prompt_lineage(ai_range_turn_id);
 
 -- ============================================================================
 -- NEXUS ALPHA ANALYSIS - CONVERSATIONS & TURNS
 -- ============================================================================
 
-CREATE TABLE nexus_alpha_conversations (
+CREATE TABLE peregrine_alpha_conversations (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT NOT NULL REFERENCES client_models(model_id),
@@ -329,14 +329,14 @@ CREATE TABLE nexus_alpha_conversations (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_conversations_product ON nexus_alpha_conversations(product_id);
-CREATE INDEX idx_nexus_conversations_model ON nexus_alpha_conversations(model_id);
-CREATE INDEX idx_nexus_conversations_id ON nexus_alpha_conversations(conversation_id);
+CREATE INDEX idx_peregrine_conversations_product ON peregrine_alpha_conversations(product_id);
+CREATE INDEX idx_peregrine_conversations_model ON peregrine_alpha_conversations(model_id);
+CREATE INDEX idx_peregrine_conversations_id ON peregrine_alpha_conversations(conversation_id);
 
-CREATE TABLE nexus_alpha_turns (
+CREATE TABLE peregrine_alpha_turns (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
-    conversation_id BIGINT NOT NULL REFERENCES nexus_alpha_conversations(id),
+    conversation_id BIGINT NOT NULL REFERENCES peregrine_alpha_conversations(id),
     turn_number INTEGER NOT NULL,
     turn_id VARCHAR(100) NOT NULL UNIQUE,
     role TEXT NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
@@ -348,18 +348,18 @@ CREATE TABLE nexus_alpha_turns (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_turns_product ON nexus_alpha_turns(product_id);
-CREATE INDEX idx_nexus_turns_conversation ON nexus_alpha_turns(conversation_id);
-CREATE INDEX idx_nexus_turns_id ON nexus_alpha_turns(turn_id);
+CREATE INDEX idx_peregrine_turns_product ON peregrine_alpha_turns(product_id);
+CREATE INDEX idx_peregrine_turns_conversation ON peregrine_alpha_turns(conversation_id);
+CREATE INDEX idx_peregrine_turns_id ON peregrine_alpha_turns(turn_id);
 
 -- ============================================================================
 -- NEXUS ALPHA ANALYSIS - EMBEDDINGS & VECTORS
 -- ============================================================================
 
-CREATE TABLE nexus_alpha_embeddings (
+CREATE TABLE peregrine_alpha_embeddings (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
-    turn_id BIGINT NOT NULL REFERENCES nexus_alpha_turns(id),
+    turn_id BIGINT NOT NULL REFERENCES peregrine_alpha_turns(id),
     embedding_type TEXT NOT NULL DEFAULT 'response' CHECK (embedding_type IN ('prompt', 'response', 'combined')),
     embedding_text TEXT NOT NULL,
     embedding vector NOT NULL,
@@ -367,13 +367,13 @@ CREATE TABLE nexus_alpha_embeddings (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_embeddings_product ON nexus_alpha_embeddings(product_id);
-CREATE INDEX idx_nexus_embeddings_turn ON nexus_alpha_embeddings(turn_id);
+CREATE INDEX idx_peregrine_embeddings_product ON peregrine_alpha_embeddings(product_id);
+CREATE INDEX idx_peregrine_embeddings_turn ON peregrine_alpha_embeddings(turn_id);
 
-CREATE TABLE nexus_alpha_vectors_2d (
+CREATE TABLE peregrine_alpha_vectors_2d (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
-    embedding_id BIGINT NOT NULL REFERENCES nexus_alpha_embeddings(id),
+    embedding_id BIGINT NOT NULL REFERENCES peregrine_alpha_embeddings(id),
     x_coordinate FLOAT NOT NULL,
     y_coordinate FLOAT NOT NULL,
     principal_component_1 FLOAT,
@@ -381,18 +381,18 @@ CREATE TABLE nexus_alpha_vectors_2d (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_vectors_product ON nexus_alpha_vectors_2d(product_id);
-CREATE INDEX idx_nexus_vectors_embedding ON nexus_alpha_vectors_2d(embedding_id);
+CREATE INDEX idx_peregrine_vectors_product ON peregrine_alpha_vectors_2d(product_id);
+CREATE INDEX idx_peregrine_vectors_embedding ON peregrine_alpha_vectors_2d(embedding_id);
 
 -- ============================================================================
 -- NEXUS ALPHA ANALYSIS - RISK METRICS
 -- ============================================================================
 
-CREATE TABLE nexus_alpha_risk_metrics (
+CREATE TABLE peregrine_alpha_risk_metrics (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
-    conversation_id BIGINT REFERENCES nexus_alpha_conversations(id),
-    turn_id BIGINT REFERENCES nexus_alpha_turns(id),
+    conversation_id BIGINT REFERENCES peregrine_alpha_conversations(id),
+    turn_id BIGINT REFERENCES peregrine_alpha_turns(id),
     risk_category TEXT NOT NULL,
     risk_score FLOAT NOT NULL CHECK (risk_score >= 0.0 AND risk_score <= 1.0),
     confidence_level FLOAT CHECK (confidence_level >= 0.0 AND confidence_level <= 1.0),
@@ -401,15 +401,15 @@ CREATE TABLE nexus_alpha_risk_metrics (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_risk_metrics_product ON nexus_alpha_risk_metrics(product_id);
-CREATE INDEX idx_nexus_risk_metrics_conversation ON nexus_alpha_risk_metrics(conversation_id);
-CREATE INDEX idx_nexus_risk_metrics_category ON nexus_alpha_risk_metrics(risk_category);
+CREATE INDEX idx_peregrine_risk_metrics_product ON peregrine_alpha_risk_metrics(product_id);
+CREATE INDEX idx_peregrine_risk_metrics_conversation ON peregrine_alpha_risk_metrics(conversation_id);
+CREATE INDEX idx_peregrine_risk_metrics_category ON peregrine_alpha_risk_metrics(risk_category);
 
 -- ============================================================================
 -- NEXUS ALPHA ANALYSIS - ROBUSTNESS ANALYSIS
 -- ============================================================================
 
-CREATE TABLE nexus_alpha_robustness_analysis (
+CREATE TABLE peregrine_alpha_robustness_analysis (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
@@ -427,14 +427,14 @@ CREATE TABLE nexus_alpha_robustness_analysis (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_robustness_product ON nexus_alpha_robustness_analysis(product_id);
-CREATE INDEX idx_nexus_robustness_model ON nexus_alpha_robustness_analysis(model_id);
+CREATE INDEX idx_peregrine_robustness_product ON peregrine_alpha_robustness_analysis(product_id);
+CREATE INDEX idx_peregrine_robustness_model ON peregrine_alpha_robustness_analysis(model_id);
 
 -- ============================================================================
 -- NEXUS ALPHA ANALYSIS - FRAGILITY SCORES
 -- ============================================================================
 
-CREATE TABLE nexus_alpha_fragility_scores (
+CREATE TABLE peregrine_alpha_fragility_scores (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
@@ -448,20 +448,20 @@ CREATE TABLE nexus_alpha_fragility_scores (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_fragility_product ON nexus_alpha_fragility_scores(product_id);
-CREATE INDEX idx_nexus_fragility_model ON nexus_alpha_fragility_scores(model_id);
-CREATE INDEX idx_nexus_fragility_category ON nexus_alpha_fragility_scores(fragility_category);
+CREATE INDEX idx_peregrine_fragility_product ON peregrine_alpha_fragility_scores(product_id);
+CREATE INDEX idx_peregrine_fragility_model ON peregrine_alpha_fragility_scores(model_id);
+CREATE INDEX idx_peregrine_fragility_category ON peregrine_alpha_fragility_scores(fragility_category);
 
 -- ============================================================================
 -- NEXUS ALPHA ANALYSIS - SYCOPHANCY DETECTION
 -- ============================================================================
 
-CREATE TABLE nexus_alpha_sycophancy_events (
+CREATE TABLE peregrine_alpha_sycophancy_events (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
-    conversation_id BIGINT REFERENCES nexus_alpha_conversations(id),
-    turn_id BIGINT REFERENCES nexus_alpha_turns(id),
+    conversation_id BIGINT REFERENCES peregrine_alpha_conversations(id),
+    turn_id BIGINT REFERENCES peregrine_alpha_turns(id),
     event_description TEXT NOT NULL,
     sycophancy_type TEXT NOT NULL CHECK (sycophancy_type IN ('agreement_bias', 'authority_deference', 'flattery_response', 'opinion_mirroring', 'other')),
     confidence_score FLOAT CHECK (confidence_score >= 0.0 AND confidence_score <= 1.0),
@@ -470,11 +470,11 @@ CREATE TABLE nexus_alpha_sycophancy_events (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_sycophancy_events_product ON nexus_alpha_sycophancy_events(product_id);
-CREATE INDEX idx_nexus_sycophancy_events_model ON nexus_alpha_sycophancy_events(model_id);
-CREATE INDEX idx_nexus_sycophancy_events_turn ON nexus_alpha_sycophancy_events(turn_id);
+CREATE INDEX idx_peregrine_sycophancy_events_product ON peregrine_alpha_sycophancy_events(product_id);
+CREATE INDEX idx_peregrine_sycophancy_events_model ON peregrine_alpha_sycophancy_events(model_id);
+CREATE INDEX idx_peregrine_sycophancy_events_turn ON peregrine_alpha_sycophancy_events(turn_id);
 
-CREATE TABLE nexus_alpha_sycophancy_analysis (
+CREATE TABLE peregrine_alpha_sycophancy_analysis (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
@@ -489,14 +489,14 @@ CREATE TABLE nexus_alpha_sycophancy_analysis (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_sycophancy_analysis_product ON nexus_alpha_sycophancy_analysis(product_id);
-CREATE INDEX idx_nexus_sycophancy_analysis_model ON nexus_alpha_sycophancy_analysis(model_id);
+CREATE INDEX idx_peregrine_sycophancy_analysis_product ON peregrine_alpha_sycophancy_analysis(product_id);
+CREATE INDEX idx_peregrine_sycophancy_analysis_model ON peregrine_alpha_sycophancy_analysis(model_id);
 
 -- ============================================================================
 -- NEXUS ALPHA ANALYSIS - PCA MODELS & CONFIGURATION
 -- ============================================================================
 
-CREATE TABLE nexus_alpha_pca_models (
+CREATE TABLE peregrine_alpha_pca_models (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
@@ -512,10 +512,10 @@ CREATE TABLE nexus_alpha_pca_models (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_pca_product ON nexus_alpha_pca_models(product_id);
-CREATE INDEX idx_nexus_pca_model ON nexus_alpha_pca_models(model_id);
+CREATE INDEX idx_peregrine_pca_product ON peregrine_alpha_pca_models(product_id);
+CREATE INDEX idx_peregrine_pca_model ON peregrine_alpha_pca_models(model_id);
 
-CREATE TABLE nexus_alpha_configuration_snapshots (
+CREATE TABLE peregrine_alpha_configuration_snapshots (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
@@ -528,14 +528,14 @@ CREATE TABLE nexus_alpha_configuration_snapshots (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_config_snapshots_product ON nexus_alpha_configuration_snapshots(product_id);
-CREATE INDEX idx_nexus_config_snapshots_model ON nexus_alpha_configuration_snapshots(model_id);
+CREATE INDEX idx_peregrine_config_snapshots_product ON peregrine_alpha_configuration_snapshots(product_id);
+CREATE INDEX idx_peregrine_config_snapshots_model ON peregrine_alpha_configuration_snapshots(model_id);
 
 -- ============================================================================
 -- NEXUS ALPHA ANALYSIS - API USAGE & BENCHMARKS
 -- ============================================================================
 
-CREATE TABLE nexus_alpha_api_usage (
+CREATE TABLE peregrine_alpha_api_usage (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
@@ -550,11 +550,11 @@ CREATE TABLE nexus_alpha_api_usage (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_api_usage_product ON nexus_alpha_api_usage(product_id);
-CREATE INDEX idx_nexus_api_usage_model ON nexus_alpha_api_usage(model_id);
-CREATE INDEX idx_nexus_api_usage_date ON nexus_alpha_api_usage(usage_date);
+CREATE INDEX idx_peregrine_api_usage_product ON peregrine_alpha_api_usage(product_id);
+CREATE INDEX idx_peregrine_api_usage_model ON peregrine_alpha_api_usage(model_id);
+CREATE INDEX idx_peregrine_api_usage_date ON peregrine_alpha_api_usage(usage_date);
 
-CREATE TABLE nexus_alpha_benchmark_tests (
+CREATE TABLE peregrine_alpha_benchmark_tests (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
@@ -571,14 +571,14 @@ CREATE TABLE nexus_alpha_benchmark_tests (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_benchmark_product ON nexus_alpha_benchmark_tests(product_id);
-CREATE INDEX idx_nexus_benchmark_model ON nexus_alpha_benchmark_tests(model_id);
+CREATE INDEX idx_peregrine_benchmark_product ON peregrine_alpha_benchmark_tests(product_id);
+CREATE INDEX idx_peregrine_benchmark_model ON peregrine_alpha_benchmark_tests(model_id);
 
 -- ============================================================================
 -- NEXUS ALPHA ANALYSIS - MODEL RECOMMENDATIONS & EXPORTS
 -- ============================================================================
 
-CREATE TABLE nexus_alpha_model_recommendations (
+CREATE TABLE peregrine_alpha_model_recommendations (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
@@ -594,10 +594,10 @@ CREATE TABLE nexus_alpha_model_recommendations (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_recommendations_product ON nexus_alpha_model_recommendations(product_id);
-CREATE INDEX idx_nexus_recommendations_model ON nexus_alpha_model_recommendations(model_id);
+CREATE INDEX idx_peregrine_recommendations_product ON peregrine_alpha_model_recommendations(product_id);
+CREATE INDEX idx_peregrine_recommendations_model ON peregrine_alpha_model_recommendations(model_id);
 
-CREATE TABLE nexus_alpha_exports (
+CREATE TABLE peregrine_alpha_exports (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     model_id BIGINT REFERENCES client_models(model_id),
@@ -614,15 +614,15 @@ CREATE TABLE nexus_alpha_exports (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_exports_product ON nexus_alpha_exports(product_id);
-CREATE INDEX idx_nexus_exports_model ON nexus_alpha_exports(model_id);
-CREATE INDEX idx_nexus_exports_status ON nexus_alpha_exports(status);
+CREATE INDEX idx_peregrine_exports_product ON peregrine_alpha_exports(product_id);
+CREATE INDEX idx_peregrine_exports_model ON peregrine_alpha_exports(model_id);
+CREATE INDEX idx_peregrine_exports_status ON peregrine_alpha_exports(status);
 
 -- ============================================================================
 -- NEXUS ALPHA ANALYSIS - AUDIT LOG
 -- ============================================================================
 
-CREATE TABLE nexus_alpha_audit_log (
+CREATE TABLE peregrine_alpha_audit_log (
     id BIGSERIAL PRIMARY KEY,
     product_id UUID NOT NULL REFERENCES products(id),
     user_id TEXT,
@@ -634,13 +634,13 @@ CREATE TABLE nexus_alpha_audit_log (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_nexus_audit_log_product ON nexus_alpha_audit_log(product_id);
-CREATE INDEX idx_nexus_audit_log_action ON nexus_alpha_audit_log(action_type);
-CREATE INDEX idx_nexus_audit_log_entity ON nexus_alpha_audit_log(entity_type);
-CREATE INDEX idx_nexus_audit_log_timestamp ON nexus_alpha_audit_log(timestamp);
+CREATE INDEX idx_peregrine_audit_log_product ON peregrine_alpha_audit_log(product_id);
+CREATE INDEX idx_peregrine_audit_log_action ON peregrine_alpha_audit_log(action_type);
+CREATE INDEX idx_peregrine_audit_log_entity ON peregrine_alpha_audit_log(entity_type);
+CREATE INDEX idx_peregrine_audit_log_timestamp ON peregrine_alpha_audit_log(timestamp);
 
 -- ============================================================================
--- AUDIT & LOGGING (Shared - but relevant to Nexus)
+-- AUDIT & LOGGING (Shared - but relevant to Peregrine)
 -- ============================================================================
 
 CREATE TABLE audit_logs (
@@ -668,11 +668,11 @@ CREATE INDEX idx_audit_event ON audit_logs(event_type);
 -- COMPOSITE INDEXES
 -- ============================================================================
 
-CREATE INDEX idx_nexus_conversations_model_status ON nexus_alpha_conversations(model_id, status);
-CREATE INDEX idx_nexus_turns_conversation_role ON nexus_alpha_turns(conversation_id, role);
-CREATE INDEX idx_nexus_risk_metrics_score ON nexus_alpha_risk_metrics(product_id, risk_score DESC);
-CREATE INDEX idx_nexus_client_models_status_risk ON client_models(status, risk_level);
-CREATE INDEX idx_nexus_embeddings_product_type ON nexus_alpha_embeddings(product_id, embedding_type);
+CREATE INDEX idx_peregrine_conversations_model_status ON peregrine_alpha_conversations(model_id, status);
+CREATE INDEX idx_peregrine_turns_conversation_role ON peregrine_alpha_turns(conversation_id, role);
+CREATE INDEX idx_peregrine_risk_metrics_score ON peregrine_alpha_risk_metrics(product_id, risk_score DESC);
+CREATE INDEX idx_peregrine_client_models_status_risk ON client_models(status, risk_level);
+CREATE INDEX idx_peregrine_embeddings_product_type ON peregrine_alpha_embeddings(product_id, embedding_type);
 
 -- ============================================================================
 -- END NEXUS COMPLETE SCHEMA

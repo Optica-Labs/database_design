@@ -21,7 +21,7 @@ This repository contains a **comprehensive integrated database** serving as the 
 - **Adversarial AI Safety Testing** - Traditional model testing, safety assessments, and compliance tracking
 - **AI Persona Testing** - Persona-driven testing, scenario generation, and cognitive risk analysis
 - **Cat-Astrophic Integration** - Full PromptGoblin v2 prompt generation tracking (AI-Range)
-- **Nexus Ground Truth** - Unified prompt library with automatic cross-product lineage (NEW)
+- **Peregrine Ground Truth** - Unified prompt library with automatic cross-product lineage (NEW)
 - **Multi-tenant Operations** - Enterprise-grade client and subscription management
 - **Risk & Threat Framework** - Comprehensive threat vectors and harm category modeling
 
@@ -31,10 +31,10 @@ This repository contains a **comprehensive integrated database** serving as the 
 
 ### Layer 1: Product Layer 🎁
 - **AI-Range**: Comprehensive testing, personas, scenarios, and prompt generation
-- **Nexus**: Ground truth for prompt ingestion, curation, and cross-product lineage
+- **Peregrine**: Ground truth for prompt ingestion, curation, and cross-product lineage
 
 ### Layer 2: Client Layer 🏢
-- **Tenants**: Organizations using AI-Range and/or Nexus
+- **Tenants**: Organizations using AI-Range and/or Peregrine
 - **Central management** for all client operations
 
 ### Layer 3: Model Layer 🤖
@@ -59,14 +59,14 @@ This repository contains a **comprehensive integrated database** serving as the 
 - Conversation-level metadata with human-in-the-loop support
 - Turn-level prompt-response exchanges with token counting
 - Quality metrics and telemetry aggregation
-- **Stage 4 prompts automatically surface in Nexus ground truth**
+- **Stage 4 prompts automatically surface in Peregrine ground truth**
 
-### ✅ Nexus Ground Truth (NEW)
+### ✅ Peregrine Ground Truth (NEW)
 - Unified prompt library ingesting AI-Range Stage 4 prompts + client submissions
 - Automatic cross-product lineage via `product_prompt_lineage` (trigger-maintained)
 - **All AI-Range prompts are traceable through both products**
 - Client submission workflow with approval pipeline
-- Query views for both forward (AI-Range → Nexus) and reverse tracing
+- Query views for both forward (AI-Range → Peregrine) and reverse tracing
 
 ### ✅ Comprehensive Risk & Threat Framework
 - Threat vectors with examples and detection methods
@@ -103,7 +103,7 @@ See [DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md) for a full, up-to-date tree
 | **⚠️ Threat Framework** | Comprehensive threat vectors, examples, and harm categories |
 | **📊 Risk Assessment** | Multi-dimensional risk analysis linked to personas and scenarios |
 | **🔄 Prompt Generation** | Cat-Astrophic/PromptGoblin v2 integration with full generation tracking (AI-Range) |
-| **🏆 Nexus Ground Truth** | Unified prompt library with automatic AI-Range → Nexus lineage (NEW) |
+| **🏆 Peregrine Ground Truth** | Unified prompt library with automatic AI-Range → Peregrine lineage (NEW) |
 | **🛡️ Safety Assessment** | Multi-agent evaluation with detailed metrics and compliance tracking |
 | **🚨 Alert Management** | Real-time critical safety incident tracking and escalation |
 | **📋 Compliance Reports** | Automated compliance reporting and trend analysis |
@@ -117,7 +117,7 @@ See [DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md) for a full, up-to-date tree
 | Table | Purpose |
 |-------|---------|
 | `tenants` | Client organizations (primary isolation boundary) |
-| `products` | AI-Range and Nexus product definitions with versioning |
+| `products` | AI-Range and Peregrine product definitions with versioning |
 | `product_usage` | Tracks each product use event (audit and billing) |
 
 ### AI-Range Platform Tables (60+ tables)
@@ -175,11 +175,11 @@ See [DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md) for a full, up-to-date tree
 - `prompt_generator_responses` - Generated prompt storage
 - `prompt_response_metadata` - Execution metadata
 
-### Nexus Platform Tables (NEW - Ground Truth)
+### Peregrine Platform Tables (NEW - Ground Truth)
 
 **Prompt Ingestion & Curation:**
 - `client_prompt_submissions` - Client-provided prompts with review pipeline
-- `nexus_prompt_library` - Unified prompt library (Stage 4 + client prompts)
+- `peregrine_prompt_library` - Unified prompt library (Stage 4 + client prompts)
 - `product_prompt_lineage` - Cross-product traceability (auto-maintained by trigger)
 
 **Knowledge Base & Sources:**

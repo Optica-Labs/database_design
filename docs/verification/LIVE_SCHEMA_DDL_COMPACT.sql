@@ -206,8 +206,8 @@ CREATE TABLE public."alpha_benchmark_runs" (
     "fragility_classification" text,
     "total_conversations" integer,
     "fragile_conversations" integer,
-    "nexus_score_n" double precision,
-    "nexus_tier" text,
+    "peregrine_score_n" double precision,
+    "peregrine_tier" text,
     "total_prompts" integer,
     "avg_risk_score" double precision,
     "avg_robustness_rho" double precision,
@@ -301,7 +301,7 @@ CREATE TABLE public."alpha_generation_runs" (
 CREATE TABLE public."alpha_pca_models" (
     "id" bigint DEFAULT nextval('pca_models_id_seq'::regclass) NOT NULL,
     "product_id" uuid DEFAULT '5a1961c3-848c-4cdb-adb6-7d66891bf5f1'::uuid NOT NULL,
-    "pca_name" text DEFAULT 'nexus_pca_default'::text NOT NULL,
+    "pca_name" text DEFAULT 'peregrine_pca_default'::text NOT NULL,
     "components_count" integer DEFAULT 2 NOT NULL,
     "explained_variance_ratio" jsonb,
     "mean_vector" jsonb,
@@ -879,9 +879,9 @@ CREATE TABLE public."personas" (
 CREATE TABLE public."product_prompt_lineage" (
     "id" uuid DEFAULT gen_random_uuid() NOT NULL,
     "ai_range_turn_id" bigint NOT NULL,
-    "nexus_prompt_id" uuid NOT NULL,
+    "peregrine_prompt_id" uuid NOT NULL,
     "ai_range_product_id" uuid NOT NULL,
-    "nexus_product_id" uuid NOT NULL,
+    "peregrine_product_id" uuid NOT NULL,
     "lineage_type" text DEFAULT 'stage4'::text NOT NULL,
     "created_at" timestamp with time zone DEFAULT now(),
     "metadata" jsonb DEFAULT '{}'::jsonb
@@ -1493,14 +1493,14 @@ ALTER TABLE ONLY public."alpha_generation_runs" ADD CONSTRAINT "generation_runs_
 ALTER TABLE ONLY public."alpha_pca_models" ADD CONSTRAINT "pca_models_pkey" PRIMARY KEY (id);
 ALTER TABLE ONLY public."alpha_pca_models" ADD CONSTRAINT "pca_models_pca_name_key" UNIQUE (pca_name);
 
-ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "chk_nexus_prompt_source" CHECK (source_type = 'cat-astrophic'::text AND cat_turn_id IS NOT NULL AND client_prompt_id IS NULL OR source_type = 'client'::text AND client_prompt_id IS NOT NULL AND cat_turn_id IS NULL);
-ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "nexus_prompt_library_source_type_check" CHECK (source_type = ANY (ARRAY['cat-astrophic'::text, 'client'::text]));
-ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "nexus_prompt_library_status_check" CHECK (status = ANY (ARRAY['active'::text, 'inactive'::text, 'archived'::text, 'rejected'::text]));
-ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "fk_nexus_prompt_library_product" FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT;
-ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "nexus_prompt_library_client_prompt_id_fkey" FOREIGN KEY (client_prompt_id) REFERENCES alpha_prompt_submissions(id) ON DELETE SET NULL;
-ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "nexus_prompt_library_product_id_fkey" FOREIGN KEY (product_id) REFERENCES products(id);
-ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "nexus_prompt_library_tenant_id_fkey" FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE;
-ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "nexus_prompt_library_pkey" PRIMARY KEY (id);
+ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "chk_peregrine_prompt_source" CHECK (source_type = 'cat-astrophic'::text AND cat_turn_id IS NOT NULL AND client_prompt_id IS NULL OR source_type = 'client'::text AND client_prompt_id IS NOT NULL AND cat_turn_id IS NULL);
+ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "peregrine_prompt_library_source_type_check" CHECK (source_type = ANY (ARRAY['cat-astrophic'::text, 'client'::text]));
+ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "peregrine_prompt_library_status_check" CHECK (status = ANY (ARRAY['active'::text, 'inactive'::text, 'archived'::text, 'rejected'::text]));
+ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "fk_peregrine_prompt_library_product" FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT;
+ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "peregrine_prompt_library_client_prompt_id_fkey" FOREIGN KEY (client_prompt_id) REFERENCES alpha_prompt_submissions(id) ON DELETE SET NULL;
+ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "peregrine_prompt_library_product_id_fkey" FOREIGN KEY (product_id) REFERENCES products(id);
+ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "peregrine_prompt_library_tenant_id_fkey" FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public."alpha_prompt_library" ADD CONSTRAINT "peregrine_prompt_library_pkey" PRIMARY KEY (id);
 
 ALTER TABLE ONLY public."alpha_prompt_submissions" ADD CONSTRAINT "client_prompt_submissions_status_check" CHECK (status = ANY (ARRAY['submitted'::text, 'approved'::text, 'rejected'::text, 'archived'::text]));
 ALTER TABLE ONLY public."alpha_prompt_submissions" ADD CONSTRAINT "client_prompt_submissions_submission_channel_check" CHECK (submission_channel = ANY (ARRAY['api'::text, 'ui'::text, 'import'::text, 'other'::text]));
@@ -1666,16 +1666,16 @@ ALTER TABLE ONLY public."personas" ADD CONSTRAINT "personas_pkey" PRIMARY KEY (i
 
 ALTER TABLE ONLY public."product_prompt_lineage" ADD CONSTRAINT "product_prompt_lineage_lineage_type_check" CHECK (lineage_type = ANY (ARRAY['stage4'::text, 'other'::text]));
 ALTER TABLE ONLY public."product_prompt_lineage" ADD CONSTRAINT "product_prompt_lineage_ai_range_product_id_fkey" FOREIGN KEY (ai_range_product_id) REFERENCES products(id) ON DELETE RESTRICT;
-ALTER TABLE ONLY public."product_prompt_lineage" ADD CONSTRAINT "product_prompt_lineage_nexus_product_id_fkey" FOREIGN KEY (nexus_product_id) REFERENCES products(id) ON DELETE RESTRICT;
-ALTER TABLE ONLY public."product_prompt_lineage" ADD CONSTRAINT "product_prompt_lineage_nexus_prompt_id_fkey" FOREIGN KEY (nexus_prompt_id) REFERENCES alpha_prompt_library(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public."product_prompt_lineage" ADD CONSTRAINT "product_prompt_lineage_peregrine_product_id_fkey" FOREIGN KEY (peregrine_product_id) REFERENCES products(id) ON DELETE RESTRICT;
+ALTER TABLE ONLY public."product_prompt_lineage" ADD CONSTRAINT "product_prompt_lineage_peregrine_prompt_id_fkey" FOREIGN KEY (peregrine_prompt_id) REFERENCES alpha_prompt_library(id) ON DELETE CASCADE;
 ALTER TABLE ONLY public."product_prompt_lineage" ADD CONSTRAINT "product_prompt_lineage_pkey" PRIMARY KEY (id);
-ALTER TABLE ONLY public."product_prompt_lineage" ADD CONSTRAINT "product_prompt_lineage_ai_range_turn_id_nexus_prompt_id_key" UNIQUE (ai_range_turn_id, nexus_prompt_id);
+ALTER TABLE ONLY public."product_prompt_lineage" ADD CONSTRAINT "product_prompt_lineage_ai_range_turn_id_peregrine_prompt_id_key" UNIQUE (ai_range_turn_id, peregrine_prompt_id);
 
 ALTER TABLE ONLY public."product_usage" ADD CONSTRAINT "product_usage_product_id_fkey" FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT;
 ALTER TABLE ONLY public."product_usage" ADD CONSTRAINT "product_usage_tenant_id_fkey" FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE;
 ALTER TABLE ONLY public."product_usage" ADD CONSTRAINT "product_usage_pkey" PRIMARY KEY (id);
 
-ALTER TABLE ONLY public."products" ADD CONSTRAINT "products_product_code_check" CHECK (product_code = ANY (ARRAY['ai-range'::text, 'nexus'::text]));
+ALTER TABLE ONLY public."products" ADD CONSTRAINT "products_product_code_check" CHECK (product_code = ANY (ARRAY['ai-range'::text, 'peregrine'::text]));
 ALTER TABLE ONLY public."products" ADD CONSTRAINT "products_status_check" CHECK (status = ANY (ARRAY['active'::text, 'beta'::text, 'deprecated'::text, 'inactive'::text]));
 ALTER TABLE ONLY public."products" ADD CONSTRAINT "products_pkey" PRIMARY KEY (id);
 ALTER TABLE ONLY public."products" ADD CONSTRAINT "products_product_code_key" UNIQUE (product_code);
@@ -1919,7 +1919,7 @@ CREATE INDEX idx_alpha_benchmark_runs_active ON public.alpha_benchmark_runs USIN
 CREATE INDEX idx_alpha_benchmark_runs_tenant ON public.alpha_benchmark_runs USING btree (tenant_id);
 CREATE INDEX idx_benchmark_runs_created ON public.alpha_benchmark_runs USING btree (created_at DESC);
 CREATE INDEX idx_benchmark_runs_model ON public.alpha_benchmark_runs USING btree (model_key);
-CREATE INDEX idx_benchmark_runs_nexus ON public.alpha_benchmark_runs USING btree (nexus_score_n DESC);
+CREATE INDEX idx_benchmark_runs_peregrine ON public.alpha_benchmark_runs USING btree (peregrine_score_n DESC);
 CREATE INDEX idx_benchmark_runs_phi ON public.alpha_benchmark_runs USING btree (phi_score_phi);
 CREATE INDEX idx_benchmark_runs_product ON public.alpha_benchmark_runs USING btree (product_id);
 CREATE INDEX idx_benchmark_runs_prompt_count ON public.alpha_benchmark_runs USING btree (prompt_responses_count);
@@ -1955,13 +1955,13 @@ CREATE INDEX idx_pca_models_active ON public.alpha_pca_models USING btree (is_ac
 CREATE INDEX idx_pca_models_created ON public.alpha_pca_models USING btree (created_at DESC);
 CREATE INDEX idx_pca_models_embedding_model ON public.alpha_pca_models USING btree (embedding_model);
 CREATE INDEX idx_alpha_prompt_library_active ON public.alpha_prompt_library USING btree (id) WHERE (archived = false);
-CREATE INDEX idx_nexus_prompt_library_cat_turn ON public.alpha_prompt_library USING btree (cat_turn_id);
-CREATE INDEX idx_nexus_prompt_library_gold ON public.alpha_prompt_library USING btree (gold);
-CREATE INDEX idx_nexus_prompt_library_hash ON public.alpha_prompt_library USING btree (prompt_hash);
-CREATE INDEX idx_nexus_prompt_library_product ON public.alpha_prompt_library USING btree (product_id);
-CREATE INDEX idx_nexus_prompt_library_source ON public.alpha_prompt_library USING btree (source_type);
-CREATE INDEX idx_nexus_prompt_library_status ON public.alpha_prompt_library USING btree (status);
-CREATE INDEX idx_nexus_prompt_library_tenant ON public.alpha_prompt_library USING btree (tenant_id);
+CREATE INDEX idx_peregrine_prompt_library_cat_turn ON public.alpha_prompt_library USING btree (cat_turn_id);
+CREATE INDEX idx_peregrine_prompt_library_gold ON public.alpha_prompt_library USING btree (gold);
+CREATE INDEX idx_peregrine_prompt_library_hash ON public.alpha_prompt_library USING btree (prompt_hash);
+CREATE INDEX idx_peregrine_prompt_library_product ON public.alpha_prompt_library USING btree (product_id);
+CREATE INDEX idx_peregrine_prompt_library_source ON public.alpha_prompt_library USING btree (source_type);
+CREATE INDEX idx_peregrine_prompt_library_status ON public.alpha_prompt_library USING btree (status);
+CREATE INDEX idx_peregrine_prompt_library_tenant ON public.alpha_prompt_library USING btree (tenant_id);
 CREATE INDEX idx_alpha_prompt_submissions_active ON public.alpha_prompt_submissions USING btree (id) WHERE (archived = false);
 CREATE INDEX idx_client_prompt_submissions_hash ON public.alpha_prompt_submissions USING btree (prompt_hash);
 CREATE INDEX idx_client_prompt_submissions_product ON public.alpha_prompt_submissions USING btree (product_id);
@@ -2045,8 +2045,8 @@ CREATE INDEX idx_personas_tenant_type ON public.personas USING btree (tenant_id,
 CREATE INDEX idx_personas_type_status ON public.personas USING btree (persona_type, status);
 CREATE INDEX idx_personas_use_case ON public.personas USING btree (use_case_id);
 CREATE INDEX idx_prompt_lineage_ai_range_turn ON public.product_prompt_lineage USING btree (ai_range_turn_id);
-CREATE INDEX idx_prompt_lineage_nexus_prompt ON public.product_prompt_lineage USING btree (nexus_prompt_id);
-CREATE INDEX idx_prompt_lineage_products ON public.product_prompt_lineage USING btree (ai_range_product_id, nexus_product_id);
+CREATE INDEX idx_prompt_lineage_peregrine_prompt ON public.product_prompt_lineage USING btree (peregrine_prompt_id);
+CREATE INDEX idx_prompt_lineage_products ON public.product_prompt_lineage USING btree (ai_range_product_id, peregrine_product_id);
 CREATE INDEX idx_product_usage_created ON public.product_usage USING btree (created_at);
 CREATE INDEX idx_product_usage_product ON public.product_usage USING btree (product_id);
 CREATE INDEX idx_product_usage_product_tenant_date ON public.product_usage USING btree (product_id, tenant_id, created_at);
